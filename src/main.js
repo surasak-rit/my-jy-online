@@ -66,10 +66,10 @@ async function boot() {
   attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
   // ปิด/รีเฟรชแท็บ → บันทึกตำแหน่งปัจจุบัน (เผื่อรีเฟรชระหว่างเดิน)
   addEventListener('beforeunload', () => game.saveState());
-  // ปุ่ม I = เปิดกระเป๋า · N = เม็ดยาภายใน (内丹)
+  // ปุ่ม I = เปิดกระเป๋า · N = เม็ดยาภายใน (内丹) — อ่าน keycode (e.code) ใช้ได้ทุก layout/ภาษา
   addEventListener('keydown', (e) => {
-    if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory();
-    else if (e.key === 'n' || e.key === 'N' || e.key === 'ื') panels.openNeidan();
+    if (e.code === 'KeyI') panels.openInventory();
+    else if (e.code === 'KeyN') panels.openNeidan();
   });
 
   startLoop(

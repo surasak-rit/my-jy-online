@@ -482,27 +482,14 @@ export class Game {
     this.drawToast();
   }
 
-  /** แสงนุ่ม+ขอบมืด ให้บรรยากาศอุ่นแบบเรือนจีน (interior อุ่นกว่า) */
+  /** โทนแสงอุ่นบาง ๆ ให้บรรยากาศเรือนจีน (interior อุ่นกว่า) — ไม่มีขอบเงาแล้ว */
   drawVignette() {
     const { ctx } = this;
     const interior = this.zone.floor === 'wood';
     ctx.save();
-    // โทนอุ่นทับบาง ๆ
     ctx.globalAlpha = interior ? 0.12 : 0.06;
     ctx.fillStyle = interior ? '#5a2f10' : '#caa15a';
     ctx.fillRect(0, 0, this.viewW, this.viewH);
-    ctx.globalAlpha = 1;
-    // ขอบมืด (vignette) — กรอบเฟรมหลายชั้น
-    const g = Math.min(this.viewW, this.viewH);
-    for (let i = 0; i < 4; i++) {
-      ctx.globalAlpha = 0.06;
-      ctx.fillStyle = '#1a120a';
-      const m = (i + 1) * g * 0.04;
-      ctx.fillRect(0, 0, this.viewW, m);
-      ctx.fillRect(0, this.viewH - m, this.viewW, m);
-      ctx.fillRect(0, 0, m, this.viewH);
-      ctx.fillRect(this.viewW - m, 0, m, this.viewH);
-    }
     ctx.restore();
   }
 

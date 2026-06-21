@@ -15,7 +15,7 @@ export function initPanels(game) {
   const el = /** @type {HTMLElement} */ (document.getElementById('panel'));
 
   function close() { el.classList.add('hidden'); el.innerHTML = ''; }
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => { if (e.code === 'Escape') close(); });
 
   function frame(title, bodyHtml) {
     el.innerHTML = `

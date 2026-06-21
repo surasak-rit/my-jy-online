@@ -33,5 +33,5 @@ export function initMenu(game) {
   };
   // ปิดเมื่อคลิกที่อื่น / กด Esc
   document.addEventListener('click', (e) => { if (!el.contains(/** @type {Node} */ (e.target))) close(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => { if (e.code === 'Escape') close(); });
 }
