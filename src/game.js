@@ -274,9 +274,18 @@ export class Game {
     this.saveState();
   }
 
-  /** ฝากตัวเข้าสำนัก (จากอาจารย์สำนัก) — §4.3 */
+  /** เช็คเงื่อนไขเข้าสำนัก (เพศ ฯลฯ) — คืน {ok, reason?} (อิงระบบ門派 ของ JY) */
+  canJoinSect(sectId) {
+    const s = this.sects[sectId]; if (!s) return { ok: false, reason: 'none' };
+    if (this.player.sectId) return { ok: false, reason: 'already' };
+    const g = s.join && s.join.gender;
+    if (g && g !== this.player.gender) return { ok: false, reason: 'gender', gender: g };
+    return { ok: true };
+  }
+
+  /** ฝากตัวเข้าสำนัก (จากอาจารย์สำนัก) — §4.3 + เงื่อนไขเข้าสำนัก */
   joinSect(sectId) {
-    if (!this.sects[sectId] || this.player.sectId) return false;
+    if (!this.canJoinSect(sectId).ok) return false;
     this.player.sectId = sectId;
     this.player.activeTitle = 'ศิษย์ใหม่';
     this.saveState();

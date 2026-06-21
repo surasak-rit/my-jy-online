@@ -190,10 +190,17 @@ export function initPanels(game) {
   /** อาจารย์สำนัก แต่ผู้เล่นยังไม่สังกัด → ชวนฝากตัวเข้าสำนัก (§4.3) */
   function openJoin(npc) {
     const sect = game.sectInfo(npc.sectId);
+    const def = game.sects[npc.sectId];
+    const req = def && def.join && def.join.gender;
+    const reqLine = req ? `<p class="sect-req">รับเฉพาะศิษย์${req === 'male' ? 'ชาย ♂' : 'หญิง ♀'}</p>` : '';
+    const c = game.canJoinSect(npc.sectId);
+    const btn = c.ok
+      ? `<button id="join-sect">ฝากตัวเป็นศิษย์</button>`
+      : `<button id="join-sect" disabled>${c.reason === 'gender' ? `รับเฉพาะ${c.gender === 'male' ? 'ชาย' : 'หญิง'} — สมัครไม่ได้` : 'สมัครไม่ได้'}</button>`;
     frame(npc.name, `<p><i>“เจ้าต้องการฝากตัวเป็นศิษย์<b>${sect ? sect.crest + ' ' + sect.name : 'สำนักนี้'}</b>หรือไม่?”</i></p>
-      <p><small>เมื่อเข้าสำนักแล้วจึงเรียนวิชาประจำสำนักได้</small></p>
-      <button id="join-sect">ฝากตัวเป็นศิษย์</button>`);
-    /** @type {HTMLElement} */ (el.querySelector('#join-sect')).onclick = () => { game.joinSect(npc.sectId); reopen(npc); };
+      ${reqLine}<p><small>เมื่อเข้าสำนักแล้วจึงเรียนวิชาประจำสำนักได้</small></p>${btn}`);
+    const b = el.querySelector('#join-sect');
+    if (c.ok) /** @type {HTMLElement} */ (b).onclick = () => { game.joinSect(npc.sectId); reopen(npc); };
   }
 
   function open(npc) {

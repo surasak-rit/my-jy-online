@@ -338,6 +338,7 @@ html, body {
 }
 
 .maxed { color: var(--jade); font-size: 14px; font-family: var(--brush); }
+.sect-req { color: var(--seal); font-size: 13px; font-weight: 600; }
 
 /* เม็ดยาภายใน (内丹) */
 .nd-elements { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
