@@ -24,13 +24,17 @@ async function boot() {
   for (const id of ['mob_petty_bandit', 'mob_gray_wolf']) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
   const skillDefs = {};
   for (const id of ['vajra_palm', 'iron_body', 'cloud_step']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
+  const itemDefs = {};
+  for (const id of ['potion_small', 'potion_big', 'meat_bun']) itemDefs[id] = await getJSON(`data/items/${id}.json`);
 
-  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs);
+  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs);
   const panels = initPanels(game);
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
 
   attachMouse(canvas, game.cam, (tile) => game.handlePick(tile));
+  // ปุ่ม I = เปิดกระเป๋า
+  addEventListener('keydown', (e) => { if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory(); });
 
   startLoop(
     (dt) => game.update(dt),

@@ -4,6 +4,7 @@
 // เปิดเมื่อเข้าคุย NPC: อาจารย์→เรียนวิชา · หมอ→รักษา · พ่อค้า→ร้าน (stub)
 // ──────────────────────────────────────────────────────────────────────────
 import { canLearn, skillCost } from '../core/skills.js';
+import { countItem } from '../core/economy.js';
 
 /**
  * @param {import('../game.js').Game} game
@@ -63,14 +64,42 @@ export function initPanels(game) {
     };
   }
 
+  /** ร้านค้า NPC — ซื้อของกิน */
+  function openShop(npc) {
+    const p = game.player;
+    const items = Object.values(game.itemDefs);
+    const rows = items.map((d) => `<div class="skill-row">
+      <div><b>${d.name}</b><br/><small>${d.desc}</small></div>
+      <div><button class="buy" data-id="${d.id}" ${p.currency >= d.price ? '' : 'disabled'}>ซื้อ 💰${d.price}</button></div>
+    </div>`).join('');
+    frame(`${npc.name} — ร้านค้า (💰 ${p.currency})`, rows);
+    el.querySelectorAll('button.buy').forEach((b) => {
+      /** @type {HTMLElement} */(b).onclick = () => { game.buyItem(game.itemDefs[/** @type {HTMLElement} */(b).dataset.id]); openShop(npc); };
+    });
+  }
+
+  /** กระเป๋า — ใช้ของกิน (เปิดด้วยปุ่ม I) */
+  function openInventory() {
+    const p = game.player;
+    const rows = p.inventory.length ? p.inventory.map((s) => {
+      const d = game.itemDefs[s.itemId]; if (!d) return '';
+      const use = d.type === 'consumable' ? `<button class="use" data-id="${d.id}">ใช้</button>` : '';
+      return `<div class="skill-row"><div><b>${d.name}</b> ×${s.qty}<br/><small>${d.desc}</small></div><div>${use}</div></div>`;
+    }).join('') : '<small>กระเป๋าว่างเปล่า</small>';
+    frame(`กระเป๋า (💰 ${p.currency} · ❤️ ${Math.ceil(p.hp)}/${p.maxHp})`, rows);
+    el.querySelectorAll('button.use').forEach((b) => {
+      /** @type {HTMLElement} */(b).onclick = () => { game.useItem(game.itemDefs[/** @type {HTMLElement} */(b).dataset.id]); openInventory(); };
+    });
+  }
+
   function open(npc) {
     if (npc.sectId) return openSkills(npc);                 // อาจารย์สำนัก
     if ((npc.role || '').includes('หมอ')) return openHealer(npc);
-    if ((npc.role || '').includes('พ่อค้า')) return frame(npc.name, '<p>“ร้านค้ากำลังจะเปิดเร็วๆ นี้…”</p>');
+    if ((npc.role || '').includes('พ่อค้า')) return openShop(npc);
     frame(npc.name, `<p><i>“${npcLine(npc)}”</i></p>`);     // ตัวประกอบ/อื่น ๆ
   }
 
-  return { open, close };
+  return { open, close, openInventory };
 }
 
 function npcLine(npc) {

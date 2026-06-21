@@ -10,6 +10,7 @@ import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
 import { learn, recomputeStats } from './core/skills.js';
+import { buy, useConsumable } from './core/economy.js';
 import { save, load } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
@@ -22,9 +23,9 @@ export class Game {
    * @param {Record<string,any>} mobDefs
    * @param {Record<string,any>} [skillDefs]
    */
-  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}) {
+  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}, itemDefs = {}) {
     this.ctx = ctx; this.canvas = canvas; this.sects = sects; this.mobDefs = mobDefs;
-    this.skillDefs = skillDefs;
+    this.skillDefs = skillDefs; this.itemDefs = itemDefs;
     this.cam = new Camera(64, 32);
     const saved = /** @type {any} */ (load()) || {};
     /** @type {any} */
@@ -34,8 +35,9 @@ export class Game {
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
       skills: saved.skills || {},
+      inventory: saved.inventory || [],
       combatXP: saved.combatXP || 0, skillPoints: saved.skillPoints || 0,
-      currency: saved.currency || 0,
+      currency: saved.currency != null ? saved.currency : 30,
     };
     recomputeStats(this.player, this.skillDefs);
     this.player.hp = saved.hp || this.player.maxHp;
@@ -114,8 +116,13 @@ export class Game {
   saveState() {
     if (!this.zone) return;
     const p = this.player;
-    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
+    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
   }
+
+  /** ซื้อไอเทมจากร้าน (เรียกจาก UI) */
+  buyItem(def) { const r = buy(this.player, def); if (r.ok) { this.saveState(); this.showToast(`ซื้อ ${def.name}`); } return r; }
+  /** ใช้ของกิน (เรียกจาก UI) */
+  useItem(def) { const r = useConsumable(this.player, def); if (r.ok) { this.saveState(); this.showToast(`ใช้ ${def.name}`); } return r; }
 
   showToast(t) { this.toast = t; this.toastT = 2.2; }
   popDmg(wx, wy, text, color) { this.dmgNums.push({ wx, wy: wy - 60, text, color, t: 0.9 }); }
