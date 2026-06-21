@@ -1,0 +1,12 @@
+{
+  "id": "five_venoms",
+  "name": "พรรคห้าพิษ",
+  "crest": "🐍",
+  "art": {
+    "palette": {
+      "primary": "#3a5a2f",
+      "accent": "#a7d05a"
+    },
+    "outfit": "ชุดเขียวพิษ"
+  }
+}

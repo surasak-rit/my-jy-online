@@ -5,7 +5,8 @@
     "azure_lotus",
     "cloud_summit",
     "beggar_union",
-    "tang_clan"
+    "tang_clan",
+    "five_venoms"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -15,7 +16,9 @@
     "mob_pickpocket",
     "mob_beggar_traitor",
     "mob_tang_guard",
-    "mob_tang_assassin"
+    "mob_tang_assassin",
+    "mob_gu_centipede",
+    "mob_venom_king"
   ],
   "skills": [
     "vajra_palm",
@@ -27,7 +30,8 @@
     "lotus_heart",
     "cloud_taichi",
     "dragon_palm",
-    "hidden_needle"
+    "hidden_needle",
+    "venom_claw"
   ],
   "items": [
     "potion_small",
@@ -46,7 +50,9 @@
     "staff_dogbeat",
     "mat_scrap_jug",
     "darts_tang",
-    "mat_venom_sac"
+    "mat_venom_sac",
+    "whip_serpent",
+    "mat_gu_powder"
   ],
   "quests": [
     "onboarding_1",
@@ -56,6 +62,8 @@
     "beggar_union_join",
     "beggar_union_hunt",
     "tang_clan_join",
-    "tang_clan_hunt"
+    "tang_clan_hunt",
+    "five_venoms_join",
+    "five_venoms_hunt"
   ]
 }

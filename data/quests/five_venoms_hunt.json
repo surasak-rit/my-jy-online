@@ -1,0 +1,25 @@
+{
+  "id": "five_venoms_hunt",
+  "order": 11,
+  "giver": "npc_venom_matron",
+  "name": "ปราบราชาตะขาบหุบพิษ",
+  "desc": "ราชาตะขาบหุบพิษอาละวาดแถบหุบเหวพิษ · ยูนนาน (เหมียวเจียง) จงพรรคห้าพิษออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_venom_king",
+      "count": 1,
+      "label": "ราชาตะขาบหุบพิษ"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "whip_serpent",
+        "qty": 1
+      }
+    ]
+  }
+}

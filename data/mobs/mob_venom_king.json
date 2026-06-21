@@ -1,0 +1,32 @@
+{
+  "id": "mob_venom_king",
+  "name": "ราชาตะขาบหุบพิษ",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 430,
+  "atk": 33,
+  "def": 6,
+  "speed": 3,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 155,
+  "skillPoints": 42,
+  "loot": {
+    "soft": [
+      85,
+      175
+    ],
+    "items": [
+      {
+        "id": "whip_serpent",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_gu_powder",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}
