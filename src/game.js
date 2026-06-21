@@ -11,6 +11,7 @@ import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
 import { spawnNpcs, updateNpcs } from './core/npcs.js';
+import { spawnStrike, updateFx, drawFx, FACE_ANGLE } from './render/fx.js';
 import { learn, recomputeStats } from './core/skills.js';
 import { upgradeNeidan } from './core/neidan.js';
 import { buy, useConsumable } from './core/economy.js';
@@ -79,6 +80,8 @@ export class Game {
     this.dead = false; this.respawnT = 0;
     /** @type {{wx:number,wy:number,text:string,color:string,t:number}[]} */
     this.dmgNums = [];
+    /** @type {any[]} */
+    this.fx = []; // เอฟเฟกต์ท่าโจมตี/วิทยายุทธ
     this.startZoneId = saved.zoneId || 'jiuhe_town';
     this.startTile = saved.tile || null;
     this.toast = ''; this.toastT = 0;
@@ -294,6 +297,21 @@ export class Game {
 
   showToast(t) { this.toast = t; this.toastT = 2.2; }
   popDmg(wx, wy, text, color) { this.dmgNums.push({ wx, wy: wy - 60, text, color, t: 0.9 }); }
+
+  /** สไตล์เอฟเฟกต์โจมตีของผู้เล่น — ตามสายวิชาที่เด่นสุด + ความแรง (ฝึก+内丹) */
+  attackFlavor() {
+    const p = this.player;
+    let best = null, bestRank = 0, total = 0;
+    for (const id in (p.skills || {})) {
+      const r = p.skills[id].rank || 0; total += r;
+      if (r > bestRank) { bestRank = r; best = this.skillDefs[id]; }
+    }
+    const power = 1 + total * 0.12 + (p.neidan?.tier || 0) * 0.18;
+    if (!best) return { style: 'fist', color: '#e9dec2', power };           // มือเปล่า
+    if (best.type === 'internal') return { style: 'qi', color: '#a98be6', power };   // 內功 ปราณม่วง
+    if (best.type === 'movement') return { style: 'slash', color: '#cfe6ff', power }; // 輕功 วงเฉือนเร็ว
+    return { style: 'palm', color: '#e6c14f', power };                       // 外功 ฝ่ามือพลังหยาง
+  }
   portalAt(tile) { return (this.zone?.portals || []).find((p) => p.at.x === tile.x && p.at.y === tile.y); }
 
   update(dt) {
@@ -302,6 +320,7 @@ export class Game {
     this.animT = (this.animT || 0) + dt; // นาฬิกาแอนิเมชันรวม (idle ของ NPC)
     for (const d of this.dmgNums) { d.t -= dt; d.wy -= 22 * dt; }
     this.dmgNums = this.dmgNums.filter((d) => d.t > 0);
+    this.fx = updateFx(this.fx, dt); // เดินเวลาเอฟเฟกต์ท่าโจมตี
 
     if (this.dead) { this.respawnT -= dt; if (this.respawnT <= 0) this.respawn(); return; }
 
@@ -354,6 +373,8 @@ export class Game {
             p.atkCd = p.attackCdMs / 1000;
             p.mp = Math.max(0, p.mp - 6); // ออกท่ากินกำลังภายใน (內力) = ทรัพยากรต่อสู้ (clamp ≥0 ไม่บล็อก)
             p.attackT = 0.3; this.target.hurtT = 0.25; // ฟันแขน + เป้าสะดุ้ง
+            const fl = this.attackFlavor(); // เอฟเฟกต์ท่าตามสายวิชา
+            spawnStrike(this.fx, this.target.pos.x, this.target.pos.y - 38, { ...fl, angle: FACE_ANGLE[p.facing] || 0 });
             if (r.killed) this.onKill(this.target);
           }
         } else if (p.waypoints.length === 0) this.routeToTile(this.target.tile, true);
@@ -374,6 +395,7 @@ export class Game {
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
         p.hp -= dmg; p.hurtT = 0.25; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
+        spawnStrike(this.fx, p.pos.x, p.pos.y - 38, { style: 'fist', color: '#c2453a', power: 0.9 }); // มอนตะปบใส่
         if (p.hp <= 0) this.die();
       },
     });
@@ -447,6 +469,7 @@ export class Game {
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 
+    drawFx(ctx, cam, this.fx); // เอฟเฟกต์ท่าโจมตี/วิทยายุทธ (เหนือตัวละคร)
     this.drawVignette();
     this.drawDmgNums();
     this.drawToast();
