@@ -11,7 +11,20 @@ const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game')
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
 const hud = /** @type {HTMLElement} */ (document.getElementById('hud'));
 
-function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+/** @type {import('./game.js').Game|null} */
+let game = null;
+
+// DPR-aware: buffer = ขนาดจริง×dpr, แต่ "พิกัดวาด" เป็น logical (CSS px)
+// → ภาพคมบนจอ retina และพิกัดเมาส์/กล้องตรงกัน (กันป้ายชื่อเพี้ยน/เลื่อน)
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(innerWidth * dpr);
+  canvas.height = Math.floor(innerHeight * dpr);
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // วาดด้วยพิกัด logical
+  if (game) game.setViewport(innerWidth, innerHeight);
+}
 addEventListener('resize', resize); resize();
 
 const getJSON = async (url) => (await fetch(url)).json();
@@ -29,7 +42,8 @@ async function boot() {
   const questDefs = {};
   for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
-  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs);
+  game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs);
+  game.setViewport(innerWidth, innerHeight); // logical viewport หลังสร้าง game
   const panels = initPanels(game);
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);

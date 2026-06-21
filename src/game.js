@@ -28,6 +28,9 @@ export class Game {
     this.ctx = ctx; this.canvas = canvas; this.sects = sects; this.mobDefs = mobDefs;
     this.skillDefs = skillDefs; this.itemDefs = itemDefs; this.questDefs = questDefs;
     this.cam = new Camera(64, 32);
+    // viewport แบบ logical (CSS px) — แยกจาก buffer (รองรับ HiDPI, กันภาพเพี้ยน)
+    this.viewW = canvas.width || 800; this.viewH = canvas.height || 600;
+    this.cam.viewW = this.viewW; this.cam.viewH = this.viewH;
     const saved = /** @type {any} */ (load()) || {};
     /** @type {any} */
     this.player = {
@@ -55,6 +58,9 @@ export class Game {
     this.startTile = saved.tile || null;
     this.toast = ''; this.toastT = 0;
   }
+
+  /** ตั้งขนาด viewport เป็น logical px (เรียกจาก resize) */
+  setViewport(w, h) { this.viewW = w; this.viewH = h; this.cam.viewW = w; this.cam.viewH = h; }
 
   sectInfo(id) { const s = this.sects[id]; return s ? { name: s.name, crest: s.crest, color: s.art.palette.accent } : null; }
   tw(x, y) { return this.cam.tileToWorld(x, y); }
@@ -155,7 +161,6 @@ export class Game {
 
   update(dt) {
     if (this.transitioning || !this.map) return;
-    this.cam.viewW = this.canvas.width; this.cam.viewH = this.canvas.height;
     if (this.toastT > 0) this.toastT -= dt;
     for (const d of this.dmgNums) { d.t -= dt; d.wy -= 22 * dt; }
     this.dmgNums = this.dmgNums.filter((d) => d.t > 0);
@@ -228,8 +233,8 @@ export class Game {
   respawn() { this.dead = false; this.player.hp = this.player.maxHp; this.loadZone('jiuhe_town', { x: 14, y: 18 }); }
 
   render() {
-    const { ctx, cam, map, canvas } = this;
-    ctx.fillStyle = '#1b2a1b'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const { ctx, cam, map } = this;
+    ctx.fillStyle = '#1b2a1b'; ctx.fillRect(0, 0, this.viewW, this.viewH);
     if (!map) return;
     drawTileMap(ctx, map, cam);
     this.drawPortals();
@@ -281,9 +286,9 @@ export class Game {
 
   drawToast() {
     if (this.toastT <= 0) return;
-    const { ctx, canvas } = this;
+    const { ctx } = this;
     ctx.save(); ctx.globalAlpha = Math.min(1, this.toastT); ctx.font = 'bold 24px "Noto Sans Thai", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,0.85)';
-    ctx.strokeText(this.toast, canvas.width / 2, 60); ctx.fillStyle = '#ffe9b0'; ctx.fillText(this.toast, canvas.width / 2, 60); ctx.restore();
+    ctx.strokeText(this.toast, this.viewW / 2, 60); ctx.fillStyle = '#ffe9b0'; ctx.fillText(this.toast, this.viewW / 2, 60); ctx.restore();
   }
 
   hudText() {
