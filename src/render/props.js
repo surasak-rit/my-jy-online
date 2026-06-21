@@ -266,9 +266,58 @@ function hall(ctx, x, y, s, plaque = '武館') {
   });
 }
 
+// ── องค์ประกอบเมืองตลาด (2.5D) ───────────────────────────────────────────────
+
+/** แผงตลาด: เสาไม้ 4 ต้น + ผ้าใบกันแดดหย่อนกลาง + เคาน์เตอร์ + ของวาง */
+function stall(ctx, x, y, s) {
+  const bw = 30 * s, bd = 26 * s, h = 40 * s;
+  const F = [x, y], R = [x + bw, y - bw / 2], L = [x - bd, y - bd / 2], B = [x + bw - bd, y - (bw + bd) / 2];
+  shadow(ctx, x, y + 2 * s, (bw + bd) * 0.6, (bw + bd) * 0.16);
+  const pole = (p) => { ctx.fillStyle = '#5e3f22'; ctx.fillRect(p[0] - 2 * s, p[1] - h, 4 * s, h); ctx.fillStyle = '#74522e'; ctx.fillRect(p[0] - 2 * s, p[1] - h, 1.5 * s, h); };
+  pole(B); pole(L); pole(R);                       // เสาหลัง/ข้างก่อน
+  const t = (p) => [p[0], p[1] - h];
+  const Ft = t(F), Rt = t(R), Lt = t(L), Bt = t(B);
+  const sag = 7 * s;                               // ผ้าใบหย่อนกลาง
+  poly(ctx, [[Ft[0], Ft[1] + sag], Rt, [Bt[0], Bt[1] - 2 * s], Lt], '#d8c79a'); // ผ้าใบ (สว่าง)
+  poly(ctx, [[Ft[0], Ft[1] + sag], Rt, [Bt[0], Bt[1] - 2 * s], [(Ft[0] + Bt[0]) / 2, (Ft[1] + Bt[1]) / 2 + 2 * s]], '#bca877'); // ครึ่งขวาเงา
+  // ชายผ้าใบหน้า (หยัก)
+  ctx.fillStyle = '#c2ad79';
+  ctx.beginPath(); ctx.moveTo(Lt[0], Lt[1]); ctx.lineTo(Ft[0], Ft[1] + sag); ctx.lineTo(Rt[0], Rt[1]);
+  ctx.lineTo(Rt[0], Rt[1] + 5 * s); ctx.lineTo(Ft[0], Ft[1] + sag + 6 * s); ctx.lineTo(Lt[0], Lt[1] + 5 * s); ctx.closePath(); ctx.fill();
+  pole(F);                                         // เสาหน้าทับ
+  // เคาน์เตอร์ไม้หน้าแผง + ของวาง
+  poly(ctx, [[F[0] - 4 * s, F[1] - 12 * s], [L[0] + 6 * s, L[1] - 12 * s], [L[0] + 6 * s, L[1] - 6 * s], [F[0] - 4 * s, F[1] - 6 * s]], '#7a5226');
+  // ตะกร้า/ไหวางพื้น
+  ctx.fillStyle = '#9c7a44'; ctx.beginPath(); ctx.ellipse(F[0] - 2 * s, F[1] - 2 * s, 5 * s, 3 * s, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#7c5a8a'; ctx.beginPath(); ctx.ellipse(F[0] + 6 * s, F[1] - 1 * s, 3 * s, 4 * s, 0, 0, Math.PI * 2); ctx.fill();
+}
+
+/** ต้นไม้ใหญ่ (ลำต้น + พุ่มใบเป็นชั้น) */
+function tree(ctx, x, y, s) {
+  shadow(ctx, x, y, 18 * s, 6 * s);
+  ctx.fillStyle = '#5e4128'; ctx.fillRect(x - 4 * s, y - 38 * s, 8 * s, 38 * s);
+  ctx.fillStyle = '#49301c'; ctx.fillRect(x + 1 * s, y - 38 * s, 3 * s, 38 * s);
+  const blob = (cx, cy, r, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); };
+  blob(x - 15 * s, y - 44 * s, 16 * s, '#415a30');
+  blob(x + 15 * s, y - 46 * s, 16 * s, '#3a5029');
+  blob(x, y - 42 * s, 20 * s, '#4f6c3c');
+  blob(x, y - 62 * s, 17 * s, '#557544');
+  blob(x - 8 * s, y - 55 * s, 11 * s, '#5f8049'); // ไฮไลต์
+  blob(x + 9 * s, y - 52 * s, 9 * s, '#48623399');
+}
+
+/** ม้านั่งไม้ (iso) */
+function bench(ctx, x, y, s) {
+  shadow(ctx, x, y, 16 * s, 4 * s);
+  const w = 22 * s;
+  poly(ctx, [[x - w, y - 4 * s], [x, y - 4 * s - w / 2], [x, y - 10 * s - w / 2], [x - w, y - 10 * s]], '#8a5e34'); // หน้านั่งซ้าย
+  poly(ctx, [[x, y - 4 * s - w / 2], [x + w, y - 4 * s], [x + w, y - 10 * s], [x, y - 10 * s - w / 2]], '#74502c'); // ขวา
+  ctx.fillStyle = '#5e3f22'; ctx.fillRect(x - w + 2 * s, y - 10 * s, 3 * s, 10 * s); ctx.fillRect(x + w - 5 * s, y - 10 * s, 3 * s, 10 * s); // ขา
+}
+
 const PROPS = {
   vase, lantern, lotus, censer, statue, pillar, table, rug,
-  house, shop, hall,
+  house, shop, hall, stall, tree, bench,
 };
 
 /** วาด prop ตามชนิด (text = ป้าย/อักษร สำหรับ shop/hall) */

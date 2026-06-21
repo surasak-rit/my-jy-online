@@ -31,7 +31,7 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 
-const getJSON = async (url) => (await fetch(url)).json();
+const getJSON = async (url) => (await fetch(url, { cache: 'no-cache' })).json();
 
 async function boot() {
   // โหลด config (data-driven §7.2)

@@ -18,7 +18,8 @@ import { buy, useConsumable } from './core/economy.js';
 import * as Quests from './core/quests.js';
 import { save, load, setLastSlot } from './state/save.js';
 
-const getJSON = async (url) => (await fetch(url)).json();
+// no-cache = revalidate กับ server เสมอ (304 ถ้าไฟล์ไม่เปลี่ยน) → ข้อมูลฉากไม่ค้างของเก่า
+const getJSON = async (url) => (await fetch(url, { cache: 'no-cache' })).json();
 
 const LEARN_FOCUS_COST = 25; // เรียนวิชา/อ่านคัมภีร์ 1 ครั้ง สิ้นเปลืองสมาธิ (定力)
 

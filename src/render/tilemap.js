@@ -6,6 +6,9 @@
 
 const TOP = ['#c4cdaa', '#d9c79f', '#e2dac4', '#9fb4ba'];
 const EDGE = ['#aab491', '#c4b083', '#cfc6ad', '#83a0a8'];
+// เมืองปูหิน/อิฐ (floor:"stone") — 0=หินเทา, 1=อิฐทางเดิน, 2=ลานหินอ่อน, 3=น้ำ
+const STONE_TOP = ['#b8b3a4', '#bd9f86', '#cfc9ba', '#9fb4ba'];
+const STONE_EDGE = ['#9a9588', '#a08469', '#b3ada0', '#83a0a8'];
 const WOOD_TOP = ['#b08a55', '#a67f4a'];
 const WOOD_EDGE = ['#7f6034', '#75582f'];
 const WALL_H = 30;
@@ -25,6 +28,8 @@ function rnd(tx, ty) {
 export function drawTileMap(ctx, map, cam, floor) {
   const { width, height, tileWidth: tw, tileHeight: th } = map;
   const wood = floor === 'wood';
+  const stone = floor === 'stone';
+  const topPal = stone ? STONE_TOP : TOP, edgePal = stone ? STONE_EDGE : EDGE;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       const s = cam.tileToScreen(tx, ty);
@@ -39,11 +44,29 @@ export function drawTileMap(ctx, map, cam, floor) {
         drawDiamond(ctx, s.x, s.y, tw, th, WOOD_TOP[sh], WOOD_EDGE[sh]);
         woodGrain(ctx, s.x, s.y, tw, th);
       } else {
-        drawDiamond(ctx, s.x, s.y, tw, th, TOP[g] || TOP[0], EDGE[g] || EDGE[0]);
-        detail(ctx, s.x, s.y, tw, th, g, tx, ty);
+        drawDiamond(ctx, s.x, s.y, tw, th, topPal[g] || topPal[0], edgePal[g] || edgePal[0]);
+        if (stone) paveDetail(ctx, s.x, s.y, tw, th, g, tx, ty);
+        else detail(ctx, s.x, s.y, tw, th, g, tx, ty);
       }
     }
   }
+}
+
+/** ลายพื้นปูหิน/อิฐ — ร่องแผ่นหิน + จุดด่างจาง (deterministic) */
+function paveDetail(ctx, cx, topY, tw, th, g, tx, ty) {
+  const midY = topY + th / 2;
+  if (g === 3) { // น้ำ (บ่อ) — ระลอก
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(cx, midY, 7, 3, 0, 0, Math.PI); ctx.stroke(); return;
+  }
+  // ร่องแบ่งแผ่นหิน (กากบาทกลางช่อง = แบ่ง 4 แผ่น)
+  ctx.strokeStyle = 'rgba(60,50,38,0.16)'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx, topY + 1); ctx.lineTo(cx, topY + th - 1);          // แนวตั้ง (เพชร)
+  ctx.moveTo(cx - tw / 2 + 2, midY); ctx.lineTo(cx + tw / 2 - 2, midY); // แนวนอน
+  ctx.stroke();
+  const r = rnd(tx, ty);
+  if (r > 0.7) { ctx.fillStyle = 'rgba(80,68,50,0.18)'; ctx.beginPath(); ctx.arc(cx + (r * 20 - 10), midY + (r * 6 - 3), 1.5, 0, Math.PI * 2); ctx.fill(); }
 }
 
 function drawDiamond(ctx, cx, topY, tw, th, fill, stroke) {
