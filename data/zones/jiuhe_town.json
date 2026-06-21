@@ -28,6 +28,18 @@
       },
       "label": "เข้าโรงฝึก",
       "art": "door"
+    },
+    {
+      "at": {
+        "x": 26,
+        "y": 14
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 2,
+        "y": 13
+      },
+      "label": "→ หยางโจว"
     }
   ],
   "props": [

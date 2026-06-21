@@ -1,0 +1,195 @@
+{
+  "id": "yangzhou_town",
+  "name": "เมืองหยางโจว",
+  "type": "hub",
+  "floor": "stone",
+  "tilemapRef": "data/tilemaps/yangzhou_town.json",
+  "portals": [
+    {
+      "at": {
+        "x": 1,
+        "y": 13
+      },
+      "toZoneId": "jiuhe_town",
+      "spawnAt": {
+        "x": 25,
+        "y": 14
+      },
+      "label": "→ นครจิ่วเหอ"
+    },
+    {
+      "at": {
+        "x": 24,
+        "y": 13
+      },
+      "toZoneId": "reed_marsh",
+      "spawnAt": {
+        "x": 2,
+        "y": 12
+      },
+      "label": "→ ทุ่งกก"
+    }
+  ],
+  "props": [
+    {
+      "type": "hall",
+      "at": {
+        "x": 5,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "月影"
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 19,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "碧蓮"
+    },
+    {
+      "type": "house",
+      "at": {
+        "x": 5,
+        "y": 20
+      },
+      "scale": 1.3
+    },
+    {
+      "type": "shop",
+      "at": {
+        "x": 19,
+        "y": 20
+      },
+      "scale": 1.3,
+      "text": "客"
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 10,
+        "y": 9
+      },
+      "scale": 1.3
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 22,
+        "y": 17
+      },
+      "scale": 1.25
+    },
+    {
+      "type": "stall",
+      "at": {
+        "x": 12,
+        "y": 15
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "stall",
+      "at": {
+        "x": 15,
+        "y": 12
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "bench",
+      "at": {
+        "x": 13,
+        "y": 15
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 3,
+        "y": 8
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 21,
+        "y": 8
+      }
+    },
+    {
+      "type": "censer",
+      "at": {
+        "x": 13,
+        "y": 11
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc_moon_master",
+      "at": {
+        "x": 5,
+        "y": 8
+      },
+      "role": "อาจารย์สำนักเงาจันทรา",
+      "archetype": "monk",
+      "name": "ปรมาจารย์เยฺว่อิ่ง",
+      "sectId": "moonshade"
+    },
+    {
+      "id": "npc_lotus_master",
+      "at": {
+        "x": 19,
+        "y": 8
+      },
+      "role": "อาจารย์สำนักบัวคราม",
+      "archetype": "monk",
+      "name": "ปรมาจารย์เหลียนซิน",
+      "sectId": "azure_lotus"
+    },
+    {
+      "id": "npc_yz_healer",
+      "at": {
+        "x": 11,
+        "y": 16
+      },
+      "role": "หมอประจำเมือง",
+      "archetype": "scholar",
+      "name": "หมอหลิว"
+    },
+    {
+      "id": "npc_yz_merchant",
+      "at": {
+        "x": 16,
+        "y": 14
+      },
+      "role": "พ่อค้าเร่",
+      "archetype": "merchant",
+      "name": "พ่อค้าโจว"
+    },
+    {
+      "id": "npc_yz_guard",
+      "at": {
+        "x": 13,
+        "y": 2
+      },
+      "role": "ยามเมือง",
+      "archetype": "guard",
+      "name": "นายทหารหยาง"
+    },
+    {
+      "id": "npc_yz_villager",
+      "at": {
+        "x": 9,
+        "y": 18
+      },
+      "role": "",
+      "archetype": "villager",
+      "name": "ชาวเมือง"
+    }
+  ]
+}

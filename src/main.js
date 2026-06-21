@@ -36,11 +36,11 @@ const getJSON = async (url) => (await fetch(url, { cache: 'no-cache' })).json();
 async function boot() {
   // โหลด config (data-driven §7.2)
   const sects = {};
-  for (const id of ['vajra_cliff']) sects[id] = await getJSON(`data/sects/${id}.json`);
+  for (const id of ['vajra_cliff', 'moonshade', 'azure_lotus']) sects[id] = await getJSON(`data/sects/${id}.json`);
   const mobDefs = {};
   for (const id of ['mob_petty_bandit', 'mob_gray_wolf']) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
   const skillDefs = {};
-  for (const id of ['vajra_palm', 'iron_body', 'cloud_step']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
+  for (const id of ['vajra_palm', 'iron_body', 'cloud_step', 'moon_sword', 'mist_step', 'jade_palm', 'lotus_heart']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
   const itemDefs = {};
   const ITEM_IDS = ['potion_small', 'potion_big', 'meat_bun',
     'helm_tiankui', 'amulet_baihu', 'robe_bodhi', 'bracers_tanlang', 'ring_jinggang', 'cloak_pojun', 'boots_huanhua', 'saber_xuantie'];

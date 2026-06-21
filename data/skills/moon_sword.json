@@ -1,0 +1,1 @@
+{"id": "moon_sword", "name": "กระบี่เงาจันทร์", "type": "external", "weaponType": "sword", "sectId": "moonshade", "maxRank": 5, "cost": 6, "perRank": {"atk": 5}, "desc": "กระบี่เร็วสายเงา เพิ่มพลังโจมตี", "fx": {"color": "#9fb8e0", "arcs": 2, "arcSpread": 1.1, "sparks": 5}}

@@ -1,0 +1,56 @@
+{
+  "id": "reed_marsh",
+  "name": "ทุ่งกกหมอกขาว",
+  "type": "field",
+  "tilemapRef": "data/tilemaps/reed_marsh.json",
+  "portals": [
+    {
+      "at": {
+        "x": 1,
+        "y": 12
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 23,
+        "y": 13
+      },
+      "label": "→ หยางโจว"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc_marsh_hermit",
+      "at": {
+        "x": 6,
+        "y": 6
+      },
+      "role": "ฤๅษีริมบึง",
+      "archetype": "wanderer",
+      "name": "เฒ่าจับปลา"
+    }
+  ],
+  "spawns": [
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 5,
+      "area": {
+        "x": 3,
+        "y": 14,
+        "w": 8,
+        "h": 7
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 5,
+      "area": {
+        "x": 14,
+        "y": 14,
+        "w": 8,
+        "h": 7
+      }
+    }
+  ]
+}

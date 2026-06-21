@@ -1,0 +1,1 @@
+{"id": "jade_palm", "name": "ฝ่ามือบัวหยก", "type": "external", "weaponType": "fist", "sectId": "azure_lotus", "maxRank": 5, "cost": 6, "perRank": {"atk": 4}, "desc": "ฝ่ามือปราณนุ่ม เพิ่มพลังโจมตี", "fx": {"color": "#7fd6b0", "arcs": 1, "arcSpread": 0.8, "rings": 1, "sparks": 7, "core": true}}
