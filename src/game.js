@@ -9,6 +9,7 @@ import { drawCharacter, drawNameplate, ARCHETYPE_COLOR } from './render/sprites.
 import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
+import { learn, recomputeStats } from './core/skills.js';
 import { save, load } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
@@ -19,19 +20,28 @@ export class Game {
    * @param {HTMLCanvasElement} canvas
    * @param {Record<string,any>} sects
    * @param {Record<string,any>} mobDefs
+   * @param {Record<string,any>} [skillDefs]
    */
-  constructor(ctx, canvas, sects, mobDefs) {
+  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}) {
     this.ctx = ctx; this.canvas = canvas; this.sects = sects; this.mobDefs = mobDefs;
+    this.skillDefs = skillDefs;
     this.cam = new Camera(64, 32);
     const saved = /** @type {any} */ (load()) || {};
     /** @type {any} */
     this.player = {
       id: 'player', displayName: 'จอมยุทธ์น้อย', activeTitle: 'ศิษย์ใหม่',
       sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, path: [],
-      hp: 100, maxHp: 100, atk: 18, def: 6, attackCdMs: 700, atkCd: 0, stun: 0,
+      baseAtk: 18, baseDef: 6, baseMaxHp: 100,
+      hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
+      skills: saved.skills || {},
       combatXP: saved.combatXP || 0, skillPoints: saved.skillPoints || 0,
       currency: saved.currency || 0,
     };
+    recomputeStats(this.player, this.skillDefs);
+    this.player.hp = saved.hp || this.player.maxHp;
+    /** ฮุคให้ UI (DOM) เปิดหน้าต่างคุยกับ NPC */
+    this.onInteract = (/** @type {any} */ _npc) => {};
+    this.interactNpc = null;
     this.zone = null; this.map = null; this.mobs = [];
     this.target = null; this.transitioning = false;
     this.dead = false; this.respawnT = 0;
@@ -64,25 +74,47 @@ export class Game {
     this.target = null;
     this.mobs = spawnFromZone(zone, this.mobDefs, (x, y) => this.isWalkable(x, y), (x, y) => this.tw(x, y));
     this.showToast(zone.name);
-    save({ zoneId, tile: this.player.tile, combatXP: this.player.combatXP, skillPoints: this.player.skillPoints, currency: this.player.currency });
+    this.saveState();
     this.transitioning = false;
   }
 
-  /** คลิก: ถ้าโดนมอน → ตั้งเป้าโจมตี, ไม่งั้น → เดิน */
+  /** คลิก: มอน→โจมตี, NPC→เข้าคุย, ไม่งั้น→เดิน */
   handlePick(tile) {
     if (this.transitioning || !this.map || this.dead) return;
     const mob = this.mobs.find((m) => m.state !== 'dead' && m.tile.x === tile.x && m.tile.y === tile.y);
-    if (mob) { this.target = mob; this.pathToAdjacent(mob); return; }
-    this.target = null;
+    if (mob) { this.target = mob; this.interactNpc = null; this.pathAdjacentTo(mob.tile); return; }
+    const npc = (this.zone.npcs || []).find((n) => n.at.x === tile.x && n.at.y === tile.y);
+    if (npc) {
+      this.target = null; this.interactNpc = npc;
+      if (tileDist(this.player.tile, npc.at) <= 1) { this.triggerInteract(); }
+      else this.pathAdjacentTo(npc.at);
+      return;
+    }
+    this.target = null; this.interactNpc = null;
     if (this.isWalkable(tile.x, tile.y)) {
       this.player.path = findPath(this.player.tile, tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
     }
   }
 
-  pathToAdjacent(mob) {
-    const path = findPath(this.player.tile, mob.tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
-    if (path.length) path.pop(); // หยุดที่ช่องประชิด ไม่ทับมอน
+  pathAdjacentTo(tile) {
+    const path = findPath(this.player.tile, tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
+    if (path.length) path.pop(); // หยุดที่ช่องประชิด ไม่ทับเป้า
     this.player.path = path;
+  }
+
+  triggerInteract() { const n = this.interactNpc; this.interactNpc = null; this.player.path = []; if (n) this.onInteract(n); }
+
+  /** เรียน/อัปเกรดวิชา (เรียกจาก UI) — คืน true ถ้าสำเร็จ */
+  learnSkill(def) {
+    const r = learn(this.player, def);
+    if (r.ok) { recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`เรียน ${def.name}`); }
+    return r;
+  }
+
+  saveState() {
+    if (!this.zone) return;
+    const p = this.player;
+    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
   }
 
   showToast(t) { this.toast = t; this.toastT = 2.2; }
@@ -106,13 +138,15 @@ export class Game {
       const next = p.path[0];
       const target = this.tw(next.x, next.y);
       const dx = target.x - p.pos.x, dy = target.y - p.pos.y, dist = Math.hypot(dx, dy);
-      const step = 150 * dt;
+      const step = 150 * (p.moveMult || 1) * dt; // วิชาตัวเบาเพิ่มความเร็ว (§3.2)
       if (dist <= step) {
         p.pos.x = target.x; p.pos.y = target.y; p.tile = next; p.path.shift();
         const portal = this.portalAt(p.tile);
         if (portal) { this.loadZone(portal.toZoneId, portal.spawnAt); return; }
       } else { p.pos.x += dx / dist * step; p.pos.y += dy / dist * step; }
     }
+    // ถึงตัว NPC ที่จะคุย → เปิดหน้าต่าง
+    if (this.interactNpc && p.path.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();
 
     // ต่อสู้กับเป้าหมาย
     if (this.target) {
@@ -127,7 +161,7 @@ export class Game {
             p.atkCd = p.attackCdMs / 1000;
             if (r.killed) this.onKill(this.target);
           }
-        } else if (p.path.length === 0) this.pathToAdjacent(this.target);
+        } else if (p.path.length === 0) this.pathAdjacentTo(this.target.tile);
       }
     }
 
@@ -154,7 +188,7 @@ export class Game {
     mob.state = 'dead'; mob.respawn = (def.respawnMs || 5000) / 1000;
     this.popDmg(mob.pos.x, mob.pos.y - 16, `+${def.xp} XP`, '#7CFC00');
     this.target = null;
-    save({ zoneId: this.zone.id, tile: this.player.tile, combatXP: this.player.combatXP, skillPoints: this.player.skillPoints, currency: this.player.currency });
+    this.saveState();
   }
 
   die() { this.dead = true; this.respawnT = 3; this.player.path = []; this.target = null; this.showToast('พ่ายแพ้… กลับสู่เมือง'); }

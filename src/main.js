@@ -5,6 +5,7 @@
 import { Game } from './game.js';
 import { startLoop } from './render/loop.js';
 import { attachMouse } from './input/mouse.js';
+import { initPanels } from './ui/panels.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game'));
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
@@ -21,8 +22,12 @@ async function boot() {
   for (const id of ['vajra_cliff']) sects[id] = await getJSON(`data/sects/${id}.json`);
   const mobDefs = {};
   for (const id of ['mob_petty_bandit', 'mob_gray_wolf']) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
+  const skillDefs = {};
+  for (const id of ['vajra_palm', 'iron_body', 'cloud_step']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
 
-  const game = new Game(ctx, canvas, sects, mobDefs);
+  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs);
+  const panels = initPanels(game);
+  game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
 
   attachMouse(canvas, game.cam, (tile) => game.handlePick(tile));
