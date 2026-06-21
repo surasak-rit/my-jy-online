@@ -1,7 +1,7 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
-// render/sprites.js — ตัวละครจิบิ "ลายเส้นหมึกพู่กัน" + ป้ายชื่อแผ่นกระดาษสา/ตราชาด
-// สไตล์นิยายกำลังภายใน: เส้นขอบหมึกเข้ม, สีชุดหม่น, ป้าย = แผ่นป้ายหมึก + ตราสำนัก
+// render/sprites.js — ตัวละครผู้ใหญ่สไตล์ JY Online (ชุดคลุมยาว ~7 หัว) + ป้ายชื่อ
+// สไตล์นิยายกำลังภายใน: robe คอไขว้ สายคาดเอว แสงเงา หันหน้าตามทิศ; ป้าย = กระดาษสา/ตราชาด
 // ──────────────────────────────────────────────────────────────────────────
 
 const INK = '#2a241d';
@@ -15,7 +15,7 @@ const ARCHETYPE_COLOR = {
   scholar: '#aeb6bf', child: '#c27f96',
 };
 
-const CHIBI_H = 48; // ความสูงโดยประมาณ (px @scale=1) — ใช้จัดตำแหน่งป้าย
+const CHAR_H = 100; // ความสูงตัวละครผู้ใหญ่ (px @scale=1) — ใช้จัดตำแหน่งป้าย
 
 /** ผสมสี hex เข้าหาดำ (amt<1) หรือขาว (ส่ง white=true) */
 function mix(hex, amt, white = false) {
@@ -27,73 +27,89 @@ function mix(hex, amt, white = false) {
 }
 
 /**
- * ตัวละครจิบิลายหมึก + แสงเงา + หันหน้าตามทิศ
+ * ตัวละครผู้ใหญ่สไตล์ JY Online — ชุดคลุมยาว (robe), แขนกว้าง, คอไขว้,
+ * สายคาดเอว, แสงเงา, หันหน้าตามทิศ. สัดส่วน ~7 หัว
  * @param {CanvasRenderingContext2D} ctx
  * @param {string} [facing] 'S'|'N'|'E'|'W'
  */
 export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S') {
-  const headR = 16 * scale;
-  const bodyW = 22 * scale, bodyH = 17 * scale;
-  const bodyBottom = fy - 3 * scale, bodyTop = bodyBottom - bodyH;
-  const bodyMidY = (bodyTop + bodyBottom) / 2;
-  const headCy = bodyTop - headR + 5 * scale;
-  ctx.lineJoin = 'round';
-  ctx.lineWidth = 1.8 * scale; ctx.strokeStyle = INK;
+  const s = scale;
+  const headR = 8 * s, headCy = fy - 90 * s;
+  const shoulderY = fy - 80 * s, shoulderHalf = 12 * s;
+  const waistY = fy - 50 * s, hemY = fy - 3 * s, hemHalf = 17 * s;
+  const dark = mix(bodyColor, 0.30), light = mix(bodyColor, 0.22, true), collar = mix(bodyColor, 0.45);
+  const skin = '#e9c9a0';
+  ctx.lineJoin = 'round'; ctx.lineWidth = 1.4 * s; ctx.strokeStyle = INK;
 
-  // เงาหมึกใต้เท้า
-  ctx.fillStyle = 'rgba(42,36,29,0.22)';
-  ctx.beginPath(); ctx.ellipse(fx, fy, 13 * scale, 5 * scale, 0, 0, Math.PI * 2); ctx.fill();
+  // เงาใต้เท้า
+  ctx.fillStyle = 'rgba(42,36,29,0.25)';
+  ctx.beginPath(); ctx.ellipse(fx, fy, 15 * s, 5 * s, 0, 0, Math.PI * 2); ctx.fill();
 
   // รองเท้า
-  ctx.fillStyle = '#241f1c';
-  ctx.beginPath(); ctx.ellipse(fx - 4 * scale, bodyBottom + 1 * scale, 3.5 * scale, 2.2 * scale, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(fx + 4 * scale, bodyBottom + 1 * scale, 3.5 * scale, 2.2 * scale, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#2a221c';
+  ctx.beginPath(); ctx.ellipse(fx - 5 * s, hemY, 4 * s, 2.4 * s, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(fx + 5 * s, hemY, 4 * s, 2.4 * s, 0, 0, Math.PI * 2); ctx.fill();
 
-  // แขน (ชุด)
-  ctx.fillStyle = mix(bodyColor, 0.12);
-  inkEllipse(ctx, fx - bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);
-  inkEllipse(ctx, fx + bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);
+  // เสื้อคลุมยาว (robe) — บานปลาย
+  ctx.beginPath();
+  ctx.moveTo(fx - shoulderHalf, shoulderY);
+  ctx.quadraticCurveTo(fx - shoulderHalf - 2 * s, waistY, fx - hemHalf, hemY);
+  ctx.lineTo(fx + hemHalf, hemY);
+  ctx.quadraticCurveTo(fx + shoulderHalf + 2 * s, waistY, fx + shoulderHalf, shoulderY);
+  ctx.quadraticCurveTo(fx, shoulderY - 4 * s, fx - shoulderHalf, shoulderY);
+  ctx.closePath();
+  ctx.fillStyle = bodyColor; ctx.fill(); ctx.stroke();
 
-  // ลำตัว (ชุด) + ไล่แสง: ฐานสี → เงาล่างขวา → ไฮไลต์บนซ้าย
-  ctx.fillStyle = bodyColor;
-  inkEllipse(ctx, fx, bodyMidY, bodyW / 2, bodyH / 2);
-  ctx.save(); ctx.beginPath(); ctx.ellipse(fx, bodyMidY, bodyW / 2, bodyH / 2, 0, 0, Math.PI * 2); ctx.clip();
-  ctx.fillStyle = mix(bodyColor, 0.28); // เงาล่างขวา
-  ctx.beginPath(); ctx.ellipse(fx + 5 * scale, bodyMidY + 4 * scale, bodyW / 2, bodyH / 2, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = mix(bodyColor, 0.30, true); // ไฮไลต์บนซ้าย
-  ctx.beginPath(); ctx.ellipse(fx - 5 * scale, bodyMidY - 4 * scale, 5 * scale, 4 * scale, 0, 0, Math.PI * 2); ctx.fill();
-  // สายคาดเอว
-  ctx.fillStyle = '#caa24a';
-  ctx.fillRect(fx - bodyW / 2, bodyMidY + 1 * scale, bodyW, 3 * scale);
+  // แสงเงาภายในทรง robe
+  ctx.save(); ctx.clip();
+  ctx.fillStyle = dark; // เงาขวา
+  ctx.beginPath(); ctx.moveTo(fx + 2 * s, shoulderY); ctx.lineTo(fx + hemHalf + 4 * s, hemY); ctx.lineTo(fx + shoulderHalf + 4 * s, shoulderY); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = light; // ไฮไลต์ซ้าย
+  ctx.beginPath(); ctx.moveTo(fx - shoulderHalf + 1 * s, shoulderY); ctx.lineTo(fx - hemHalf + 3 * s, hemY); ctx.lineTo(fx - hemHalf + 9 * s, hemY); ctx.lineTo(fx - shoulderHalf + 7 * s, shoulderY); ctx.closePath(); ctx.fill();
+  // คอเสื้อไขว้ (交领)
+  ctx.fillStyle = collar;
+  ctx.beginPath(); ctx.moveTo(fx, shoulderY - 3 * s); ctx.lineTo(fx - 7 * s, shoulderY + 2 * s); ctx.lineTo(fx - 3 * s, waistY); ctx.lineTo(fx, waistY - 6 * s); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(fx, shoulderY - 3 * s); ctx.lineTo(fx + 7 * s, shoulderY + 2 * s); ctx.lineTo(fx + 3 * s, waistY); ctx.lineTo(fx, waistY - 6 * s); ctx.closePath(); ctx.fill();
   ctx.restore();
 
-  // หัว + ขอบหมึก
-  ctx.fillStyle = '#efd6ae';
-  inkCircle(ctx, fx, headCy, headR);
-  // ผม
+  // สายคาดเอว + ชายผ้า
+  ctx.fillStyle = '#caa24a'; ctx.fillRect(fx - shoulderHalf * 0.95, waistY, shoulderHalf * 1.9, 4 * s);
+  ctx.fillStyle = '#a8842f'; ctx.fillRect(fx - 2 * s, waistY, 4 * s, 13 * s);
+
+  // แขนเสื้อกว้าง (สองข้าง) + มือ
+  ctx.fillStyle = mix(bodyColor, 0.10);
+  drapeSleeve(ctx, fx - shoulderHalf, shoulderY, -1, s, skin);
+  drapeSleeve(ctx, fx + shoulderHalf, shoulderY, 1, s, skin);
+
+  // คอ + หัว
+  ctx.fillStyle = skin; ctx.fillRect(fx - 2.5 * s, headCy + headR - 1 * s, 5 * s, 5 * s);
+  ctx.fillStyle = '#efd6ae'; ctx.beginPath(); ctx.arc(fx, headCy, headR, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+  // ผม + มวยผม (topknot)
   ctx.fillStyle = INK;
-  ctx.beginPath(); ctx.arc(fx, headCy, headR, Math.PI * 1.0, Math.PI * 2.0); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(fx, headCy - headR * 0.5, headR * 0.98, headR * 0.55, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(fx, headCy, headR, Math.PI * 0.95, Math.PI * 2.05); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(fx, headCy - headR * 0.6, headR * 1.05, headR * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(fx, headCy - headR * 1.15, 3 * s, 0, Math.PI * 2); ctx.fill();
   if (facing === 'N') {
-    // หันหลัง: มวยผม ไม่มีตา
-    ctx.beginPath(); ctx.arc(fx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#1c1714'; ctx.beginPath(); ctx.arc(fx, headCy - headR * 0.4, 3.5 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(fx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill(); // หันหลัง
   } else {
-    const ex = facing === 'E' ? 3 * scale : facing === 'W' ? -3 * scale : 0;
+    const ex = facing === 'E' ? 2 * s : facing === 'W' ? -2 * s : 0;
     ctx.fillStyle = INK;
-    ctx.beginPath(); ctx.arc(fx - 5.5 * scale + ex, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(fx + 5.5 * scale + ex, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath(); ctx.arc(fx - 4.8 * scale + ex, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(fx + 6.2 * scale + ex, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(fx - 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(fx + 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
   }
 }
 
-function inkEllipse(ctx, x, y, rx, ry) {
-  ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-}
-function inkCircle(ctx, x, y, r) {
-  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+/** แขนเสื้อกว้างทรงห้อย (dir = -1 ซ้าย / +1 ขวา) + มือโผล่ */
+function drapeSleeve(ctx, sx, sy, dir, s, skin) {
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + 1 * s);
+  ctx.quadraticCurveTo(sx + dir * 9 * s, sy + 12 * s, sx + dir * 6 * s, sy + 28 * s);
+  ctx.lineTo(sx + dir * 0.5 * s, sy + 26 * s);
+  ctx.quadraticCurveTo(sx - dir * 1 * s, sy + 12 * s, sx, sy + 1 * s);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.save(); ctx.fillStyle = skin;
+  ctx.beginPath(); ctx.arc(sx + dir * 4 * s, sy + 27 * s, 2 * s, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 }
 
 /**
@@ -119,7 +135,7 @@ export function drawNameplate(ctx, fx, fy, info, scale = 1) {
   const padX = boxed ? 9 * scale : 0, padY = boxed ? 5 * scale : 0;
   const plaqueW = maxW + padX * 2;
   const plaqueH = lines.length * lineH + padY * 2;
-  const topY = fy - CHIBI_H * scale - 12 - plaqueH;
+  const topY = fy - CHAR_H * scale - 12 - plaqueH;
 
   if (boxed) {
     roundRect(ctx, fx - plaqueW / 2, topY, plaqueW, plaqueH, 4 * scale);
