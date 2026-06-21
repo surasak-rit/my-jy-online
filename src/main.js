@@ -42,7 +42,9 @@ async function boot() {
   const skillDefs = {};
   for (const id of ['vajra_palm', 'iron_body', 'cloud_step']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
   const itemDefs = {};
-  for (const id of ['potion_small', 'potion_big', 'meat_bun']) itemDefs[id] = await getJSON(`data/items/${id}.json`);
+  const ITEM_IDS = ['potion_small', 'potion_big', 'meat_bun',
+    'helm_tiankui', 'amulet_baihu', 'robe_bodhi', 'bracers_tanlang', 'ring_jinggang', 'cloak_pojun', 'boots_huanhua', 'saber_xuantie'];
+  for (const id of ITEM_IDS) itemDefs[id] = await getJSON(`data/items/${id}.json`);
   const questDefs = {};
   for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
@@ -66,10 +68,11 @@ async function boot() {
   attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
   // ปิด/รีเฟรชแท็บ → บันทึกตำแหน่งปัจจุบัน (เผื่อรีเฟรชระหว่างเดิน)
   addEventListener('beforeunload', () => game.saveState());
-  // ปุ่ม I = เปิดกระเป๋า · N = เม็ดยาภายใน (内丹) — อ่าน keycode (e.code) ใช้ได้ทุก layout/ภาษา
+  // ปุ่ม I=กระเป๋า · N=เม็ดยาภายใน(内丹) · E=อุปกรณ์(裝備) — อ่าน keycode ใช้ได้ทุก layout/ภาษา
   addEventListener('keydown', (e) => {
     if (e.code === 'KeyI') panels.openInventory();
     else if (e.code === 'KeyN') panels.openNeidan();
+    else if (e.code === 'KeyE') panels.openEquip();
   });
 
   startLoop(

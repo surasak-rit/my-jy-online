@@ -35,19 +35,25 @@ export function learn(player, def) {
  * @param {any} player ต้องมี baseAtk/baseMaxHp/baseDef + skills{}
  * @param {Record<string,any>} skillDefs
  */
-export function recomputeStats(player, skillDefs) {
+export function recomputeStats(player, skillDefs, itemDefs = {}) {
   let atk = player.baseAtk, maxHp = player.baseMaxHp, def = player.baseDef, moveMult = 1;
   let maxMp = player.baseMaxMp || 0, maxStamina = player.baseMaxStamina || 0, maxFocus = player.baseMaxFocus || 0;
-  // ค่ากำเนิด (資質) ส่งผลต่อค่าต่อสู้ + ค่าพื้นฐาน (GDD §สเตตัส C / §基本屬性)
-  const b = player.birthAttrs;
-  if (b) {
-    maxHp += Math.round((b.bone || 0) * 4);    // 1 กระดูก ≈ +4 HP (อิง 根骨=เลือด)
-    atk += Math.round((b.might || 0) * 0.6);   // พลังแขน → ผลโจมตีกายภาพ
-    def += Math.round((b.focus || 0) * 0.3);   // สมาธิ/定力 → ต้านทาน
-    maxMp += Math.round((b.insight || 0) * 2 + (b.bone || 0)); // รู้แจ้ง+กระดูก → กำลังภายใน (內力)
-    maxStamina += Math.round((b.might || 0) + (b.bone || 0));  // พลังแขน+กระดูก → สติ (體力)
-    maxFocus += Math.round((b.focus || 0));                    // สมาธิ → 定力
+  // รวมโบนัสอุปกรณ์ที่สวม: ค่ากำเนิด (attr) รวมเข้ากับค่ากำเนิดฐาน · ค่าตรง (bonus) บวกท้าย
+  const b = Object.assign({}, player.birthAttrs || {});
+  let eqAtk = 0, eqDef = 0, eqHp = 0, eqMp = 0;
+  for (const slot in (player.equipment || {})) {
+    const id = player.equipment[slot]; if (!id) continue;
+    const d = itemDefs[id]; if (!d) continue;
+    const bo = d.bonus || {}; eqAtk += bo.atk || 0; eqDef += bo.def || 0; eqHp += bo.maxHp || 0; eqMp += bo.maxMp || 0;
+    const at = d.attr || {}; for (const k in at) b[k] = (b[k] || 0) + at[k];
   }
+  // ค่ากำเนิด (資質, รวมจากอุปกรณ์) → ค่าต่อสู้ + ค่าพื้นฐาน (GDD §สเตตัส C / §基本屬性)
+  maxHp += Math.round((b.bone || 0) * 4);    // 1 กระดูก ≈ +4 HP (อิง 根骨=เลือด)
+  atk += Math.round((b.might || 0) * 0.6);   // พลังแขน → ผลโจมตีกายภาพ
+  def += Math.round((b.focus || 0) * 0.3);   // สมาธิ/定力 → ต้านทาน
+  maxMp += Math.round((b.insight || 0) * 2 + (b.bone || 0)); // รู้แจ้ง+กระดูก → กำลังภายใน (內力)
+  maxStamina += Math.round((b.might || 0) + (b.bone || 0));  // พลังแขน+กระดูก → สติ (體力)
+  maxFocus += Math.round((b.focus || 0));                    // สมาธิ → 定力
   // เม็ดยาภายใน (五行内丹) — เสริมค่าต่อสู้ตามขั้น+ธาตุ
   const nb = neidanBonus(player.neidan);
   atk += nb.atk; def += nb.def; maxHp += nb.maxHp; maxMp += nb.maxMp;
@@ -60,6 +66,7 @@ export function recomputeStats(player, skillDefs) {
     moveMult += (pr.moveBonus || 0) * r;
     maxMp += (pr.maxMp_ || 0) * r; // หมายเหตุ: perRank.maxMp_ เผื่อวิชาเสริม內力 (ยังไม่มี def ใช้)
   }
+  atk += eqAtk; def += eqDef; maxHp += eqHp; maxMp += eqMp; // โบนัสตรงจากอุปกรณ์
   player.atk = atk; player.maxHp = maxHp; player.def = def; player.moveMult = moveMult;
   player.maxMp = maxMp; player.maxStamina = maxStamina; player.maxFocus = maxFocus;
   if (player.hp > maxHp) player.hp = maxHp;

@@ -16,7 +16,7 @@ export function initMenu(game) {
     <div id="menu-pop" class="hidden">
       <div class="menu-title">เมนู</div>
       <button id="menu-home">🏠 กลับสู่หน้าหลัก</button>
-      <div class="menu-hint">I = กระเป๋า · N = เม็ดยาภายใน</div>
+      <div class="menu-hint">I = กระเป๋า · E = อุปกรณ์ · N = เม็ดยาภายใน</div>
     </div>`;
 
   const pop = /** @type {HTMLElement} */ (el.querySelector('#menu-pop'));

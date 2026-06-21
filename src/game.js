@@ -14,6 +14,7 @@ import { spawnNpcs, updateNpcs } from './core/npcs.js';
 import { spawnStrike, updateFx, drawFx, FACE_ANGLE } from './render/fx.js';
 import { learn, recomputeStats } from './core/skills.js';
 import { upgradeNeidan } from './core/neidan.js';
+import { equip, unequip, emptyEquipment } from './core/equip.js';
 import { buy, useConsumable } from './core/economy.js';
 import * as Quests from './core/quests.js';
 import { save, load, setLastSlot } from './state/save.js';
@@ -64,6 +65,7 @@ export class Game {
       birthAttrs: saved.birthAttrs || null, // ค่ากำเนิด 7 ค่า (資質) — ทอยตอนสร้างตัว
       birthday: saved.birthday || null,     // วันเกิดในเกม {month, day} (生日系統)
       neidan: saved.neidan || { tier: 0, element: null }, // เม็ดยาภายใน (五行内丹)
+      equipment: saved.equipment || emptyEquipment(),     // อุปกรณ์ที่สวม 8 ช่อง (裝備)
       tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       baseMaxMp: 40, baseMaxStamina: 30, baseMaxFocus: 100, // ค่าพื้นฐาน 內力/體力/定力 (§基本屬性)
@@ -75,7 +77,7 @@ export class Game {
       combatXP: saved.combatXP || 0, skillPoints: saved.skillPoints || 0,
       currency: saved.currency != null ? saved.currency : 30,
     };
-    recomputeStats(this.player, this.skillDefs);
+    recomputeStats(this.player, this.skillDefs, this.itemDefs);
     this.player.hp = saved.hp || this.player.maxHp;
     this.player.mp = saved.mp != null ? saved.mp : this.player.maxMp;
     this.player.stamina = saved.stamina != null ? saved.stamina : this.player.maxStamina;
@@ -226,7 +228,7 @@ export class Game {
     const r = learn(this.player, def);
     if (r.ok) {
       this.player.focus = Math.max(0, this.player.focus - LEARN_FOCUS_COST); // เรียนวิชาสิ้นเปลืองสมาธิ (定力)
-      recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`เรียน ${def.name}`);
+      recomputeStats(this.player, this.skillDefs, this.itemDefs); this.saveState(); this.showToast(`เรียน ${def.name}`);
     }
     return r;
   }
@@ -236,7 +238,7 @@ export class Game {
     const before = this.player.neidan?.tier || 0;
     const r = upgradeNeidan(this.player, element);
     if (r.ok) {
-      recomputeStats(this.player, this.skillDefs);
+      recomputeStats(this.player, this.skillDefs, this.itemDefs);
       this.player.hp = Math.min(this.player.maxHp, this.player.hp); // กัน hp เกิน (ไม่ฮีลฟรี)
       this.saveState();
       this.showToast(before === 0 ? 'หลอมเม็ดยาสำเร็จ!' : 'ยกขั้นเม็ดยาสำเร็จ!');
@@ -249,7 +251,7 @@ export class Game {
     const p = this.player;
     save(this.slot, {
       displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
-      birthAttrs: p.birthAttrs, birthday: p.birthday, neidan: p.neidan,
+      birthAttrs: p.birthAttrs, birthday: p.birthday, neidan: p.neidan, equipment: p.equipment,
       zoneId: this.zone.id, zoneName: this.zone.name, tile: p.tile, hp: p.hp, mp: p.mp, stamina: p.stamina, focus: p.focus,
       skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
@@ -266,7 +268,7 @@ export class Game {
     if (birthAttrs) p.birthAttrs = birthAttrs;   // ค่ากำเนิดที่ทอยได้ (資質)
     if (birthday) p.birthday = birthday;          // วันเกิดในเกม (生日系統)
     p.sectId = null; p.activeTitle = 'พเนจร';
-    recomputeStats(p, this.skillDefs);            // ค่ากำเนิดส่งผลต่อ atk/def/maxHp + 內力/體力/定力
+    recomputeStats(p, this.skillDefs, this.itemDefs);            // ค่ากำเนิดส่งผลต่อ atk/def/maxHp + 內力/體力/定力
     p.hp = p.maxHp; p.mp = p.maxMp; p.stamina = p.maxStamina; p.focus = p.maxFocus;
     this.needsCreation = false;
     this.saveState();
@@ -295,7 +297,7 @@ export class Game {
   acceptQuest(def) { Quests.accept(this.player, def); this.saveState(); this.showToast(`รับเควส: ${def.name}`); }
   turnInQuest(def) {
     const r = Quests.complete(this.player, def);
-    if (r.ok) { recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`สำเร็จ: ${def.name}!`); }
+    if (r.ok) { recomputeStats(this.player, this.skillDefs, this.itemDefs); this.saveState(); this.showToast(`สำเร็จ: ${def.name}!`); }
     return r;
   }
 
@@ -303,6 +305,10 @@ export class Game {
   buyItem(def) { const r = buy(this.player, def); if (r.ok) { this.saveState(); this.showToast(`ซื้อ ${def.name}`); } return r; }
   /** ใช้ของกิน (เรียกจาก UI) */
   useItem(def) { const r = useConsumable(this.player, def); if (r.ok) { this.saveState(); this.showToast(`ใช้ ${def.name}`); } return r; }
+  /** สวมอุปกรณ์ (เรียกจาก UI) */
+  equipItem(def) { const r = equip(this.player, def); if (r.ok) { recomputeStats(this.player, this.skillDefs, this.itemDefs); this.saveState(); this.showToast(`สวม ${def.name}`); } return r; }
+  /** ถอดอุปกรณ์ (เรียกจาก UI) */
+  unequipItem(slot) { const r = unequip(this.player, slot); if (r.ok) { recomputeStats(this.player, this.skillDefs, this.itemDefs); this.saveState(); } return r; }
 
   showToast(t) { this.toast = t; this.toastT = 2.2; }
   popDmg(wx, wy, text, color) { this.dmgNums.push({ wx, wy: wy - 60, text, color, t: 0.9 }); }

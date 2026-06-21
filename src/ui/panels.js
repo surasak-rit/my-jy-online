@@ -7,6 +7,7 @@ import { canLearn, skillCost } from '../core/skills.js';
 import { countItem } from '../core/economy.js';
 import { progressText } from '../core/quests.js';
 import { neidanBonus, canUpgradeNeidan, NEIDAN_STAGES, ELEMENTS, MAX_TIER } from '../core/neidan.js';
+import { EQUIP_SLOTS, bonusText } from '../core/equip.js';
 
 /**
  * @param {import('../game.js').Game} game
@@ -94,6 +95,34 @@ export function initPanels(game) {
     });
   }
 
+  /** หน้าต่างอุปกรณ์ (裝備) — 8 ช่องสวมใส่ + กระเป๋า (เปิดด้วยปุ่ม E) */
+  function openEquip() {
+    const p = game.player;
+    const eq = p.equipment || {};
+    const slotsHtml = EQUIP_SLOTS.map((sl) => {
+      const d = eq[sl.key] ? game.itemDefs[eq[sl.key]] : null;
+      const inner = d ? `<b>${d.name}</b><br/><small>${bonusText(d)}</small>` : `<span class="eq-empty">— ว่าง —</span>`;
+      return `<div class="eq-slot ${d ? 'filled' : ''}" data-slot="${sl.key}">
+        <span class="eq-slot-label">${sl.th} <em>${sl.cn}</em></span>
+        <span class="eq-slot-item">${inner}</span></div>`;
+    }).join('');
+    const bag = p.inventory.length ? p.inventory.map((s) => {
+      const d = game.itemDefs[s.itemId]; if (!d) return '';
+      const wear = d.type === 'equip';
+      return `<div class="eq-bag-item ${wear ? 'wearable' : ''}" ${wear ? `data-eq="${d.id}"` : ''} title="${bonusText(d) || d.desc || ''}">
+        <b>${d.name}</b>${s.qty > 1 ? ` ×${s.qty}` : ''}<br/><small>${wear ? bonusText(d) + ' · กดเพื่อสวม' : (d.desc || '')}</small></div>`;
+    }).join('') : '<small>กระเป๋าว่างเปล่า</small>';
+    frame(`อุปกรณ์ 裝備 — ⚔️${Math.round(p.atk)} 🛡️${Math.round(p.def)} ❤️${p.maxHp} 內力${p.maxMp}`,
+      `<div class="eq-wrap"><div class="eq-doll">${slotsHtml}</div>
+        <div class="eq-bag"><div class="eq-bag-head">玩家身上物品 · กระเป๋า</div><div class="eq-bag-grid">${bag}</div></div></div>`);
+    el.querySelectorAll('.eq-slot.filled').forEach((n) => {
+      /** @type {HTMLElement} */ (n).onclick = () => { game.unequipItem(/** @type {HTMLElement} */ (n).dataset.slot); openEquip(); };
+    });
+    el.querySelectorAll('.eq-bag-item.wearable').forEach((n) => {
+      /** @type {HTMLElement} */ (n).onclick = () => { game.equipItem(game.itemDefs[/** @type {HTMLElement} */ (n).dataset.eq]); openEquip(); };
+    });
+  }
+
   /** หน้าต่างเม็ดยาภายใน (五行内丹) — เปิดด้วยปุ่ม N */
   function openNeidan() {
     const p = game.player;
@@ -177,7 +206,7 @@ export function initPanels(game) {
     frame(npc.name, `<p><i>“${npcLine(npc)}”</i></p>`);     // ตัวประกอบ/อื่น ๆ
   }
 
-  return { open, close, openInventory, openNeidan };
+  return { open, close, openInventory, openNeidan, openEquip };
 }
 
 function npcLine(npc) {
