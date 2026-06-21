@@ -51,7 +51,7 @@ export function spawnFromZone(zone, mobDefs, isWalkable, tileToWorld, rng = Math
         tile: { x: tx, y: ty }, pos: { x: w.x, y: w.y }, home: { x: tx, y: ty },
         hp: def.maxHp, maxHp: def.maxHp, atk: def.atk, def: def.def,
         state: 'idle', facing: 'S', moving: false, step: 0, breath: Math.random() * 6.28,
-        moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
+        attackT: 0, hurtT: 0, moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
       });
     }
   }
@@ -78,6 +78,8 @@ export function updateMobs(mobs, player, dt, h) {
       }
       continue;
     }
+    m.attackT = Math.max(0, (m.attackT || 0) - dt); // อนิเมชันฟันแขน
+    m.hurtT = Math.max(0, (m.hurtT || 0) - dt);     // กระพริบแดงโดนตี
     if (m.stun > 0) { m.stun -= dt; continue; } // โดน hit-stun → ขยับ/ตีไม่ได้
     m.moveCd -= dt; m.atkCd -= dt;
 
@@ -93,6 +95,7 @@ export function updateMobs(mobs, player, dt, h) {
       const r = attack(m, /** @type {any} */(player), 150);
       h.onPlayerDamaged(r.damage);
       m.atkCd = (m.def_.attackCdMs || 1200) / 1000;
+      m.attackT = 0.3; // ฟันแขนเข้าหาผู้เล่น
     } else if (m.moveCd <= 0 && (m.tile.x !== target.x || m.tile.y !== target.y) && !(m.state === 'chase' && d <= 1)) {
       // เดินทีละช่องเข้าหา target (greedy 4-dir)
       const step = stepToward(m.tile, target, h.isWalkable);

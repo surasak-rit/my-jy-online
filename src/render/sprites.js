@@ -29,19 +29,22 @@ function mix(hex, amt, white = false) {
 /**
  * ตัวละครผู้ใหญ่สไตล์ JY Online — ชุดคลุมยาว (robe), แขนกว้าง, คอไขว้,
  * สายคาดเอว, แสงเงา, หันหน้าตามทิศ. สัดส่วน ~7 หัว
- * anim: { moving, step (เรเดียนผูกระยะเดิน), breath (เรเดียนเวลา) } → ทำให้ขยับเนียน
+ * anim: { moving, step, breath, attack (1→0), hurt (1→0) } → ขยับเนียน + โจมตี/สะดุ้ง
  * @param {CanvasRenderingContext2D} ctx
  * @param {string} [facing] 'S'|'N'|'E'|'W'
- * @param {{moving?:boolean, step?:number, breath?:number}} [anim]
+ * @param {{moving?:boolean, step?:number, breath?:number, attack?:number, hurt?:number}} [anim]
  */
 export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', anim = {}) {
   const s = scale;
   const mv = !!anim.moving, step = anim.step || 0, breath = anim.breath || 0;
+  const atk = anim.attack || 0, hurt = anim.hurt || 0;
+  const punch = atk > 0 ? Math.sin((1 - atk) * Math.PI) : 0; // 0→1→0 (จังหวะฟัน)
+  const dir = facing === 'W' ? -1 : 1; // ทิศแขนที่ฟันออก
   // bob: เดิน=เด้งสองครั้ง/รอบ (|sin|), ยืน=หายใจช้า ๆ ; sw: แกว่งแขน/ก้าวเท้า -1..1
   const bob = mv ? Math.abs(Math.sin(step)) * 2.6 * s : (Math.sin(breath) * 0.9 + 0.9) * s;
   const sw = mv ? Math.sin(step) : Math.sin(breath) * 0.18;
-  const lean = mv ? (facing === 'E' ? 1.4 * s : facing === 'W' ? -1.4 * s : 0) : 0;
-  const by = -bob; // ยกลำตัวขึ้น (สะโพกขึ้นบน, ชายเสื้ออยู่กับพื้น → ยืด/ยุบ)
+  const lean = (mv ? (facing === 'E' ? 1.4 * s : facing === 'W' ? -1.4 * s : 0) : 0) + punch * dir * 3 * s;
+  const by = -bob + punch * 3.5 * s; // ฟัน=ย่อตัวลง (crouch); เดิน/ยืน=ยกขึ้น
 
   const headR = 8 * s, headCy = fy - 90 * s + by;
   const shoulderY = fy - 80 * s + by, shoulderHalf = 12 * s;
@@ -85,10 +88,11 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', a
   ctx.fillStyle = '#caa24a'; ctx.fillRect(fx - shoulderHalf * 0.95, waistY, shoulderHalf * 1.9, 4 * s);
   ctx.fillStyle = '#a8842f'; ctx.fillRect(fx - 2 * s + sw * 2 * s, waistY, 4 * s, 13 * s);
 
-  // แขนเสื้อกว้าง (แกว่งสลับข้าง) + มือ
+  // แขนเสื้อกว้าง (แกว่งสลับข้าง) + ฟันแขนออกตอนโจมตี + มือ
   ctx.fillStyle = mix(bodyColor, 0.10);
-  drapeSleeve(ctx, fx - shoulderHalf + lean, shoulderY, -1, s, skin, sw * 3.5 * s);
-  drapeSleeve(ctx, fx + shoulderHalf + lean, shoulderY, 1, s, skin, -sw * 3.5 * s);
+  const thrust = punch * 13 * s; // แขนข้างที่ฟันพุ่งออก
+  drapeSleeve(ctx, fx - shoulderHalf + lean, shoulderY, -1, s, skin, sw * 3.5 * s + (dir < 0 ? -thrust : 0));
+  drapeSleeve(ctx, fx + shoulderHalf + lean, shoulderY, 1, s, skin, -sw * 3.5 * s + (dir > 0 ? thrust : 0));
 
   // คอ + หัว (เอียงตามทิศ)
   ctx.fillStyle = skin; ctx.fillRect(fx - 2.5 * s + lean, headCy + headR - 1 * s, 5 * s, 5 * s);
@@ -107,6 +111,16 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', a
     ctx.fillStyle = INK;
     ctx.beginPath(); ctx.arc(hx - 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(hx + 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // สะดุ้งโดนตี: กระพริบแดงคลุมเงาตัว (ไม่เด้งถอย)
+  if (hurt > 0) {
+    ctx.save();
+    ctx.globalAlpha = hurt * 0.6;
+    ctx.fillStyle = '#e23529';
+    ctx.beginPath(); ctx.ellipse(fx + lean, (shoulderY + hemY) / 2, hemHalf, (hemY - shoulderY) / 2 + 2 * s, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx, headCy, headR + 1 * s, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
   }
 }
 

@@ -240,6 +240,8 @@ export class Game {
 
     const p = this.player;
     p.atkCd -= dt;
+    p.attackT = Math.max(0, (p.attackT || 0) - dt); // อนิเมชันฟันแขน
+    p.hurtT = Math.max(0, (p.hurtT || 0) - dt);     // กระพริบแดงโดนตี
     p.breath = (p.breath || 0) + dt * 3; // จังหวะหายใจตอนยืนเฉย
     const ox = p.pos.x, oy = p.pos.y;
 
@@ -280,6 +282,7 @@ export class Game {
             const r = attack(p, this.target, 300);
             this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#7c1f1b');
             p.atkCd = p.attackCdMs / 1000;
+            p.attackT = 0.3; this.target.hurtT = 0.25; // ฟันแขน + เป้าสะดุ้ง
             if (r.killed) this.onKill(this.target);
           }
         } else if (p.waypoints.length === 0) this.routeToTile(this.target.tile, true);
@@ -291,7 +294,7 @@ export class Game {
       isWalkable: (x, y) => this.isWalkable(x, y),
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
-        p.hp -= dmg; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
+        p.hp -= dmg; p.hurtT = 0.25; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
         if (p.hp <= 0) this.die();
       },
     });
@@ -351,11 +354,11 @@ export class Game {
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
       const s = cam.worldToScreen(m.pos.x, m.pos.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8, m.facing || 'S', { moving: m.moving, step: m.step, breath: m.breath }); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
+      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8, m.facing || 'S', { moving: m.moving, step: m.step, breath: m.breath, attack: (m.attackT || 0) / 0.3, hurt: (m.hurtT || 0) / 0.25 }); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
     }
     if (!this.dead) {
       const ps = cam.worldToScreen(this.player.pos.x, this.player.pos.y); ps.y += map.tileHeight / 2;
-      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing, { moving: this.player.moving, step: this.player.step, breath: this.player.breath }); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
+      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing, { moving: this.player.moving, step: this.player.step, breath: this.player.breath, attack: (this.player.attackT || 0) / 0.3, hurt: (this.player.hurtT || 0) / 0.25 }); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 
