@@ -6,6 +6,7 @@
 import { canLearn, skillCost } from '../core/skills.js';
 import { countItem } from '../core/economy.js';
 import { progressText } from '../core/quests.js';
+import { neidanBonus, canUpgradeNeidan, NEIDAN_STAGES, ELEMENTS, MAX_TIER } from '../core/neidan.js';
 
 /**
  * @param {import('../game.js').Game} game
@@ -93,6 +94,47 @@ export function initPanels(game) {
     });
   }
 
+  /** หน้าต่างเม็ดยาภายใน (五行内丹) — เปิดด้วยปุ่ม N */
+  function openNeidan() {
+    const p = game.player;
+    const n = p.neidan || { tier: 0, element: null };
+    const c = canUpgradeNeidan(p);
+    const b = neidanBonus(n);
+    const bonusLine = `<small>โบนัสปัจจุบัน: ⚔️+${b.atk} · 🛡️+${b.def} · ❤️+${b.maxHp} · 內力+${b.maxMp}</small>`;
+
+    let body;
+    if (n.tier === 0) {
+      const cost = /** @type {any} */ (c).cost;
+      const afford = p.skillPoints >= cost.sp && p.currency >= cost.coins;
+      const elBtns = ELEMENTS.map((e) =>
+        `<button class="nd-el" data-el="${e.key}" ${afford ? '' : 'disabled'}>${e.cn} ${e.th}</button>`).join('');
+      body = `<p><i>“เลือกธาตุประจำเม็ดยา แล้วเริ่มจุดไฟหลอม (เลือกครั้งเดียว ล็อกถาวร)”</i></p>
+        <p class="nd-cost">ต้นทุนหลอม: ✦${cost.sp} SP · 💰${cost.coins}</p>
+        <div class="nd-elements">${elBtns}</div>
+        <p><small>ธาตุเน้น: 金/火→โจมตี · 木→เลือด · 水→กำลังภายใน · 土→ป้องกัน</small></p>`;
+    } else {
+      const elDef = ELEMENTS.find((e) => e.key === n.element);
+      const stage = NEIDAN_STAGES.find((s) => s.tier === n.tier);
+      const nextStage = NEIDAN_STAGES.find((s) => s.tier === n.tier + 1);
+      let action;
+      if (n.tier >= MAX_TIER) action = `<span class="maxed">玄化 — ขั้นสูงสุดแล้ว</span>`;
+      else {
+        const cost = /** @type {any} */ (c).cost;
+        action = `<button id="nd-up" ${c.ok ? '' : 'disabled'}>${nextStage?.th} (✦${cost.sp} · 💰${cost.coins})</button>`;
+      }
+      body = `<p><b>${stage?.cn} ${stage?.th}</b></p>
+        <p>ธาตุ <b>${elDef ? elDef.cn + ' ' + elDef.th : '-'}</b> · ขั้น ${n.tier}/${MAX_TIER}</p>
+        <p>${bonusLine}</p>
+        <div class="nd-action">${action}</div>`;
+    }
+    frame(`内丹 · เม็ดยาภายใน (✦SP ${p.skillPoints} · 💰${p.currency})`, body);
+    el.querySelectorAll('button.nd-el').forEach((btn) => {
+      /** @type {HTMLElement} */ (btn).onclick = () => { game.upgradeNeidan(/** @type {HTMLElement} */ (btn).dataset.el); openNeidan(); };
+    });
+    const up = el.querySelector('#nd-up');
+    if (up) /** @type {HTMLElement} */ (up).onclick = () => { game.upgradeNeidan(); openNeidan(); };
+  }
+
   /** หน้าต่างเควสจากผู้ให้เควส */
   function openQuest(npc, q) {
     const d = q.def;
@@ -135,7 +177,7 @@ export function initPanels(game) {
     frame(npc.name, `<p><i>“${npcLine(npc)}”</i></p>`);     // ตัวประกอบ/อื่น ๆ
   }
 
-  return { open, close, openInventory };
+  return { open, close, openInventory, openNeidan };
 }
 
 function npcLine(npc) {

@@ -11,6 +11,7 @@ import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
 import { learn, recomputeStats } from './core/skills.js';
+import { upgradeNeidan } from './core/neidan.js';
 import { buy, useConsumable } from './core/economy.js';
 import * as Quests from './core/quests.js';
 import { save, load } from './state/save.js';
@@ -52,6 +53,7 @@ export class Game {
       sectId: saved.sectId || null, // เริ่มเกมยังไม่สังกัดสำนัก (§4.3 เข้าได้หลังเควสมือใหม่)
       birthAttrs: saved.birthAttrs || null, // ค่ากำเนิด 7 ค่า (資質) — ทอยตอนสร้างตัว
       birthday: saved.birthday || null,     // วันเกิดในเกม {month, day} (生日系統)
+      neidan: saved.neidan || { tier: 0, element: null }, // เม็ดยาภายใน (五行内丹)
       tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       baseMaxMp: 40, baseMaxStamina: 30, baseMaxFocus: 100, // ค่าพื้นฐาน 內力/體力/定力 (§基本屬性)
@@ -216,12 +218,25 @@ export class Game {
     return r;
   }
 
+  /** หลอม/ยกขั้นเม็ดยาภายใน (五行内丹) — element ใช้เฉพาะตอนหลอมครั้งแรก */
+  upgradeNeidan(element) {
+    const before = this.player.neidan?.tier || 0;
+    const r = upgradeNeidan(this.player, element);
+    if (r.ok) {
+      recomputeStats(this.player, this.skillDefs);
+      this.player.hp = Math.min(this.player.maxHp, this.player.hp); // กัน hp เกิน (ไม่ฮีลฟรี)
+      this.saveState();
+      this.showToast(before === 0 ? 'หลอมเม็ดยาสำเร็จ!' : 'ยกขั้นเม็ดยาสำเร็จ!');
+    }
+    return r;
+  }
+
   saveState() {
     if (!this.zone) return;
     const p = this.player;
     save(this.slot, {
       displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
-      birthAttrs: p.birthAttrs, birthday: p.birthday,
+      birthAttrs: p.birthAttrs, birthday: p.birthday, neidan: p.neidan,
       zoneId: this.zone.id, zoneName: this.zone.name, tile: p.tile, hp: p.hp, mp: p.mp, stamina: p.stamina, focus: p.focus,
       skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,

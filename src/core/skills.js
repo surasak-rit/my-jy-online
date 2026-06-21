@@ -3,6 +3,7 @@
 // core/skills.js — เรียน/อัปเกรดวิชา + คำนวณสเตตัสรวม (pure, ทดสอบได้ — §3.2/§3.3)
 // progression ผูกกับวิชา ไม่ใช่เลเวล (Pillar 2)
 // ──────────────────────────────────────────────────────────────────────────
+import { neidanBonus } from './neidan.js';
 
 /** ต้นทุน SP สำหรับไต่ไป rank ที่กำหนด (แพงขึ้นตาม rank) */
 export function skillCost(def, rank) { return (def.cost || 5) * rank; }
@@ -47,6 +48,9 @@ export function recomputeStats(player, skillDefs) {
     maxStamina += Math.round((b.might || 0) + (b.bone || 0));  // พลังแขน+กระดูก → สติ (體力)
     maxFocus += Math.round((b.focus || 0));                    // สมาธิ → 定力
   }
+  // เม็ดยาภายใน (五行内丹) — เสริมค่าต่อสู้ตามขั้น+ธาตุ
+  const nb = neidanBonus(player.neidan);
+  atk += nb.atk; def += nb.def; maxHp += nb.maxHp; maxMp += nb.maxMp;
   for (const id in player.skills) {
     const d = skillDefs[id]; if (!d) continue;
     const r = player.skills[id].rank, pr = d.perRank || {};

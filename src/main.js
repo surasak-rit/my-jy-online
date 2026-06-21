@@ -59,8 +59,11 @@ async function boot() {
   attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
   // ปิด/รีเฟรชแท็บ → บันทึกตำแหน่งปัจจุบัน (เผื่อรีเฟรชระหว่างเดิน)
   addEventListener('beforeunload', () => game.saveState());
-  // ปุ่ม I = เปิดกระเป๋า
-  addEventListener('keydown', (e) => { if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory(); });
+  // ปุ่ม I = เปิดกระเป๋า · N = เม็ดยาภายใน (内丹)
+  addEventListener('keydown', (e) => {
+    if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory();
+    else if (e.key === 'n' || e.key === 'N' || e.key === 'ื') panels.openNeidan();
+  });
 
   startLoop(
     (dt) => game.update(dt),

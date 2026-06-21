@@ -321,5 +321,11 @@ body::after {
 
 .maxed { color: var(--jade); font-size: 14px; font-family: var(--brush); }
 
+/* เม็ดยาภายใน (内丹) */
+.nd-elements { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.nd-elements .nd-el { flex: 1 1 28%; text-align: center; font-size: 15px; }
+.nd-cost { color: var(--seal); font-weight: 600; }
+.nd-action { margin-top: 10px; }
+
 .quest-steps { margin: 8px 0 8px 18px; color: var(--ink-soft); }
 .quest-steps li { margin: 4px 0; }
