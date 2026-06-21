@@ -6,7 +6,8 @@
     "cloud_summit",
     "beggar_union",
     "tang_clan",
-    "five_venoms"
+    "five_venoms",
+    "huashan_peak"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -18,7 +19,9 @@
     "mob_tang_guard",
     "mob_tang_assassin",
     "mob_gu_centipede",
-    "mob_venom_king"
+    "mob_venom_king",
+    "mob_rogue_swordsman",
+    "mob_sword_demon"
   ],
   "skills": [
     "vajra_palm",
@@ -31,7 +34,8 @@
     "cloud_taichi",
     "dragon_palm",
     "hidden_needle",
-    "venom_claw"
+    "venom_claw",
+    "lonely_nine"
   ],
   "items": [
     "potion_small",
@@ -52,7 +56,9 @@
     "darts_tang",
     "mat_venom_sac",
     "whip_serpent",
-    "mat_gu_powder"
+    "mat_gu_powder",
+    "sword_purpletip",
+    "mat_cold_iron"
   ],
   "quests": [
     "onboarding_1",
@@ -64,6 +70,8 @@
     "tang_clan_join",
     "tang_clan_hunt",
     "five_venoms_join",
-    "five_venoms_hunt"
+    "five_venoms_hunt",
+    "huashan_peak_join",
+    "huashan_peak_hunt"
   ]
 }

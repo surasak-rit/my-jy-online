@@ -1,0 +1,26 @@
+{
+  "id": "mob_rogue_swordsman",
+  "name": "กระบี่จรนอกรีต",
+  "archetype": "wanderer",
+  "maxHp": 60,
+  "atk": 15,
+  "def": 4,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 20,
+  "skillPoints": 8,
+  "loot": {
+    "soft": [
+      8,
+      16
+    ],
+    "items": [
+      {
+        "id": "mat_cold_iron",
+        "chance": 0.4
+      }
+    ]
+  }
+}

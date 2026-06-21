@@ -1,0 +1,12 @@
+{
+  "id": "huashan_peak",
+  "name": "สำนักยอดกระบี่ฮว่าซาน",
+  "crest": "⚔️",
+  "art": {
+    "palette": {
+      "primary": "#4a4a6a",
+      "accent": "#cfd6ec"
+    },
+    "outfit": "ชุดบัณฑิตกระบี่"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "huashan_peak_join",
+  "order": 10,
+  "giver": "npc_huashan_master",
+  "name": "ฝากตัวสำนักยอดกระบี่ฮว่าซาน",
+  "desc": "คุยปรมาจารย์เฟิงชิงหยางเพื่อฝากตัวเป็นศิษย์สำนักยอดกระบี่ฮว่าซาน แล้วเรียนวิชากระบี่เดียวดายเก้ากระบวน",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_huashan_master",
+      "label": "ปรมาจารย์เฟิงชิงหยาง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

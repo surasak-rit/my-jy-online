@@ -1,0 +1,32 @@
+{
+  "id": "mob_sword_demon",
+  "name": "ปีศาจกระบี่ยอดเขา",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 450,
+  "atk": 36,
+  "def": 9,
+  "speed": 4,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 165,
+  "skillPoints": 45,
+  "loot": {
+    "soft": [
+      90,
+      180
+    ],
+    "items": [
+      {
+        "id": "sword_purpletip",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_cold_iron",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

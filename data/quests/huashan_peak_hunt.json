@@ -1,0 +1,25 @@
+{
+  "id": "huashan_peak_hunt",
+  "order": 11,
+  "giver": "npc_huashan_master",
+  "name": "ปราบปีศาจกระบี่ยอดเขา",
+  "desc": "ปีศาจกระบี่ยอดเขาอาละวาดแถบยอดเขาฮว่าซาน · สั่นซี จงสำนักยอดกระบี่ฮว่าซานออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_sword_demon",
+      "count": 1,
+      "label": "ปีศาจกระบี่ยอดเขา"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "sword_purpletip",
+        "qty": 1
+      }
+    ]
+  }
+}
