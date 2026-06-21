@@ -17,48 +17,76 @@ const ARCHETYPE_COLOR = {
 
 const CHIBI_H = 48; // ความสูงโดยประมาณ (px @scale=1) — ใช้จัดตำแหน่งป้าย
 
+/** ผสมสี hex เข้าหาดำ (amt<1) หรือขาว (ส่ง white=true) */
+function mix(hex, amt, white = false) {
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const t = white ? 255 : 0;
+  r = Math.round(r + (t - r) * amt); g = Math.round(g + (t - g) * amt); b = Math.round(b + (t - b) * amt);
+  return `rgb(${r},${g},${b})`;
+}
+
 /**
- * ตัวละครจิบิลายหมึก ณ ฐานเท้า (screen px), กึ่งกลางที่ fx
+ * ตัวละครจิบิลายหมึก + แสงเงา + หันหน้าตามทิศ
  * @param {CanvasRenderingContext2D} ctx
+ * @param {string} [facing] 'S'|'N'|'E'|'W'
  */
-export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1) {
+export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S') {
   const headR = 16 * scale;
   const bodyW = 22 * scale, bodyH = 17 * scale;
   const bodyBottom = fy - 3 * scale, bodyTop = bodyBottom - bodyH;
   const bodyMidY = (bodyTop + bodyBottom) / 2;
   const headCy = bodyTop - headR + 5 * scale;
   ctx.lineJoin = 'round';
+  ctx.lineWidth = 1.8 * scale; ctx.strokeStyle = INK;
 
   // เงาหมึกใต้เท้า
   ctx.fillStyle = 'rgba(42,36,29,0.22)';
   ctx.beginPath(); ctx.ellipse(fx, fy, 13 * scale, 5 * scale, 0, 0, Math.PI * 2); ctx.fill();
 
-  // ขาสั้น
-  ctx.fillStyle = INK;
-  ctx.fillRect(fx - 6 * scale, bodyBottom - 3 * scale, 5 * scale, 6 * scale);
-  ctx.fillRect(fx + 1 * scale, bodyBottom - 3 * scale, 5 * scale, 6 * scale);
+  // รองเท้า
+  ctx.fillStyle = '#241f1c';
+  ctx.beginPath(); ctx.ellipse(fx - 4 * scale, bodyBottom + 1 * scale, 3.5 * scale, 2.2 * scale, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(fx + 4 * scale, bodyBottom + 1 * scale, 3.5 * scale, 2.2 * scale, 0, 0, Math.PI * 2); ctx.fill();
 
-  // ลำตัว (ชุด) + ขอบหมึก
-  ctx.lineWidth = 1.8 * scale; ctx.strokeStyle = INK;
+  // แขน (ชุด)
+  ctx.fillStyle = mix(bodyColor, 0.12);
+  inkEllipse(ctx, fx - bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);
+  inkEllipse(ctx, fx + bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);
+
+  // ลำตัว (ชุด) + ไล่แสง: ฐานสี → เงาล่างขวา → ไฮไลต์บนซ้าย
   ctx.fillStyle = bodyColor;
-  inkEllipse(ctx, fx - bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);   // แขนซ้าย
-  inkEllipse(ctx, fx + bodyW / 2, bodyMidY, 3.6 * scale, 6 * scale);   // แขนขวา
-  inkEllipse(ctx, fx, bodyMidY, bodyW / 2, bodyH / 2);                 // ตัว
+  inkEllipse(ctx, fx, bodyMidY, bodyW / 2, bodyH / 2);
+  ctx.save(); ctx.beginPath(); ctx.ellipse(fx, bodyMidY, bodyW / 2, bodyH / 2, 0, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = mix(bodyColor, 0.28); // เงาล่างขวา
+  ctx.beginPath(); ctx.ellipse(fx + 5 * scale, bodyMidY + 4 * scale, bodyW / 2, bodyH / 2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = mix(bodyColor, 0.30, true); // ไฮไลต์บนซ้าย
+  ctx.beginPath(); ctx.ellipse(fx - 5 * scale, bodyMidY - 4 * scale, 5 * scale, 4 * scale, 0, 0, Math.PI * 2); ctx.fill();
+  // สายคาดเอว
+  ctx.fillStyle = '#caa24a';
+  ctx.fillRect(fx - bodyW / 2, bodyMidY + 1 * scale, bodyW, 3 * scale);
+  ctx.restore();
 
-  // หัวโต + ขอบหมึก
+  // หัว + ขอบหมึก
   ctx.fillStyle = '#efd6ae';
   inkCircle(ctx, fx, headCy, headR);
-  // ผมหมึก
+  // ผม
   ctx.fillStyle = INK;
   ctx.beginPath(); ctx.arc(fx, headCy, headR, Math.PI * 1.0, Math.PI * 2.0); ctx.fill();
   ctx.beginPath(); ctx.ellipse(fx, headCy - headR * 0.5, headR * 0.98, headR * 0.55, 0, 0, Math.PI * 2); ctx.fill();
-  // ตาโต
-  ctx.fillStyle = INK;
-  ctx.beginPath(); ctx.arc(fx - 5.5 * scale, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(fx + 5.5 * scale, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(fx - 4.8 * scale, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(fx + 6.2 * scale, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
+  if (facing === 'N') {
+    // หันหลัง: มวยผม ไม่มีตา
+    ctx.beginPath(); ctx.arc(fx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1c1714'; ctx.beginPath(); ctx.arc(fx, headCy - headR * 0.4, 3.5 * scale, 0, Math.PI * 2); ctx.fill();
+  } else {
+    const ex = facing === 'E' ? 3 * scale : facing === 'W' ? -3 * scale : 0;
+    ctx.fillStyle = INK;
+    ctx.beginPath(); ctx.arc(fx - 5.5 * scale + ex, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(fx + 5.5 * scale + ex, headCy + 3 * scale, 2.1 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(fx - 4.8 * scale + ex, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(fx + 6.2 * scale + ex, headCy + 2.3 * scale, 0.7 * scale, 0, Math.PI * 2); ctx.fill();
+  }
 }
 
 function inkEllipse(ctx, x, y, rx, ry) {

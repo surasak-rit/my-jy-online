@@ -17,6 +17,12 @@ import { save, load } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
 
+/** ทิศหันจาก world delta → 'E'|'W'|'S'|'N' */
+function facing(dx, dy) {
+  if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? 'E' : 'W';
+  return dy >= 0 ? 'S' : 'N';
+}
+
 export class Game {
   /**
    * @param {CanvasRenderingContext2D} ctx
@@ -36,7 +42,7 @@ export class Game {
     /** @type {any} */
     this.player = {
       id: 'player', displayName: 'จอมยุทธ์น้อย', activeTitle: 'ศิษย์ใหม่',
-      sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [],
+      sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
       skills: saved.skills || {},
@@ -211,6 +217,7 @@ export class Game {
       while (budget > 0 && p.waypoints.length) {
         const w0 = p.waypoints[0];
         const dx = w0.x - p.pos.x, dy = w0.y - p.pos.y, dist = Math.hypot(dx, dy);
+        if (dist > 0.5) p.facing = facing(dx, dy);
         if (dist <= budget) { p.pos.x = w0.x; p.pos.y = w0.y; p.waypoints.shift(); budget -= dist; }
         else { p.pos.x += dx / dist * budget; p.pos.y += dy / dist * budget; budget = 0; }
       }
@@ -307,11 +314,11 @@ export class Game {
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
       const s = cam.worldToScreen(m.pos.x, m.pos.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
+      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8, m.facing || 'S'); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
     }
     if (!this.dead) {
       const ps = cam.worldToScreen(this.player.pos.x, this.player.pos.y); ps.y += map.tileHeight / 2;
-      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
+      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 

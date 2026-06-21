@@ -50,7 +50,7 @@ export function spawnFromZone(zone, mobDefs, isWalkable, tileToWorld, rng = Math
         defId: def.id, name: def.name, archetype: def.archetype || 'villager',
         tile: { x: tx, y: ty }, pos: { x: w.x, y: w.y }, home: { x: tx, y: ty },
         hp: def.maxHp, maxHp: def.maxHp, atk: def.atk, def: def.def,
-        state: 'idle', moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
+        state: 'idle', facing: 'S', moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
       });
     }
   }
@@ -98,6 +98,12 @@ export function updateMobs(mobs, player, dt, h) {
       if (step) { m.tile = step; m.moveCd = 1 / (m.def_.speed || 2); }
       else m.moveCd = 0.3;
     }
+
+    // ทิศหัน: เข้าหาเป้าหมาย (world delta)
+    const tgt = m.state === 'chase' ? player.tile : m.home;
+    const tw = h.tileToWorld(tgt.x, tgt.y);
+    const fdx = tw.x - m.pos.x, fdy = tw.y - m.pos.y;
+    if (Math.hypot(fdx, fdy) > 2) m.facing = (Math.abs(fdx) >= Math.abs(fdy)) ? (fdx >= 0 ? 'E' : 'W') : (fdy >= 0 ? 'S' : 'N');
 
     // ลื่น pos เข้าหา center ของ tile
     const w = h.tileToWorld(m.tile.x, m.tile.y);
