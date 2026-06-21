@@ -1,0 +1,12 @@
+{
+  "id": "dali_duan",
+  "name": "ตระกูลต้วนต้าหลี่",
+  "crest": "☝️",
+  "art": {
+    "palette": {
+      "primary": "#3a6a5a",
+      "accent": "#e6d27a"
+    },
+    "outfit": "ชุดราชวงศ์ต้าหลี่"
+  }
+}

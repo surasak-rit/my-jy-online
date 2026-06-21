@@ -1,0 +1,26 @@
+{
+  "id": "mob_temple_guard",
+  "name": "องครักษ์วัดเทียนหลง",
+  "archetype": "wanderer",
+  "maxHp": 66,
+  "atk": 15,
+  "def": 6,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 22,
+  "skillPoints": 9,
+  "loot": {
+    "soft": [
+      9,
+      18
+    ],
+    "items": [
+      {
+        "id": "mat_gold_leaf",
+        "chance": 0.4
+      }
+    ]
+  }
+}

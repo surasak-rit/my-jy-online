@@ -1,0 +1,32 @@
+{
+  "id": "mob_demon_monk",
+  "name": "นักพรตมารวัดร้าง",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 500,
+  "atk": 36,
+  "def": 13,
+  "speed": 2,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 185,
+  "skillPoints": 50,
+  "loot": {
+    "soft": [
+      105,
+      210
+    ],
+    "items": [
+      {
+        "id": "glove_yang",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_gold_leaf",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

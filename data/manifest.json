@@ -11,7 +11,8 @@
     "peach_isle",
     "ancient_tomb",
     "kunlun_snow",
-    "sacred_flame"
+    "sacred_flame",
+    "dali_duan"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -33,7 +34,9 @@
     "mob_snow_wolf",
     "mob_frost_yeti",
     "mob_flame_zealot",
-    "mob_flame_guardian"
+    "mob_flame_guardian",
+    "mob_temple_guard",
+    "mob_demon_monk"
   ],
   "skills": [
     "vajra_palm",
@@ -51,7 +54,8 @@
     "jade_flute",
     "jade_maiden",
     "snow_blade",
-    "sun_palm"
+    "sun_palm",
+    "sixmeridian"
   ],
   "items": [
     "potion_small",
@@ -82,7 +86,9 @@
     "blade_snowmoon",
     "mat_snow_lotus",
     "saber_flame",
-    "mat_flame_charcoal"
+    "mat_flame_charcoal",
+    "glove_yang",
+    "mat_gold_leaf"
   ],
   "quests": [
     "onboarding_1",
@@ -104,6 +110,8 @@
     "kunlun_snow_join",
     "kunlun_snow_hunt",
     "sacred_flame_join",
-    "sacred_flame_hunt"
+    "sacred_flame_hunt",
+    "dali_duan_join",
+    "dali_duan_hunt"
   ]
 }
