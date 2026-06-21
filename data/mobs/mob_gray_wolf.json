@@ -1,0 +1,1 @@
+{"id":"mob_gray_wolf","name":"หมาป่าเทา","archetype":"villager","maxHp":30,"atk":8,"def":1,"speed":3,"attackCdMs":1000,"aggroRange":6,"respawnMs":5000,"xp":9,"skillPoints":4,"loot":{"soft":[2,6]}}

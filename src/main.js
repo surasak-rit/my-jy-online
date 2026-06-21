@@ -16,14 +16,16 @@ addEventListener('resize', resize); resize();
 const getJSON = async (url) => (await fetch(url)).json();
 
 async function boot() {
-  // โหลดสำนัก (data-driven §7.2) — ภายหลังโหลดครบทุกสำนักจาก index ได้
+  // โหลด config (data-driven §7.2)
   const sects = {};
   for (const id of ['vajra_cliff']) sects[id] = await getJSON(`data/sects/${id}.json`);
+  const mobDefs = {};
+  for (const id of ['mob_petty_bandit', 'mob_gray_wolf']) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
 
-  const game = new Game(ctx, canvas, sects);
+  const game = new Game(ctx, canvas, sects, mobDefs);
   await game.loadZone(game.startZoneId);
 
-  attachMouse(canvas, game.cam, (tile) => game.setDestination(tile));
+  attachMouse(canvas, game.cam, (tile) => game.handlePick(tile));
 
   startLoop(
     (dt) => game.update(dt),

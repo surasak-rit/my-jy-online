@@ -1,0 +1,1 @@
+{"id":"mob_petty_bandit","name":"โจรกระจอก","archetype":"wanderer","maxHp":45,"atk":10,"def":3,"speed":2,"attackCdMs":1200,"aggroRange":5,"respawnMs":6000,"xp":14,"skillPoints":6,"loot":{"soft":[5,12]}}
