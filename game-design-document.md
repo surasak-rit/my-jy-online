@@ -7,6 +7,7 @@ tags:
   - wuxia
   - 2d-isometric
   - web
+  - vanilla-js
 created: 2026-06-21
 based_on: jy-online-gdd-reference.md
 ---
@@ -95,7 +96,7 @@ graph LR
 **เหตุผล:**
 - ตรงกับ "feel" ที่ผู้เล่น JY Online ชื่นชม (เรียลไทม์ + วางหมาก, hit-stun, คอมโบ) — `[อิงรีวิวจาก reference]`
 - ให้ **skill expression** สอดคล้อง Pillar 2 (เก่งด้วยฝีมือ)
-- ทำบนเว็บ/Phaser ได้จริง และยังเป็น **deterministic-friendly** พอสำหรับ networking ภายหลัง
+- ทำบนเว็บด้วย Canvas 2D (vanilla) ได้จริง และยังเป็น **deterministic-friendly** พอสำหรับ networking ภายหลัง
 - หลีกเลี่ยงกับดักของ JY (เปลี่ยน core กลางคัน) — เราเลือกอันเดียวแล้วยึด
 
 **กติกาแกนของ combat:**
@@ -190,7 +191,7 @@ graph LR
 ## 5. เสาหลัก 3 — โลก & การเดิน/เควสต์
 
 ### 5.1 โครงสร้างโลก 2D isometric
-- **มุมมอง:** 2D isometric (เฉียงกดลง) — ยึดจาก reference, เหมาะกับเว็บ/Phaser
+- **มุมมอง:** 2D isometric (เฉียงกดลง) — ยึดจาก reference, วาดด้วย Canvas 2D บนเว็บ
 - **โครงแผนที่:** โลกแบ่งเป็น **โซน (zone)** เชื่อมกันด้วยทางออก (portal/edge)
   - **เมืองกลาง (hub)** — NPC, ร้านค้า, กระดานเควสต์, จุดเดินทาง
   - **โซนสำนัก** — ที่ตั้งของแต่ละสำนัก (อาจารย์, ลานฝึก)
@@ -270,22 +271,31 @@ graph TD
 ## 7. ส่วนเทคนิค & Data Model
 
 ### 7.1 Tech stack
-- **Client:** TypeScript + **Phaser 3** (2D, รองรับ isometric tilemap, WebGL/Canvas)
-- **Build:** Vite (dev เร็ว, bundle เล็ก)
-- **State/logic:** แยก **game logic (pure TS)** ออกจาก rendering (Phaser) → test ได้ + reuse ฝั่ง server ภายหลัง
-- **Persistence (MVP):** local (IndexedDB/localStorage) — เล่น single-player/offline ก่อน
-- **Server (post-MVP):** Node.js + WebSocket, authoritative server; ออกแบบ logic ให้ย้ายไปรันฝั่ง server ได้
+> [!important] **Vanilla stack** — HTML + CSS + JavaScript (ES modules) ล้วน ไม่มี framework / build tool
+> เป้าหมาย: เปิดเล่นจากเบราว์เซอร์ได้ทันที, dependency เป็นศูนย์, เข้าใจง่าย, ขยายต่อได้
+
+- **Markup/UI:** **HTML + CSS** — เมนู, HUD, หน้าต่าง (inventory, เรียนวิชา, ร้านค้า) เป็น DOM/CSS
+- **Rendering เกม:** **Canvas 2D API** (vanilla) — วาด isometric tilemap, sprites, เอฟเฟกต์เอง ผ่าน game loop (`requestAnimationFrame`)
+- **Logic:** **JavaScript (ES modules)** — `import/export` แบบ native (ไม่มี bundler), เสิร์ฟเป็น static files
+- **Type safety (เลือกใช้):** **JSDoc typedef + `// @ts-check`** ให้ editor ช่วยตรวจ type ได้โดยไม่ต้อง compile (ดู §7.3)
+- **Persistence (MVP):** `localStorage` / `IndexedDB` — เล่น single-player/offline ก่อน
+- **Server (post-MVP):** Node.js + WebSocket, authoritative server; เขียน logic เป็น JS module ที่รันได้ทั้ง browser และ Node → ย้ายขึ้น server ได้
+
+> [!note] ผลจากการเลือก vanilla (ต้องรับรู้)
+> - **ไม่มี Phaser** → เราเขียน game loop, การจัดการ sprite/tilemap, input, camera, การชน เอง (งานมากขึ้นใน Phase 0 แต่ควบคุมได้เต็มที่ + ไม่มี dependency)
+> - **ไม่มี build step** → เสิร์ฟ static ได้เลย (`python -m http.server` / live-server / GitHub Pages); ต้องใช้ ES modules ผ่าน `<script type="module">` (ต้องเปิดผ่าน http ไม่ใช่ `file://`)
+> - **ไม่มี TS compile** → ใช้ JSDoc แทน interface; วินัยการแยกโมดูลสำคัญกว่าเดิม
 
 ### 7.2 สถาปัตยกรรม (เริ่ม single-player → ขยายเป็น MMO)
 ```mermaid
 graph TD
-  subgraph Client
-    UI["UI Layer (Phaser Scenes)"]
-    REN["Render Layer (sprites, tilemap)"]
-    GL["Game Logic (pure TS, deterministic)"]
+  subgraph Client["Browser (static files)"]
+    UI["UI Layer (HTML + CSS, DOM)"]
+    REN["Render Layer (Canvas 2D + game loop)"]
+    GL["Game Logic (pure JS modules, deterministic)"]
     DATA["Data/Config (JSON: สำนัก/วิชา/ไอเทม/แผนที่)"]
   end
-  STORE["Persistence (IndexedDB → API ภายหลัง)"]
+  STORE["Persistence (localStorage/IndexedDB → API ภายหลัง)"]
   GL --> REN
   UI --> GL
   DATA --> GL
@@ -293,77 +303,90 @@ graph TD
   GL -. "post-MVP" .-> SRV["Authoritative Server (Node + WS)"]
 ```
 
-> [!important] หลักการที่ทำให้ "ขยายต่อได้"
-> 1. **Logic แยกจาก render** — combat/economy เป็น pure functions, ทดสอบได้, ย้ายขึ้น server ได้
+> [!important] หลักการที่ทำให้ "ขยายต่อได้" (สำคัญเป็นพิเศษเมื่อไม่มี framework)
+> 1. **Logic แยกจาก render** — combat/economy เป็น **pure JS functions** (ไม่แตะ DOM/Canvas), ทดสอบได้, รันบน Node ได้ → ย้ายขึ้น server ได้
 > 2. **Data-driven** — สำนัก/วิชา/ไอเทม/แผนที่ เป็น **config (JSON)** ไม่ hardcode → เพิ่มเนื้อหา = เพิ่มไฟล์ data (รองรับ content patch แบบ reference)
-> 3. **ECS-lite** — entity (player/mob/npc) ประกอบจาก component → เพิ่มพฤติกรรมใหม่ได้ยืดหยุ่น
+> 3. **ECS-lite** — entity (player/mob/npc) เป็น plain object ที่ประกอบจาก component → เพิ่มพฤติกรรมใหม่ได้ยืดหยุ่น
+> 4. **UI = DOM, เกม = Canvas** — แยกชัด: HUD/เมนู/หน้าต่างทำด้วย HTML+CSS (จัด layout ง่าย, เข้าถึงง่าย), ฉากเกมวาดบน Canvas เลเยอร์เดียว
 
-### 7.3 Data Model หลัก (ร่าง)
-```ts
+### 7.3 Data Model หลัก (ร่าง — JSDoc typedef)
+> เขียนเป็น **JSDoc** ใน `.js` ธรรมดา → ได้ autocomplete/type-check ใน editor (เปิด `// @ts-check`) โดยไม่ต้อง compile
+> `*Def` = config (โหลดจาก JSON) · instance = runtime state
+
+```js
+// @ts-check
+
 // ---------- Sect ----------
-interface SectDef {
-  id: string;                 // "vajra_cliff"
-  name: string;               // "สำนักศิลาวัชระ"
-  archetype: "bruiser" | "support" | "skirmisher";
-  identityStat: IdentityStatDef;   // ค่าคุณธรรมเฉพาะสำนัก
-  weaponTypes: WeaponType[];       // อาวุธที่ใช้ได้
-  skillIds: string[];              // วิชาของสำนัก (อ้างถึง SkillDef)
-  art: { palette: string; outfit: string; architecture: string };
-}
+/**
+ * @typedef {Object} SectDef
+ * @property {string} id                 // "vajra_cliff"
+ * @property {string} name               // "สำนักศิลาวัชระ"
+ * @property {"bruiser"|"support"|"skirmisher"} archetype
+ * @property {IdentityStatDef} identityStat   // ค่าคุณธรรมเฉพาะสำนัก
+ * @property {WeaponType[]} weaponTypes        // อาวุธที่ใช้ได้
+ * @property {string[]} skillIds               // วิชาของสำนัก (อ้างถึง SkillDef.id)
+ * @property {{ palette: string, outfit: string, architecture: string }} art
+ */
 
-interface IdentityStatDef {
-  id: string;                 // "resolve" | "compassion" | "serenity"
-  name: string;               // "ค่าวิริยะ"
-  gainFrom: string[];         // เงื่อนไขได้ค่า (เช่น "heal_ally", "kill_bandit")
-}
+/**
+ * @typedef {Object} IdentityStatDef
+ * @property {string} id                 // "resolve" | "compassion" | "serenity"
+ * @property {string} name               // "ค่าวิริยะ"
+ * @property {string[]} gainFrom         // เงื่อนไขได้ค่า เช่น "heal_ally", "kill_bandit"
+ */
 
 // ---------- Skill ----------
-interface SkillDef {
-  id: string;
-  name: string;
-  type: "external" | "internal" | "movement";   // 外功/內功/輕功
-  weaponType?: WeaponType;     // ต้องคู่กับอาวุธ (สำหรับ external)
-  maxRank: number;
-  ranks: SkillRank[];          // ค่าพลังต่อ rank
-  requirements: SkillRequirement;  // skillPoints, combatXP, identityStat, prereqSkillIds
-  hitStun: number;             // น้ำหนักการกระทบ
-  cooldownMs: number;
-  staminaCost: number;         // 內力
-}
+/**
+ * @typedef {Object} SkillDef
+ * @property {string} id
+ * @property {string} name
+ * @property {"external"|"internal"|"movement"} type   // 外功/內功/輕功
+ * @property {WeaponType=} weaponType    // ต้องคู่กับอาวุธ (สำหรับ external)
+ * @property {number} maxRank
+ * @property {SkillRank[]} ranks         // ค่าพลังต่อ rank
+ * @property {SkillRequirement} requirements  // skillPoints, combatXP, identityStat, prereqSkillIds
+ * @property {number} hitStun            // น้ำหนักการกระทบ
+ * @property {number} cooldownMs
+ * @property {number} staminaCost        // 內力
+ */
 
-// ---------- Character ----------
-interface Character {
-  id: string;
-  sectId: string | null;
-  // ไม่มี level! power มาจากด้านล่าง:
-  skills: Record<string, { rank: number }>;
-  skillPoints: number;
-  combatXP: number;
-  identityStats: Record<string, number>;   // resolve/compassion/...
-  equipment: EquipmentSlots;
-  hp: number; stamina: number;             // 氣血 / 內力
-  inventory: ItemStack[];
-  currency: { soft: number; premium: number };
-}
+// ---------- Character (instance / runtime state) ----------
+/**
+ * @typedef {Object} Character
+ * @property {string} id
+ * @property {string|null} sectId
+ * // ไม่มี level! power มาจากด้านล่าง:
+ * @property {Object<string, { rank: number }>} skills
+ * @property {number} skillPoints
+ * @property {number} combatXP
+ * @property {Object<string, number>} identityStats   // resolve/compassion/...
+ * @property {EquipmentSlots} equipment
+ * @property {number} hp                 // 氣血
+ * @property {number} stamina            // 內力
+ * @property {ItemStack[]} inventory
+ * @property {{ soft: number, premium: number }} currency
+ */
 
 // ---------- World ----------
-interface ZoneDef {
-  id: string;
-  name: string;
-  type: "hub" | "sect" | "field";
-  tilemapRef: string;          // ไฟล์ tilemap (Tiled JSON)
-  exits: { toZoneId: string; at: TilePos }[];
-  npcs: NpcSpawn[];
-  spawns?: MobSpawn[];         // field zones
-}
+/**
+ * @typedef {Object} ZoneDef
+ * @property {string} id
+ * @property {string} name
+ * @property {"hub"|"sect"|"field"} type
+ * @property {string} tilemapRef         // ไฟล์ tilemap (JSON)
+ * @property {{ toZoneId: string, at: TilePos }[]} exits
+ * @property {NpcSpawn[]} npcs
+ * @property {MobSpawn[]=} spawns         // field zones
+ */
 
-interface QuestDef {
-  id: string;
-  category: "city" | "sect" | "jianghu";
-  steps: QuestStep[];
-  rewards: { skillPoints?: number; soft?: number; itemIds?: string[] };
-  requirements?: { sectId?: string; prereqQuestIds?: string[] };
-}
+/**
+ * @typedef {Object} QuestDef
+ * @property {string} id
+ * @property {"city"|"sect"|"jianghu"} category
+ * @property {QuestStep[]} steps
+ * @property {{ skillPoints?: number, soft?: number, itemIds?: string[] }} rewards
+ * @property {{ sectId?: string, prereqQuestIds?: string[] }=} requirements
+ */
 ```
 
 > [!note] ทำไม model นี้รองรับการขยาย
@@ -371,33 +394,46 @@ interface QuestDef {
 > - `Character` ไม่มี `level` → ยึด Pillar 2 ตั้งแต่ schema
 > - `ZoneDef.exits` = ต่อโซนใหม่เข้ากับโลกเดิมได้อิสระ (hub-and-spoke)
 > - แยก `*Def` (config) ออกจาก instance (runtime state) ชัดเจน
+> - JSDoc ทำให้ได้ความปลอดภัยของ type ส่วนใหญ่ของ TS โดยคง stack vanilla (ไม่มี build)
 
 ### 7.4 โครงไฟล์/โมดูลที่แนะนำ
 ```
+index.html         # entry: <canvas> + UI containers, <script type="module" src="src/main.js">
+styles/
+  ui.css           # HUD, เมนู, หน้าต่าง (inventory/เรียนวิชา/ร้าน)
 src/
-  core/            # pure TS game logic (ทดสอบได้, ไม่พึ่ง Phaser)
-    combat/        # resolve hits, cooldown, hit-stun, combo
-    skills/        # ระบบเรียน/ไต่ rank วิชา
-    sect/          # logic สำนัก + identity stats
-    economy/       # sink/source, currency, trade rules
-    progression/   # skill points, combat XP, requirements
-  data/            # config JSON (สิ่งที่ designer แก้ได้)
-    sects/*.json
-    skills/*.json
-    items/*.json
-    zones/*.json
-    quests/*.json
-  render/          # Phaser scenes, sprites, tilemap, UI
-    scenes/
-    entities/      # render ของ player/mob/npc (ECS-lite view)
-  state/           # persistence (IndexedDB), save/load
+  core/            # pure JS game logic (ทดสอบได้, ไม่แตะ DOM/Canvas)
+    combat.js      # resolve hits, cooldown, hit-stun, combo
+    skills.js      # ระบบเรียน/ไต่ rank วิชา
+    sect.js        # logic สำนัก + identity stats
+    economy.js     # sink/source, currency, trade rules
+    progression.js # skill points, combat XP, requirements
+  render/          # วาดด้วย Canvas 2D
+    loop.js        # game loop (requestAnimationFrame), เวลา/เฟรม
+    camera.js      # isometric projection + viewport
+    tilemap.js     # วาด tilemap isometric
+    sprites.js     # วาด/อนิเมต player/mob/npc
+  ui/              # ผูก DOM (HTML+CSS) เข้ากับ state
+    hud.js
+    panels.js      # inventory, เรียนวิชา, ร้านค้า
+  input/           # mouse/keyboard → คำสั่งเกม (point-to-click)
+  state/           # persistence (localStorage/IndexedDB), save/load
   net/             # (post-MVP) WebSocket client, sync
-  main.ts
-tests/             # unit tests ของ core/
+  types.js         # JSDoc typedefs รวม (ดู §7.3)
+  main.js          # bootstrap: โหลด data, สร้าง loop, ผูก UI
+data/              # config JSON (สิ่งที่ designer แก้ได้)
+  sects/*.json
+  skills/*.json
+  items/*.json
+  zones/*.json
+  quests/*.json
+assets/            # sprites, tilesets, sfx
+tests/             # unit tests ของ core/ (รันด้วย node --test, vanilla)
 ```
 
-> [!tip] กฎเหล็ก: `render/` และ `net/` พึ่ง `core/` ได้ แต่ `core/` **ห้าม** พึ่ง Phaser/DOM
-> → ย้าย `core/` ขึ้น authoritative server ได้ทันทีตอนทำ MMO
+> [!tip] กฎเหล็ก: `render/`, `ui/`, `net/` พึ่ง `core/` ได้ แต่ `core/` **ห้าม** พึ่ง DOM/Canvas/`window`
+> → `core/` เป็น JS module ล้วน รันบน Node ได้ → ย้ายขึ้น authoritative server ได้ทันทีตอนทำ MMO
+> รันโลคัลด้วย static server ใดก็ได้ (เช่น `python3 -m http.server`) แล้วเปิด `http://localhost:8000`
 
 ---
 
@@ -412,10 +448,11 @@ graph LR
 ```
 
 ### Phase 0 — Foundation (รากฐาน)
-- ตั้งโปรเจกต์ (Vite + TS + Phaser), โครงไฟล์ตาม §7.4
-- วาง data schema + loader (อ่าน JSON config)
+- ตั้งโปรเจกต์ vanilla (`index.html` + `<canvas>` + ES modules), โครงไฟล์ตาม §7.4
+- เขียน game loop (`requestAnimationFrame`) + isometric camera/projection เอง
+- วาง data schema (JSDoc) + loader (fetch JSON config)
 - render tilemap isometric + เดินตัวละคร (point-to-click + pathfinding)
-- **เกณฑ์ผ่าน:** เดินตัวละครในโซนเดียวบนแผนที่ isometric ได้
+- **เกณฑ์ผ่าน:** เปิดผ่าน static server แล้วเดินตัวละครในโซนเดียวบนแผนที่ isometric ได้
 
 ### Phase 1 — Vertical Slice (สิ่งที่ user ขอเป็น slice แรก)
 ครอบ **ทั้ง 4 เสาหลักในระดับ MVP**:
@@ -465,9 +502,9 @@ graph LR
 ## 10. ขั้นต่อไป (actionable)
 
 1. **ยืนยัน working title + ธีมโลกของเราเอง** (หรือ greenlight ภาคผนวก A ไปก่อน)
-2. **ตั้งโปรเจกต์ Phase 0** — Vite + TS + Phaser, โครงไฟล์ตาม §7.4, data loader
-3. **เขียน data schema เป็น TypeScript types + ตัวอย่าง JSON** ของ 3 สำนัก/วิชา (ทำให้ §7.3 รันได้จริง)
-4. **Prototype การเดิน isometric** ในโซนเดียว (เกณฑ์ผ่าน Phase 0)
+2. **ตั้งโปรเจกต์ Phase 0** — `index.html` + `<canvas>` + ES modules (vanilla), โครงไฟล์ตาม §7.4, data loader
+3. **เขียน data schema เป็น JSDoc typedef + ตัวอย่าง JSON** ของ 3 สำนัก/วิชา (ทำให้ §7.3 ใช้งานจริง)
+4. **Prototype การเดิน isometric** ด้วย Canvas 2D ในโซนเดียว (เกณฑ์ผ่าน Phase 0)
 5. **ตัดสินใจ art pipeline** เพื่อ unblock การทำ slice จริง
 
 > ถ้าพร้อม ผมเริ่ม **ขั้นที่ 2-3 (ตั้งโปรเจกต์ + เขียน schema/JSON ตัวอย่าง)** ให้เป็นโค้ดจริงได้ทันที
