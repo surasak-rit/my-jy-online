@@ -17,6 +17,8 @@ import { save, load } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
 
+const LEARN_FOCUS_COST = 25; // เรียนวิชา/อ่านคัมภีร์ 1 ครั้ง สิ้นเปลืองสมาธิ (定力)
+
 /** ทิศหันจาก world delta → 'E'|'W'|'S'|'N' */
 function facing(dx, dy) {
   if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? 'E' : 'W';
@@ -207,7 +209,10 @@ export class Game {
   /** เรียน/อัปเกรดวิชา (เรียกจาก UI) — คืน true ถ้าสำเร็จ */
   learnSkill(def) {
     const r = learn(this.player, def);
-    if (r.ok) { recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`เรียน ${def.name}`); }
+    if (r.ok) {
+      this.player.focus = Math.max(0, this.player.focus - LEARN_FOCUS_COST); // เรียนวิชาสิ้นเปลืองสมาธิ (定力)
+      recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`เรียน ${def.name}`);
+    }
     return r;
   }
 
@@ -330,10 +335,7 @@ export class Game {
             const r = attack(p, this.target, 300);
             this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#7c1f1b');
             p.atkCd = p.attackCdMs / 1000;
-            // ออกท่ากินกำลังภายใน + สติ, สมาธิสะดุด (clamp ≥0 ไม่บล็อกการตี)
-            p.mp = Math.max(0, p.mp - 6);
-            p.stamina = Math.max(0, p.stamina - 5);
-            p.focus = Math.max(0, p.focus - 8);
+            p.mp = Math.max(0, p.mp - 6); // ออกท่ากินกำลังภายใน (內力) = ทรัพยากรต่อสู้ (clamp ≥0 ไม่บล็อก)
             p.attackT = 0.3; this.target.hurtT = 0.25; // ฟันแขน + เป้าสะดุ้ง
             if (r.killed) this.onKill(this.target);
           }
@@ -347,19 +349,15 @@ export class Game {
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
         p.hp -= dmg; p.hurtT = 0.25; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
-        p.focus = Math.max(0, p.focus - 15); // โดนตี → สมาธิแตก
         if (p.hp <= 0) this.die();
       },
     });
 
-    // ฟื้นค่าพื้นฐานตามเวลา (§內力系統): กำลังภายในฟื้นเรื่อย ๆ,
-    // สติฟื้นตอนยืนนิ่ง/หมดตอนเดิน, สมาธิสะสมตอนสงบ (ไม่สู้/ไม่เดิน)
-    const inCombat = !!this.target;
-    p.mp = Math.min(p.maxMp, p.mp + 8 * dt);
-    p.stamina = Math.max(0, Math.min(p.maxStamina, p.stamina + (p.moving ? -5 : 12) * dt));
-    p.focus = (inCombat || p.moving)
-      ? Math.max(0, p.focus - 10 * dt)
-      : Math.min(p.maxFocus, p.focus + 14 * dt);
+    // ฟื้นค่าพื้นฐานตามเวลา — เดินไม่หักสติ/สมาธิ (อิงเว็บจีน: 體力 ผูกกับ生活技能/อาชีพ,
+    // 定力 ผูกกับการเรียนวิชา/讀書識字 ไม่เกี่ยวการเดิน/ต่อสู้). 內力 = ทรัพยากรต่อสู้
+    p.mp = Math.min(p.maxMp, p.mp + 8 * dt);             // 內力 ฟื้นเรื่อย ๆ (ออกท่าแล้วลด)
+    p.stamina = Math.min(p.maxStamina, p.stamina + 4 * dt); // 體力 ฟื้นเรื่อย ๆ — สิ้นเปลืองตอนทำอาชีพ
+    p.focus = Math.min(p.maxFocus, p.focus + 5 * dt);    // 定力 ฟื้นเรื่อย ๆ — สิ้นเปลืองตอนเรียนวิชา
 
     this.cam.follow(p.pos.x, p.pos.y);
   }
