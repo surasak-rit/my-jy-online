@@ -488,10 +488,12 @@ export class Game {
 
   drawDmgNums() {
     const { ctx, cam } = this;
-    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 15px "Noto Serif Thai", serif'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(244,238,222,0.8)';
+    // textAlign='left' + คำนวณ x กึ่งกลางเอง (Safari ไม่เคารพ center → ข้อความเลื่อนขวา)
+    ctx.save(); ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = 'bold 15px "Noto Serif Thai", serif'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(244,238,222,0.8)';
     for (const d of this.dmgNums) {
       const s = cam.worldToScreen(d.wx, d.wy); ctx.globalAlpha = Math.min(1, d.t * 1.5);
-      ctx.strokeText(d.text, s.x, s.y); ctx.fillStyle = d.color; ctx.fillText(d.text, s.x, s.y);
+      const x = s.x - ctx.measureText(d.text).width / 2;
+      ctx.strokeText(d.text, x, s.y); ctx.fillStyle = d.color; ctx.fillText(d.text, x, s.y);
     }
     ctx.restore();
   }
@@ -501,14 +503,15 @@ export class Game {
     const { ctx } = this;
     const cx = this.viewW / 2, cy = 56;
     ctx.save(); ctx.globalAlpha = Math.min(1, this.toastT);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; // คำนวณ x กึ่งกลางเอง (Safari ไม่เคารพ center)
     ctx.font = '30px "Ma Shan Zheng","Noto Serif Thai",serif';
     const w = Math.max(160, this.toast.length * 20 + 48), h = 44;
     // แบนเนอร์กระดาษสา + ขอบหมึก + แถบชาด
     ctx.fillStyle = 'rgba(233,222,196,0.95)'; ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
     ctx.fillStyle = '#9e2b25'; ctx.fillRect(cx - w / 2, cy - h / 2, w, 4); ctx.fillRect(cx - w / 2, cy + h / 2 - 4, w, 4);
     ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(42,36,29,0.7)'; ctx.strokeRect(cx - w / 2, cy - h / 2, w, h);
-    ctx.fillStyle = '#2a241d'; ctx.fillText(this.toast, cx, cy + 2);
+    const tw = ctx.measureText(this.toast).width;
+    ctx.fillStyle = '#2a241d'; ctx.fillText(this.toast, cx - tw / 2, cy + 2);
     ctx.restore();
   }
 
