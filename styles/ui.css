@@ -111,6 +111,54 @@ body::after {
 }
 #panel.hidden { display: none; }
 
+/* ── หน้าสร้างตัวละคร ── */
+#create {
+  position: fixed; inset: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(40,32,22,0.78), rgba(16,12,8,0.92));
+}
+#create.hidden { display: none; }
+.create-card {
+  width: min(420px, 92vw);
+  background: radial-gradient(120% 100% at 50% 0%, var(--paper-2), var(--paper));
+  border: 2px solid var(--ink); border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 4px rgba(255,255,255,0.18);
+  padding: 22px 24px; color: var(--ink); font-family: var(--serif);
+}
+.create-title {
+  margin: 0 0 18px; text-align: center;
+  font-family: var(--brush); font-size: 30px; color: var(--seal);
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+}
+.create-field { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.create-field > span { width: 56px; flex: none; font-weight: 600; }
+#cc-name {
+  flex: 1; padding: 9px 12px; font-family: var(--serif); font-size: 15px;
+  color: var(--ink); background: rgba(255,255,255,0.55);
+  border: 1.5px solid var(--line); border-radius: 4px;
+}
+#cc-name:focus { outline: none; border-color: var(--seal); }
+.create-opts { display: flex; gap: 8px; flex: 1; }
+.create-opts button {
+  flex: 1; padding: 9px 0; font-family: var(--serif); font-size: 14px; cursor: pointer;
+  color: var(--ink); background: rgba(255,255,255,0.4);
+  border: 1.5px solid var(--line); border-radius: 4px;
+}
+.create-opts button.on { background: var(--seal); color: #fff; border-color: var(--seal-deep); }
+.create-swatches { display: flex; gap: 8px; flex: 1; }
+.create-swatches button {
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.create-swatches button.on { border-color: var(--ink); transform: scale(1.18); }
+.create-note { margin: 4px 0 16px; font-size: 12px; color: var(--ink-soft); font-style: italic; text-align: center; }
+.create-go {
+  width: 100%; padding: 11px 0; font-family: var(--brush); font-size: 19px; cursor: pointer;
+  color: #fff; background: var(--seal); border: 1.5px solid var(--seal-deep); border-radius: 4px;
+  box-shadow: 0 2px 0 var(--seal-deep);
+}
+.create-go:disabled { opacity: 0.45; cursor: not-allowed; }
+
 .panel-card {
   width: min(460px, 92vw);
   background:

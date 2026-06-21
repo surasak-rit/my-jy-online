@@ -116,10 +116,20 @@ export function initPanels(game) {
 
   function reopen(npc) { open(npc); }
 
+  /** อาจารย์สำนัก แต่ผู้เล่นยังไม่สังกัด → ชวนฝากตัวเข้าสำนัก (§4.3) */
+  function openJoin(npc) {
+    const sect = game.sectInfo(npc.sectId);
+    frame(npc.name, `<p><i>“เจ้าต้องการฝากตัวเป็นศิษย์<b>${sect ? sect.crest + ' ' + sect.name : 'สำนักนี้'}</b>หรือไม่?”</i></p>
+      <p><small>เมื่อเข้าสำนักแล้วจึงเรียนวิชาประจำสำนักได้</small></p>
+      <button id="join-sect">ฝากตัวเป็นศิษย์</button>`);
+    /** @type {HTMLElement} */ (el.querySelector('#join-sect')).onclick = () => { game.joinSect(npc.sectId); reopen(npc); };
+  }
+
   function open(npc) {
     const q = game.getGiverQuest(npc.id);
-    if (q.mode !== 'none') return openQuest(npc, q);        // ผู้ให้เควส
-    if (npc.sectId) return openSkills(npc);                 // อาจารย์สำนัก
+    if (q.mode !== 'none') return openQuest(npc, q);                       // ผู้ให้เควส
+    if (npc.sectId) return game.player.sectId === npc.sectId               // อาจารย์สำนัก
+      ? openSkills(npc) : openJoin(npc);                                   // สังกัดแล้ว→เรียนวิชา / ยังไม่→ฝากตัว
     if ((npc.role || '').includes('หมอ')) return openHealer(npc);
     if ((npc.role || '').includes('พ่อค้า')) return openShop(npc);
     frame(npc.name, `<p><i>“${npcLine(npc)}”</i></p>`);     // ตัวประกอบ/อื่น ๆ

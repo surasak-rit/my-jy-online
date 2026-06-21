@@ -41,8 +41,13 @@ export class Game {
     const saved = /** @type {any} */ (load()) || {};
     /** @type {any} */
     this.player = {
-      id: 'player', displayName: 'จอมยุทธ์น้อย', activeTitle: 'ศิษย์ใหม่',
-      sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
+      id: 'player',
+      displayName: saved.displayName || 'จอมยุทธ์น้อย',
+      activeTitle: saved.activeTitle || 'พเนจร',
+      gender: saved.gender || 'male',
+      robeColor: saved.robeColor || '#3f5a6e',
+      sectId: saved.sectId || null, // เริ่มเกมยังไม่สังกัดสำนัก (§4.3 เข้าได้หลังเควสมือใหม่)
+      tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
       skills: saved.skills || {},
@@ -64,6 +69,7 @@ export class Game {
     this.startZoneId = saved.zoneId || 'jiuhe_town';
     this.startTile = saved.tile || null;
     this.toast = ''; this.toastT = 0;
+    this.needsCreation = !saved.displayName; // ยังไม่เคยสร้างตัวละคร → เปิดหน้าสร้างก่อน
   }
 
   /** ตั้งขนาด viewport เป็น logical px (เรียกจาก resize) */
@@ -200,7 +206,32 @@ export class Game {
   saveState() {
     if (!this.zone) return;
     const p = this.player;
-    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, quests: p.quests, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
+    save({
+      displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
+      zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, quests: p.quests,
+      combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
+    });
+  }
+
+  /** สร้างตัวละครใหม่ (จากหน้าสร้างตอนเริ่มเกม) — ยังไม่สังกัดสำนัก */
+  createCharacter({ name, gender, robeColor }) {
+    const p = this.player;
+    p.displayName = (name || '').trim().slice(0, 16) || 'จอมยุทธ์น้อย';
+    p.gender = gender === 'female' ? 'female' : 'male';
+    if (robeColor) p.robeColor = robeColor;
+    p.sectId = null; p.activeTitle = 'พเนจร';
+    this.needsCreation = false;
+    this.saveState();
+  }
+
+  /** ฝากตัวเข้าสำนัก (จากอาจารย์สำนัก) — §4.3 */
+  joinSect(sectId) {
+    if (!this.sects[sectId] || this.player.sectId) return false;
+    this.player.sectId = sectId;
+    this.player.activeTitle = 'ศิษย์ใหม่';
+    this.saveState();
+    this.showToast(`ฝากตัวเป็นศิษย์${this.sects[sectId].name}แล้ว`);
+    return true;
   }
 
   // ── เควส ──
@@ -358,7 +389,7 @@ export class Game {
     }
     if (!this.dead) {
       const ps = cam.worldToScreen(this.player.pos.x, this.player.pos.y); ps.y += map.tileHeight / 2;
-      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing, { moving: this.player.moving, step: this.player.step, breath: this.player.breath, attack: (this.player.attackT || 0) / 0.3, hurt: (this.player.hurtT || 0) / 0.25 }); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false }, 1); } });
+      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, this.player.robeColor, 1, this.player.facing, { moving: this.player.moving, step: this.player.step, breath: this.player.breath, attack: (this.player.attackT || 0) / 0.3, hurt: (this.player.hurtT || 0) / 0.25, gender: this.player.gender }); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false }, 1); } });
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 

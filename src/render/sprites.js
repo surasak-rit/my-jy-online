@@ -38,6 +38,7 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', a
   const s = scale;
   const mv = !!anim.moving, step = anim.step || 0, breath = anim.breath || 0;
   const atk = anim.attack || 0, hurt = anim.hurt || 0;
+  const female = anim.gender === 'female';
   const punch = atk > 0 ? Math.sin((1 - atk) * Math.PI) : 0; // 0→1→0 (จังหวะฟัน)
   const dir = facing === 'W' ? -1 : 1; // ทิศแขนที่ฟันออก
   // bob: เดิน=เด้งสองครั้ง/รอบ (|sin|), ยืน=หายใจช้า ๆ ; sw: แกว่งแขน/ก้าวเท้า -1..1
@@ -47,7 +48,7 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', a
   const by = -bob + punch * 3.5 * s; // ฟัน=ย่อตัวลง (crouch); เดิน/ยืน=ยกขึ้น
 
   const headR = 8 * s, headCy = fy - 90 * s + by;
-  const shoulderY = fy - 80 * s + by, shoulderHalf = 12 * s;
+  const shoulderY = fy - 80 * s + by, shoulderHalf = (female ? 10 : 12) * s; // หญิงไหล่แคบกว่า (§C)
   const waistY = fy - 50 * s + by, hemY = fy - 3 * s, hemHalf = 17 * s;
   const dark = mix(bodyColor, 0.30), light = mix(bodyColor, 0.22, true), collar = mix(bodyColor, 0.45);
   const skin = '#e9c9a0';
@@ -103,7 +104,15 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', a
   ctx.fillStyle = INK;
   ctx.beginPath(); ctx.arc(hx, headCy, headR, Math.PI * 0.95, Math.PI * 2.05); ctx.fill();
   ctx.beginPath(); ctx.ellipse(hx, headCy - headR * 0.6, headR * 1.05, headR * 0.7, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(hx, headCy - headR * 1.15, 3 * s, 0, Math.PI * 2); ctx.fill();
+  if (female) {
+    // หญิง: ผมยาวสองข้าง + มวยผมต่ำด้านหลัง
+    ctx.beginPath(); ctx.ellipse(hx - headR * 0.9, headCy + 4 * s, 2.4 * s, 7 * s, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(hx + headR * 0.9, headCy + 4 * s, 2.4 * s, 7 * s, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx, headCy - headR * 1.0, 3.5 * s, 0, Math.PI * 2); ctx.fill();
+  } else {
+    // ชาย: มวยผมจุก (topknot)
+    ctx.beginPath(); ctx.arc(hx, headCy - headR * 1.15, 3 * s, 0, Math.PI * 2); ctx.fill();
+  }
   if (facing === 'N') {
     ctx.beginPath(); ctx.arc(hx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill(); // หันหลัง
   } else {

@@ -7,6 +7,7 @@ import { startLoop } from './render/loop.js';
 import { attachMouse } from './input/mouse.js';
 import { initPanels } from './ui/panels.js';
 import { initHud } from './ui/hud.js';
+import { showCreate } from './ui/create.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game'));
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
@@ -48,6 +49,9 @@ async function boot() {
   const hudUI = initHud(game);
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
+
+  // เริ่มเกมใหม่ → สร้างตัวละครก่อน (รอจนกดเริ่ม)
+  if (game.needsCreation) await showCreate(game);
 
   attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
   // ปุ่ม I = เปิดกระเป๋า
