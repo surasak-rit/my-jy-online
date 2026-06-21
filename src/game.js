@@ -47,6 +47,8 @@ export class Game {
       gender: saved.gender || 'male',
       robeColor: saved.robeColor || '#3f5a6e',
       sectId: saved.sectId || null, // เริ่มเกมยังไม่สังกัดสำนัก (§4.3 เข้าได้หลังเควสมือใหม่)
+      birthAttrs: saved.birthAttrs || null, // ค่ากำเนิด 7 ค่า (資質) — ทอยตอนสร้างตัว
+      birthday: saved.birthday || null,     // วันเกิดในเกม {month, day} (生日系統)
       tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
@@ -208,18 +210,23 @@ export class Game {
     const p = this.player;
     save({
       displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
+      birthAttrs: p.birthAttrs, birthday: p.birthday,
       zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
     });
   }
 
   /** สร้างตัวละครใหม่ (จากหน้าสร้างตอนเริ่มเกม) — ยังไม่สังกัดสำนัก */
-  createCharacter({ name, gender, robeColor }) {
+  createCharacter({ name, gender, robeColor, birthAttrs, birthday }) {
     const p = this.player;
     p.displayName = (name || '').trim().slice(0, 16) || 'จอมยุทธ์น้อย';
     p.gender = gender === 'female' ? 'female' : 'male';
     if (robeColor) p.robeColor = robeColor;
+    if (birthAttrs) p.birthAttrs = birthAttrs;   // ค่ากำเนิดที่ทอยได้ (資質)
+    if (birthday) p.birthday = birthday;          // วันเกิดในเกม (生日系統)
     p.sectId = null; p.activeTitle = 'พเนจร';
+    recomputeStats(p, this.skillDefs);            // ค่ากำเนิดส่งผลต่อ atk/def/maxHp
+    p.hp = p.maxHp;
     this.needsCreation = false;
     this.saveState();
   }

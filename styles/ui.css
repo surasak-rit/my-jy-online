@@ -152,6 +152,36 @@ body::after {
 }
 .create-swatches button.on { border-color: var(--ink); transform: scale(1.18); }
 .create-note { margin: 4px 0 16px; font-size: 12px; color: var(--ink-soft); font-style: italic; text-align: center; }
+
+/* ── ค่ากำเนิด (資質) + วันเกิด ── */
+.create-card { max-height: 92vh; overflow-y: auto; }
+.cc-section {
+  margin-bottom: 16px; padding: 12px; border-radius: 4px;
+  border: 1.5px solid var(--line); background: rgba(255,255,255,0.28);
+}
+.cc-section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; font-weight: 600; }
+.cc-section-head em { font-style: normal; color: var(--ink-soft); font-size: 13px; }
+.cc-total { font-size: 13px; color: var(--ink-soft); font-weight: 400; }
+.cc-total b { color: var(--seal); font-size: 16px; }
+.cc-attrs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 12px; }
+.cc-attr { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 6px; border-bottom: 1px dotted var(--line); cursor: help; }
+.cc-attr-name { font-size: 14px; }
+.cc-attr-val { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--ink); }
+.cc-rolled .cc-attr-val { animation: cc-pop 0.32s ease; }
+@keyframes cc-pop { 0% { transform: scale(1.4); color: var(--seal); } 100% { transform: scale(1); } }
+.cc-roll {
+  width: 100%; margin-top: 10px; padding: 8px 0; cursor: pointer;
+  font-family: var(--serif); font-size: 14px; color: var(--ink);
+  background: rgba(255,255,255,0.5); border: 1.5px solid var(--line); border-radius: 4px;
+}
+.cc-roll:hover { background: rgba(255,255,255,0.75); border-color: var(--seal); }
+.cc-birth { display: flex; gap: 8px; flex: 1; }
+.cc-birth select {
+  flex: 1; padding: 9px 8px; font-family: var(--serif); font-size: 14px;
+  color: var(--ink); background: rgba(255,255,255,0.55);
+  border: 1.5px solid var(--line); border-radius: 4px; cursor: pointer;
+}
+.cc-birth select:focus { outline: none; border-color: var(--seal); }
 .create-go {
   width: 100%; padding: 11px 0; font-family: var(--brush); font-size: 19px; cursor: pointer;
   color: #fff; background: var(--seal); border: 1.5px solid var(--seal-deep); border-radius: 4px;

@@ -33,6 +33,15 @@ test('internal เพิ่ม maxHp + def', () => {
   assert.equal(p.def, 10);    // 6 + 2*2
 });
 
+test('ค่ากำเนิด (資質) เสริม atk/def/maxHp', () => {
+  const p = mkPlayer();
+  p.birthAttrs = { bone: 20, might: 10, focus: 20 }; // กระดูก/พลังแขน/สมาธิ
+  recomputeStats(p, defs);
+  assert.equal(p.maxHp, 180); // 100 + 20*4
+  assert.equal(p.atk, 24);    // 18 + round(10*0.6)
+  assert.equal(p.def, 12);    // 6 + round(20*0.3)
+});
+
 test('เรียนเกิน maxRank ไม่ได้ / SP ไม่พอ', () => {
   const p = mkPlayer(); p.skillPoints = 5; // ไม่พอ (ต้อง 6)
   assert.equal(canLearn(p, defs.vajra_palm).ok, false);

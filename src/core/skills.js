@@ -36,6 +36,13 @@ export function learn(player, def) {
  */
 export function recomputeStats(player, skillDefs) {
   let atk = player.baseAtk, maxHp = player.baseMaxHp, def = player.baseDef, moveMult = 1;
+  // ค่ากำเนิด (資質) ส่งผลต่อค่าต่อสู้ — กระดูก→เลือด, พลังแขน→โจมตี, สมาธิ→ป้องกัน (GDD §สเตตัส C)
+  const b = player.birthAttrs;
+  if (b) {
+    maxHp += Math.round((b.bone || 0) * 4);   // 1 กระดูก ≈ +4 HP (อิง 根骨=เลือด)
+    atk += Math.round((b.might || 0) * 0.6);  // พลังแขน → ผลโจมตีกายภาพ
+    def += Math.round((b.focus || 0) * 0.3);  // สมาธิ/定力 → ต้านทาน
+  }
   for (const id in player.skills) {
     const d = skillDefs[id]; if (!d) continue;
     const r = player.skills[id].rank, pr = d.perRank || {};
