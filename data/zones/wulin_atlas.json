@@ -1,0 +1,95 @@
+{
+  "id": "wulin_atlas",
+  "name": "แผนที่ยุทธภพ (江湖)",
+  "type": "hub",
+  "floor": "stone",
+  "tilemapRef": "data/tilemaps/wulin_atlas.json",
+  "portals": [
+    {
+      "at": {
+        "x": 1,
+        "y": 11
+      },
+      "toZoneId": "jiuhe_town",
+      "spawnAt": {
+        "x": 10,
+        "y": 3
+      },
+      "label": "→ นครจิ่วเหอ"
+    },
+    {
+      "at": {
+        "x": 5,
+        "y": 5
+      },
+      "toZoneId": "jiuhe_dojo_interior",
+      "spawnAt": {
+        "x": 6,
+        "y": 7
+      },
+      "label": "→ สำนักศิลาวัชระ"
+    },
+    {
+      "at": {
+        "x": 10,
+        "y": 5
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 2,
+        "y": 13
+      },
+      "label": "→ สำนักเงาจันทรา"
+    },
+    {
+      "at": {
+        "x": 15,
+        "y": 5
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 2,
+        "y": 13
+      },
+      "label": "→ สำนักบัวคราม"
+    }
+  ],
+  "props": [
+    {
+      "type": "censer",
+      "at": {
+        "x": 15,
+        "y": 11
+      },
+      "scale": 1.4
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 5,
+        "y": 4
+      },
+      "scale": 1.25,
+      "text": "金剛"
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 10,
+        "y": 4
+      },
+      "scale": 1.25,
+      "text": "月影"
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 15,
+        "y": 4
+      },
+      "scale": 1.25,
+      "text": "碧蓮"
+    }
+  ],
+  "npcs": []
+}

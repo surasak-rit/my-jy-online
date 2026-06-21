@@ -1,0 +1,37 @@
+{
+  "sects": [
+    "vajra_cliff",
+    "moonshade",
+    "azure_lotus"
+  ],
+  "mobs": [
+    "mob_petty_bandit",
+    "mob_gray_wolf"
+  ],
+  "skills": [
+    "vajra_palm",
+    "iron_body",
+    "cloud_step",
+    "moon_sword",
+    "mist_step",
+    "jade_palm",
+    "lotus_heart"
+  ],
+  "items": [
+    "potion_small",
+    "potion_big",
+    "meat_bun",
+    "helm_tiankui",
+    "amulet_baihu",
+    "robe_bodhi",
+    "bracers_tanlang",
+    "ring_jinggang",
+    "cloak_pojun",
+    "boots_huanhua",
+    "saber_xuantie"
+  ],
+  "quests": [
+    "onboarding_1",
+    "onboarding_2"
+  ]
+}
