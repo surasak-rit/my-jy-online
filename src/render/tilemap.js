@@ -1,12 +1,12 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
-// render/tilemap.js — วาด isometric tilemap (placeholder art: diamond สี)
-// ยังไม่มี asset จริง → ใช้สีแทนชนิดพื้น (GDD §C: art pipeline ภายหลัง)
+// render/tilemap.js — วาด isometric tilemap สไตล์ "หมึกจีน/กระดาษสา (水墨)"
+// โทนกระดาษสา + พื้นหยกจาง + น้ำหมึก, เส้นขอบหมึกพู่กันบาง ๆ
 // ──────────────────────────────────────────────────────────────────────────
 
-/** สีพื้นตามดัชนี ground: 0 หญ้า, 1 ทางดิน, 2 ลานหิน, 3 น้ำ */
-const GROUND_COLORS = ['#3f6b3a', '#8a6f48', '#9a958c', '#2f5d86']; // ขอบ/เงา
-const GROUND_TOP = ['#4e7d46', '#9a7d54', '#b3aea4', '#3f72a0'];   // ผิวบน
+/** พื้น: 0 หญ้า(หยกจาง) · 1 ทางดิน · 2 ลานหิน/กระดาษ · 3 น้ำหมึก */
+const TOP = ['#c4cdaa', '#d9c79f', '#e2dac4', '#9fb4ba']; // ผิวบน
+const EDGE = ['#aab491', '#c4b083', '#cfc6ad', '#83a0a8']; // ขอบ/เงา
 
 /**
  * @param {CanvasRenderingContext2D} ctx
@@ -18,27 +18,24 @@ export function drawTileMap(ctx, map, cam) {
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       const s = cam.tileToScreen(tx, ty);
-      // cull นอกจอ
       if (s.x < -tw || s.x > cam.viewW + tw || s.y < -th || s.y > cam.viewH + th) continue;
       const g = map.ground[ty * width + tx] || 0;
-      drawDiamond(ctx, s.x, s.y, tw, th, GROUND_TOP[g] || '#4e7d46', GROUND_COLORS[g] || '#3f6b3a');
+      drawDiamond(ctx, s.x, s.y, tw, th, TOP[g] || TOP[0], EDGE[g] || EDGE[0]);
     }
   }
 }
 
-/** วาด tile รูปข้าวหลามตัด (จุด s = บนสุดของ diamond) */
+/** tile รูปข้าวหลามตัด (จุด s = บนสุด) + เส้นขอบหมึกจาง */
 function drawDiamond(ctx, cx, topY, tw, th, fill, stroke) {
-  const hw = tw / 2, hh = th / 2;
-  const midY = topY + hh;
+  const hw = tw / 2, hh = th / 2, midY = topY + hh;
   ctx.beginPath();
-  ctx.moveTo(cx, topY);          // บน
-  ctx.lineTo(cx + hw, midY);     // ขวา
-  ctx.lineTo(cx, topY + th);     // ล่าง
-  ctx.lineTo(cx - hw, midY);     // ซ้าย
+  ctx.moveTo(cx, topY);
+  ctx.lineTo(cx + hw, midY);
+  ctx.lineTo(cx, topY + th);
+  ctx.lineTo(cx - hw, midY);
   ctx.closePath();
-  ctx.fillStyle = fill;
-  ctx.fill();
-  ctx.strokeStyle = stroke;
-  ctx.lineWidth = 1;
-  ctx.stroke();
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke();
+  // เส้นหมึกจาง ๆ เน้นมิติ (ขอบบนซ้าย)
+  ctx.strokeStyle = 'rgba(42,36,29,0.08)'; ctx.stroke();
 }

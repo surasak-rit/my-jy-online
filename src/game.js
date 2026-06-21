@@ -194,7 +194,7 @@ export class Game {
           p.path = [];
           if (p.atkCd <= 0) {
             const r = attack(p, this.target, 300);
-            this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#ffe066');
+            this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#7c1f1b');
             p.atkCd = p.attackCdMs / 1000;
             if (r.killed) this.onKill(this.target);
           }
@@ -207,7 +207,7 @@ export class Game {
       isWalkable: (x, y) => this.isWalkable(x, y),
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
-        p.hp -= dmg; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#ff6b6b');
+        p.hp -= dmg; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
         if (p.hp <= 0) this.die();
       },
     });
@@ -223,7 +223,7 @@ export class Game {
     const coins = lo + Math.floor(Math.random() * (hi - lo + 1));
     this.player.currency += coins;
     mob.state = 'dead'; mob.respawn = (def.respawnMs || 5000) / 1000;
-    this.popDmg(mob.pos.x, mob.pos.y - 16, `+${def.xp} XP`, '#7CFC00');
+    this.popDmg(mob.pos.x, mob.pos.y - 16, `+${def.xp} 历练`, '#4f6a2e');
     this.target = null;
     Quests.onKill(this.player, mob.defId, this.questDefs); // นับเควสล่ามอน
     this.saveState();
@@ -234,7 +234,7 @@ export class Game {
 
   render() {
     const { ctx, cam, map } = this;
-    ctx.fillStyle = '#1b2a1b'; ctx.fillRect(0, 0, this.viewW, this.viewH);
+    ctx.fillStyle = '#ddd1b3'; ctx.fillRect(0, 0, this.viewW, this.viewH); // กระดาษสาหม่น
     if (!map) return;
     drawTileMap(ctx, map, cam);
     this.drawPortals();
@@ -253,11 +253,11 @@ export class Game {
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
       const s = cam.worldToScreen(m.pos.x, m.pos.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#a0413a' : ARCHETYPE_COLOR[m.archetype] || '#777', 0.8); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp } }, 0.8); } });
+      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp } }, 0.8); } });
     }
     if (!this.dead) {
       const ps = cam.worldToScreen(this.player.pos.x, this.player.pos.y); ps.y += map.tileHeight / 2;
-      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3b5b8c', 1); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp } }, 1); } });
+      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp } }, 1); } });
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 
@@ -269,14 +269,15 @@ export class Game {
     const { ctx, cam, map } = this;
     for (const p of (this.zone.portals || [])) {
       const s = cam.tileToScreen(p.at.x, p.at.y), hw = map.tileWidth / 2, hh = map.tileHeight / 2;
-      ctx.save(); ctx.globalAlpha = 0.5 + 0.2 * Math.sin(performance.now() / 300); ctx.fillStyle = '#ffd479';
-      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x + hw, s.y + hh); ctx.lineTo(s.x, s.y + map.tileHeight); ctx.lineTo(s.x - hw, s.y + hh); ctx.closePath(); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.globalAlpha = 0.4 + 0.18 * Math.sin(performance.now() / 320); ctx.fillStyle = '#6f7d5a'; // เรืองหยก
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x + hw, s.y + hh); ctx.lineTo(s.x, s.y + map.tileHeight); ctx.lineTo(s.x - hw, s.y + hh); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 0.7; ctx.lineWidth = 1.5; ctx.strokeStyle = '#3f4a32'; ctx.stroke(); ctx.restore();
     }
   }
 
   drawDmgNums() {
     const { ctx, cam } = this;
-    ctx.save(); ctx.textAlign = 'center'; ctx.font = 'bold 14px "Noto Sans Thai", sans-serif'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 15px "Noto Serif Thai", serif'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(244,238,222,0.8)';
     for (const d of this.dmgNums) {
       const s = cam.worldToScreen(d.wx, d.wy); ctx.globalAlpha = Math.min(1, d.t * 1.5);
       ctx.strokeText(d.text, s.x, s.y); ctx.fillStyle = d.color; ctx.fillText(d.text, s.x, s.y);
@@ -287,8 +288,17 @@ export class Game {
   drawToast() {
     if (this.toastT <= 0) return;
     const { ctx } = this;
-    ctx.save(); ctx.globalAlpha = Math.min(1, this.toastT); ctx.font = 'bold 24px "Noto Sans Thai", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,0.85)';
-    ctx.strokeText(this.toast, this.viewW / 2, 60); ctx.fillStyle = '#ffe9b0'; ctx.fillText(this.toast, this.viewW / 2, 60); ctx.restore();
+    const cx = this.viewW / 2, cy = 56;
+    ctx.save(); ctx.globalAlpha = Math.min(1, this.toastT);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '30px "Ma Shan Zheng","Noto Serif Thai",serif';
+    const w = Math.max(160, this.toast.length * 20 + 48), h = 44;
+    // แบนเนอร์กระดาษสา + ขอบหมึก + แถบชาด
+    ctx.fillStyle = 'rgba(233,222,196,0.95)'; ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+    ctx.fillStyle = '#9e2b25'; ctx.fillRect(cx - w / 2, cy - h / 2, w, 4); ctx.fillRect(cx - w / 2, cy + h / 2 - 4, w, 4);
+    ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(42,36,29,0.7)'; ctx.strokeRect(cx - w / 2, cy - h / 2, w, h);
+    ctx.fillStyle = '#2a241d'; ctx.fillText(this.toast, cx, cy + 2);
+    ctx.restore();
   }
 
   hudText() {
