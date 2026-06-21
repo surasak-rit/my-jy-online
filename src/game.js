@@ -31,14 +31,15 @@ export class Game {
    * @param {Record<string,any>} mobDefs
    * @param {Record<string,any>} [skillDefs]
    */
-  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}, itemDefs = {}, questDefs = {}) {
+  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}, itemDefs = {}, questDefs = {}, slot = 0) {
     this.ctx = ctx; this.canvas = canvas; this.sects = sects; this.mobDefs = mobDefs;
     this.skillDefs = skillDefs; this.itemDefs = itemDefs; this.questDefs = questDefs;
+    this.slot = slot; // ช่องบันทึกที่กำลังเล่น
     this.cam = new Camera(64, 32);
     // viewport แบบ logical (CSS px) — แยกจาก buffer (รองรับ HiDPI, กันภาพเพี้ยน)
     this.viewW = canvas.width || 800; this.viewH = canvas.height || 600;
     this.cam.viewW = this.viewW; this.cam.viewH = this.viewH;
-    const saved = /** @type {any} */ (load()) || {};
+    const saved = /** @type {any} */ (load(slot)) || {};
     /** @type {any} */
     this.player = {
       id: 'player',
@@ -213,10 +214,10 @@ export class Game {
   saveState() {
     if (!this.zone) return;
     const p = this.player;
-    save({
+    save(this.slot, {
       displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
       birthAttrs: p.birthAttrs, birthday: p.birthday,
-      zoneId: this.zone.id, tile: p.tile, hp: p.hp, mp: p.mp, stamina: p.stamina, focus: p.focus,
+      zoneId: this.zone.id, zoneName: this.zone.name, tile: p.tile, hp: p.hp, mp: p.mp, stamina: p.stamina, focus: p.focus,
       skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
     });

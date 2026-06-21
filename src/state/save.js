@@ -1,17 +1,51 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
 // state/save.js — persistence (MVP: localStorage) (GDD §7.1/§7.4)
-// ภายหลังเปลี่ยนเป็น API/server ได้โดยคง interface เดิม
+// รองรับหลายช่องบันทึก (save slots). ภายหลังเปลี่ยนเป็น API/server ได้โดยคง interface เดิม
 // ──────────────────────────────────────────────────────────────────────────
 
-const KEY = 'tigersway.save.v0';
+const PREFIX = 'tigersway.save.v0';
+const LEGACY_KEY = PREFIX; // ช่องเดียวแบบเก่า → ย้ายเข้า slot 0 อัตโนมัติ
+export const NUM_SLOTS = 3;
 
-/** @param {object} data */
-export function save(data) {
-  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch { /* โหมด private */ }
+const keyFor = (/** @type {number} */ slot) => `${PREFIX}.slot${slot}`;
+
+// ย้ายเซฟเก่า (ช่องเดียว) เข้า slot 0 ครั้งเดียว — ผู้เล่นเดิมไม่เสียข้อมูล
+(function migrateLegacy() {
+  try {
+    const legacy = localStorage.getItem(LEGACY_KEY);
+    if (legacy != null && localStorage.getItem(keyFor(0)) == null) {
+      localStorage.setItem(keyFor(0), legacy);
+      localStorage.removeItem(LEGACY_KEY);
+    }
+  } catch { /* โหมด private / ไม่มี localStorage */ }
+})();
+
+/** @param {number} slot @param {object} data */
+export function save(slot, data) {
+  try { localStorage.setItem(keyFor(slot), JSON.stringify(data)); } catch { /* โหมด private */ }
 }
 
-/** @returns {object|null} */
-export function load() {
-  try { const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+/** @param {number} slot @returns {object|null} */
+export function load(slot) {
+  try { const s = localStorage.getItem(keyFor(slot)); return s ? JSON.parse(s) : null; } catch { return null; }
+}
+
+/** ลบเซฟช่องที่ระบุ */
+export function deleteSlot(slot) {
+  try { localStorage.removeItem(keyFor(slot)); } catch { /* ignore */ }
+}
+
+/**
+ * สรุปทุกช่องสำหรับหน้าจอเลือกช่อง
+ * @returns {{ slot:number, empty:boolean, name?:string, title?:string, zone?:string, xp?:number, coins?:number }[]}
+ */
+export function listSlots() {
+  const out = [];
+  for (let i = 0; i < NUM_SLOTS; i++) {
+    const d = /** @type {any} */ (load(i));
+    if (!d || !d.displayName) out.push({ slot: i, empty: true });
+    else out.push({ slot: i, empty: false, name: d.displayName, title: d.activeTitle, zone: d.zoneName || '', xp: d.combatXP || 0, coins: d.currency || 0 });
+  }
+  return out;
 }

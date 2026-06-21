@@ -8,6 +8,7 @@ import { attachMouse } from './input/mouse.js';
 import { initPanels } from './ui/panels.js';
 import { initHud } from './ui/hud.js';
 import { showCreate } from './ui/create.js';
+import { showSlots } from './ui/slots.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game'));
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
@@ -43,7 +44,9 @@ async function boot() {
   const questDefs = {};
   for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
-  game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs);
+  // เลือกช่องบันทึกก่อน (เล่นต่อ/สร้างใหม่) → สร้าง Game ผูกกับช่องนั้น
+  const slot = await showSlots();
+  game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs, slot);
   game.setViewport(innerWidth, innerHeight); // logical viewport หลังสร้าง game
   const panels = initPanels(game);
   const hudUI = initHud(game);
