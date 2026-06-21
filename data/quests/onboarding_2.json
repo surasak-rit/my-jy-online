@@ -1,0 +1,1 @@
+{"id":"onboarding_2","order":2,"giver":"npc_guide_lan","name":"ปราบโจรทุ่งต้นหลิว","desc":"โจรกระจอกชุกชุมที่ทุ่งต้นหลิว ไปปราบให้สิ้นซาก 3 ตัว","steps":[{"kind":"kill","mobId":"mob_petty_bandit","count":3,"label":"โจรกระจอก"}],"rewards":{"skillPoints":12,"soft":30,"items":[{"id":"potion_small","qty":2}]}}

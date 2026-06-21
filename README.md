@@ -3,16 +3,23 @@
 MMO กำลังภายใน 2D isometric บนเว็บ · **vanilla HTML/CSS/JS (ES modules)** ไม่มี framework/build tool
 ออกแบบตาม [`game-design-document.md`](game-design-document.md) (อ้างอิงงานวิจัยใน [`jy-online-gdd-reference.md`](jy-online-gdd-reference.md))
 
-## สถานะ: Phase 0 — Foundation ✅
-ตาม GDD §8 — เกณฑ์ผ่าน: *เปิดผ่าน static server แล้วเดินตัวละครในโซน isometric ได้*
+## สถานะ: Phase 1 — Vertical Slice ✅ (ครบ 4 เสาหลัก MVP)
+ตาม GDD §8 — ผู้เล่นใหม่ → เควส → เลือกสำนัก/เรียนวิชา → ล่ามอน → ใช้เงิน ครบ 1 ลูป
 
-สิ่งที่ทำงานแล้ว:
-- 🗺️ เรนเดอร์ **isometric tilemap** จาก data (โซน `นครจิ่วเหอ`)
-- 🚶 **เดินแบบ point-to-click + A\* pathfinding** (เลี่ยงน้ำ/อาคาร, ไม่ลัดมุมทะลุกำแพง)
-- 🎥 **กล้อง isometric** ตามตัวละครแบบนุ่มนวล
-- 🧍 ตัวละคร/NPC placeholder (สัดส่วนตาม §C.1) + **ป้ายชื่อเหนือหัว** (ฉายา/ชื่อ/สำนัก — §C.7)
-- 👥 NPC หลายอาร์คีไทป์ (อาจารย์/พ่อค้า/ยาม/ขอทาน… — §D.2) z-sort ถูกชั้น
-- 💾 จำตำแหน่งผู้เล่นด้วย `localStorage`
+**โลก & การเดิน (เสาหลัก 3)**
+- 🗺️ isometric tilemap หลายโซน: `นครจิ่วเหอ` (เมือง) · `ทุ่งต้นหลิว` (โซนล่า) · `โรงฝึก` (interior)
+- 🚶 point-to-click + **A\* pathfinding** · 🎥 กล้องตามตัว · 🚪 **portal เปลี่ยนโซน/เข้า-ออกอาคาร**
+- 🧍 ตัวละคร/NPC + ป้ายชื่อ ฉายา/ชื่อ/สำนัก (§C.7) · 👥 NPC archetypes (§D.2)
+
+**Combat (เสาหลัก 1)** — ⚔️ คลิกศัตรู→เข้าประชิด→โจมตีตาม cooldown + hit-stun · มอน AI (idle→chase→attack) · damage numbers · ตาย→ฟื้นที่เมือง
+
+**สำนัก & วิชา (เสาหลัก 2)** — 🥋 คุยอาจารย์→เรียน/อัปเกรดวิชา (外功/內功/輕功) ด้วย Skill Points · **ไม่มีเลเวล** (พลังมาจากวิชา)
+
+**เศรษฐกิจ (เสาหลัก 4)** — 💰 ร้านค้า NPC ซื้อของ · 🎒 กระเป๋า (ปุ่ม **I**) ใช้ยาฟื้น HP · ดรอปเหรียญจากมอน
+
+**เควส/onboarding** — 📜 เควสสายมือใหม่ (คุยอาจารย์ → ปราบโจร 3 ตัว) + รางวัล SP/เงิน/ไอเทม
+
+💾 เซฟทุกอย่างใน `localStorage` (โซน/HP/วิชา/กระเป๋า/เควส/เงิน)
 
 ## วิธีรัน (ต้องเปิดผ่าน http ไม่ใช่ `file://` เพราะใช้ ES modules + fetch)
 ```bash
@@ -21,9 +28,11 @@ python3 -m http.server 8000
 ```
 คลิกบนพื้นเพื่อสั่งตัวละครเดิน
 
+คลิกพื้น = เดิน · คลิกศัตรู = โจมตี · คลิก NPC = คุย/เรียนวิชา/ร้านค้า/เควส · ปุ่ม **I** = กระเป๋า
+
 ## เทสต์ (core เป็น pure logic — รันบน Node ได้, ไม่มี dependency)
 ```bash
-node --test        # ทดสอบ A* pathfinding
+node --test        # pathfind / combat / skills / economy / quests (19 เคส)
 ```
 
 ## โครงไฟล์ (ตาม GDD §7.4)

@@ -1,0 +1,1 @@
+{"id":"onboarding_1","order":1,"giver":"npc_guide_lan","name":"ก้าวแรกสู่ยุทธภพ","desc":"ไปพบปรมาจารย์สือที่โรงฝึก เพื่อฝากตัวเป็นศิษย์สำนักศิลาวัชระ","steps":[{"kind":"talk","npcId":"npc_dojo_master","label":"ปรมาจารย์สือ"}],"rewards":{"skillPoints":8,"soft":20}}

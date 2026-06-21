@@ -26,8 +26,10 @@ async function boot() {
   for (const id of ['vajra_palm', 'iron_body', 'cloud_step']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
   const itemDefs = {};
   for (const id of ['potion_small', 'potion_big', 'meat_bun']) itemDefs[id] = await getJSON(`data/items/${id}.json`);
+  const questDefs = {};
+  for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
-  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs);
+  const game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs);
   const panels = initPanels(game);
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);

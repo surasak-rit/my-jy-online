@@ -5,6 +5,7 @@
 // ──────────────────────────────────────────────────────────────────────────
 import { canLearn, skillCost } from '../core/skills.js';
 import { countItem } from '../core/economy.js';
+import { progressText } from '../core/quests.js';
 
 /**
  * @param {import('../game.js').Game} game
@@ -92,7 +93,32 @@ export function initPanels(game) {
     });
   }
 
+  /** หน้าต่างเควสจากผู้ให้เควส */
+  function openQuest(npc, q) {
+    const d = q.def;
+    if (q.mode === 'offer') {
+      frame(npc.name, `<p><b>${d.name}</b></p><p><small>${d.desc}</small></p>
+        <button id="q-accept">รับเควส</button>`);
+      /** @type {HTMLElement} */ (el.querySelector('#q-accept')).onclick = () => { game.acceptQuest(d); reopen(npc); };
+    } else if (q.mode === 'progress') {
+      const steps = progressText(game.player, d).map((t) => `<li>${t}</li>`).join('');
+      frame(npc.name, `<p><b>${d.name}</b> (กำลังทำ)</p><ul class="quest-steps">${steps}</ul>
+        <p><small>กลับมาหาข้าเมื่อทำสำเร็จ</small></p>`);
+    } else if (q.mode === 'turnin') {
+      const r = d.rewards || {};
+      const rw = [r.skillPoints ? `✦${r.skillPoints} SP` : '', r.soft ? `💰${r.soft}` : '',
+      ...(r.items || []).map((i) => `${game.itemDefs[i.id]?.name || i.id}×${i.qty}`)].filter(Boolean).join(' · ');
+      frame(npc.name, `<p><b>${d.name}</b> ✓ สำเร็จ!</p><p><small>รางวัล: ${rw}</small></p>
+        <button id="q-turnin">รับรางวัล</button>`);
+      /** @type {HTMLElement} */ (el.querySelector('#q-turnin')).onclick = () => { game.turnInQuest(d); reopen(npc); };
+    }
+  }
+
+  function reopen(npc) { open(npc); }
+
   function open(npc) {
+    const q = game.getGiverQuest(npc.id);
+    if (q.mode !== 'none') return openQuest(npc, q);        // ผู้ให้เควส
     if (npc.sectId) return openSkills(npc);                 // อาจารย์สำนัก
     if ((npc.role || '').includes('หมอ')) return openHealer(npc);
     if ((npc.role || '').includes('พ่อค้า')) return openShop(npc);

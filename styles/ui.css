@@ -83,3 +83,6 @@ html, body {
 .panel-body button:hover { background: #816228; }
 .panel-body button:disabled { opacity: 0.4; cursor: not-allowed; }
 .maxed { color: #7CFC00; font-size: 13px; }
+
+.quest-steps { margin: 8px 0 8px 18px; color: #d8cdb8; }
+.quest-steps li { margin: 3px 0; }

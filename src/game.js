@@ -11,6 +11,7 @@ import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
 import { learn, recomputeStats } from './core/skills.js';
 import { buy, useConsumable } from './core/economy.js';
+import * as Quests from './core/quests.js';
 import { save, load } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
@@ -23,9 +24,9 @@ export class Game {
    * @param {Record<string,any>} mobDefs
    * @param {Record<string,any>} [skillDefs]
    */
-  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}, itemDefs = {}) {
+  constructor(ctx, canvas, sects, mobDefs, skillDefs = {}, itemDefs = {}, questDefs = {}) {
     this.ctx = ctx; this.canvas = canvas; this.sects = sects; this.mobDefs = mobDefs;
-    this.skillDefs = skillDefs; this.itemDefs = itemDefs;
+    this.skillDefs = skillDefs; this.itemDefs = itemDefs; this.questDefs = questDefs;
     this.cam = new Camera(64, 32);
     const saved = /** @type {any} */ (load()) || {};
     /** @type {any} */
@@ -36,6 +37,7 @@ export class Game {
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
       skills: saved.skills || {},
       inventory: saved.inventory || [],
+      quests: saved.quests || {},
       combatXP: saved.combatXP || 0, skillPoints: saved.skillPoints || 0,
       currency: saved.currency != null ? saved.currency : 30,
     };
@@ -104,7 +106,13 @@ export class Game {
     this.player.path = path;
   }
 
-  triggerInteract() { const n = this.interactNpc; this.interactNpc = null; this.player.path = []; if (n) this.onInteract(n); }
+  triggerInteract() {
+    const n = this.interactNpc; this.interactNpc = null; this.player.path = [];
+    if (!n) return;
+    Quests.onTalk(this.player, n.id, this.questDefs); // ปิด step คุย NPC
+    this.saveState();
+    this.onInteract(n);
+  }
 
   /** เรียน/อัปเกรดวิชา (เรียกจาก UI) — คืน true ถ้าสำเร็จ */
   learnSkill(def) {
@@ -116,7 +124,24 @@ export class Game {
   saveState() {
     if (!this.zone) return;
     const p = this.player;
-    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
+    save({ zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, quests: p.quests, combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency });
+  }
+
+  // ── เควส ──
+  getGiverQuest(npcId) {
+    const chain = Object.values(this.questDefs).filter((d) => d.giver === npcId).sort((a, b) => a.order - b.order);
+    for (const def of chain) {
+      const q = this.player.quests[def.id];
+      if (!q) return { mode: 'offer', def };
+      if (q.state === 'active') return Quests.isComplete(this.player, def) ? { mode: 'turnin', def } : { mode: 'progress', def };
+    }
+    return { mode: 'none' };
+  }
+  acceptQuest(def) { Quests.accept(this.player, def); this.saveState(); this.showToast(`รับเควส: ${def.name}`); }
+  turnInQuest(def) {
+    const r = Quests.complete(this.player, def);
+    if (r.ok) { recomputeStats(this.player, this.skillDefs); this.saveState(); this.showToast(`สำเร็จ: ${def.name}!`); }
+    return r;
   }
 
   /** ซื้อไอเทมจากร้าน (เรียกจาก UI) */
@@ -195,6 +220,7 @@ export class Game {
     mob.state = 'dead'; mob.respawn = (def.respawnMs || 5000) / 1000;
     this.popDmg(mob.pos.x, mob.pos.y - 16, `+${def.xp} XP`, '#7CFC00');
     this.target = null;
+    Quests.onKill(this.player, mob.defId, this.questDefs); // นับเควสล่ามอน
     this.saveState();
   }
 
