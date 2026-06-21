@@ -1,11 +1,37 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
 // ui/create.js — หน้าสร้างตัวละคร (เริ่มเกมใหม่): ชื่อ + เพศ + สีชุด + พรีวิวสด
+//   + ทอยค่ากำเนิด 7 ค่า (資質屬性) + แต้มอิสระจัดสรรเอง (配點, §สเตตัส E) + วันเกิด
 // เริ่มต้น "ยังไม่สังกัดสำนัก" (§4.3) — ไปฝากตัวกับอาจารย์ภายหลัง
 // ──────────────────────────────────────────────────────────────────────────
 import { drawCharacter } from '../render/sprites.js';
 
 const ROBES = ['#3f5a6e', '#6e4a3f', '#3f6e52', '#5b4a6e', '#7a6a3a'];
+
+/** ค่าคุณสมบัติกำเนิด 7 ค่า (資質屬性) — กำหนดตอนสร้างตัว (GDD §สเตตัส C) */
+export const BIRTH_ATTRS = [
+  { key: 'might', th: 'พลังแขน', cn: '臂力', tip: 'น้ำหนักแบก + ผลโจมตีกายภาพ' },
+  { key: 'courage', th: 'ความกล้า', cn: '膽識', tip: 'ออกท่าเร็ว — เงื่อนไขวิชาชั้นสูง' },
+  { key: 'insight', th: 'รู้แจ้ง', cn: '悟性', tip: 'ฝึกวิชาเร็ว + ได้แต้มบำเพ็ญมาก' },
+  { key: 'fortune', th: 'วาสนา', cn: '福緣', tip: 'โชค/โอกาส drop + เหตุการณ์บังเอิญ' },
+  { key: 'focus', th: 'สมาธิ', cn: '定力', tip: 'ต้านทานจิต + สะสมพลัง (เพิ่มป้องกัน)' },
+  { key: 'agility', th: 'ปฏิภาณ', cn: '機敏', tip: 'ส่งผลต่อ身法/หลบหลีก' },
+  { key: 'bone', th: 'กระดูก', cn: '根骨', tip: 'ความแกร่ง/เลือด — 1 กระดูก = เลือดมากขึ้น' },
+];
+
+const FREE_POINTS = 10; // แต้มอิสระแจกให้จัดสรรเอง (เลียนแบบ 至尊版 แจกฟรีแต้ม §สเตตัส E)
+const ATTR_CAP = 30;    // เพดานต่อค่า (อิงตัวอย่างบิลด์ใน GDD)
+
+/** ทอยค่ากำเนิดพื้นฐาน 1 ชุด — แต่ละค่า 5–14 */
+export function rollAttrs() {
+  /** @type {Record<string, number>} */
+  const out = {};
+  for (const a of BIRTH_ATTRS) out[a.key] = 5 + Math.floor(Math.random() * 10);
+  return out;
+}
+
+const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+const DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
 
 /**
  * แสดงหน้าสร้างตัวละคร แล้ว resolve เมื่อกดเริ่ม (เซ็ตค่าให้ game.player แล้ว)
@@ -16,6 +42,9 @@ export function showCreate(game) {
   const el = /** @type {HTMLElement} */ (document.getElementById('create'));
   let gender = game.player.gender || 'male';
   let robe = game.player.robeColor || ROBES[0];
+  let base = rollAttrs();                 // ค่าที่ทอยได้ (จัดลดต่ำกว่านี้ไม่ได้)
+  /** @type {Record<string, number>} */
+  let alloc = {};                          // แต้มอิสระที่ใส่เพิ่มแต่ละค่า
 
   el.innerHTML = `
     <div class="create-card">
@@ -38,7 +67,28 @@ export function showCreate(game) {
           ${ROBES.map((c) => `<button data-c="${c}" class="${c === robe ? 'on' : ''}" style="background:${c}"></button>`).join('')}
         </div>
       </div>
-      <p class="create-note">เริ่มต้นยังไม่สังกัดสำนัก — ไปฝากตัวกับอาจารย์ในเมืองภายหลัง</p>
+
+      <div class="cc-section">
+        <div class="cc-section-head">
+          <span>ค่ากำเนิด <em>資質</em></span>
+          <span class="cc-total">แต้มอิสระ <b id="cc-left">0</b> · รวม <b id="cc-sum">0</b></span>
+        </div>
+        <div class="cc-attrs" id="cc-attrs"></div>
+        <button id="cc-roll" class="cc-roll" type="button">🎲 ทอยใหม่</button>
+      </div>
+
+      <div class="create-field">
+        <span>วันเกิด</span>
+        <div class="cc-birth">
+          <select id="cc-bmonth" aria-label="เดือนเกิด">
+            ${MONTHS.map((m) => `<option value="${m}">เดือน ${m}</option>`).join('')}
+          </select>
+          <select id="cc-bday" aria-label="วันเกิด">
+            ${DAYS.map((d) => `<option value="${d}">วันที่ ${d}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <p class="create-note">ทอยค่ากำเนิดแล้วแจกแต้มอิสระให้ครบก่อนเริ่ม · ถึงวันเกิดในเกมค่ากำเนิดเพิ่มสุ่ม +0–2 · เริ่มต้นยังไม่สังกัดสำนัก</p>
       <button id="cc-go" class="create-go" disabled>เริ่มออกเดินทาง</button>
     </div>`;
   el.classList.remove('hidden');
@@ -46,6 +96,49 @@ export function showCreate(game) {
   const q = (/** @type {string} */ c) => /** @type {HTMLElement} */ (el.querySelector(c));
   const nameI = /** @type {HTMLInputElement} */ (q('#cc-name'));
   const go = /** @type {HTMLButtonElement} */ (q('#cc-go'));
+  const attrsBox = q('#cc-attrs');
+  const sumEl = q('#cc-sum');
+  const leftEl = q('#cc-left');
+
+  const valOf = (/** @type {string} */ k) => base[k] + (alloc[k] || 0);
+  const spent = () => BIRTH_ATTRS.reduce((s, a) => s + (alloc[a.key] || 0), 0);
+  const remaining = () => FREE_POINTS - spent();
+  const total = () => BIRTH_ATTRS.reduce((s, a) => s + valOf(a.key), 0);
+
+  const renderAttrs = () => {
+    const left = remaining();
+    attrsBox.innerHTML = BIRTH_ATTRS.map((a) => {
+      const v = valOf(a.key);
+      const canMinus = (alloc[a.key] || 0) > 0;
+      const canPlus = left > 0 && v < ATTR_CAP;
+      return `
+        <div class="cc-attr" title="${a.cn} — ${a.tip}">
+          <span class="cc-attr-name">${a.th}</span>
+          <span class="cc-attr-ctl">
+            <button class="cc-step cc-minus" data-k="${a.key}" ${canMinus ? '' : 'disabled'} type="button">−</button>
+            <span class="cc-attr-val">${v}</span>
+            <button class="cc-step cc-plus" data-k="${a.key}" ${canPlus ? '' : 'disabled'} type="button">＋</button>
+          </span>
+        </div>`;
+    }).join('');
+    leftEl.textContent = String(left);
+    leftEl.classList.toggle('cc-left-zero', left === 0);
+    sumEl.textContent = String(total());
+    updateGo();
+  };
+
+  const updateGo = () => { go.disabled = !nameI.value.trim() || remaining() > 0; };
+
+  // จัดสรรแต้มผ่าน +/- (event delegation — ปุ่มถูกสร้างใหม่ทุกครั้งที่ render)
+  attrsBox.onclick = (e) => {
+    const btn = /** @type {HTMLElement} */ (e.target);
+    const k = btn.dataset && btn.dataset.k;
+    if (!k) return;
+    if (btn.classList.contains('cc-plus') && remaining() > 0 && valOf(k) < ATTR_CAP) alloc[k] = (alloc[k] || 0) + 1;
+    else if (btn.classList.contains('cc-minus') && (alloc[k] || 0) > 0) alloc[k]--;
+    else return;
+    renderAttrs();
+  };
 
   q('#cc-gender').querySelectorAll('button').forEach((b) => {
     b.onclick = () => { gender = /** @type {string} */ (b.dataset.v); q('#cc-gender').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b)); };
@@ -53,8 +146,14 @@ export function showCreate(game) {
   q('#cc-robe').querySelectorAll('button').forEach((b) => {
     b.onclick = () => { robe = /** @type {string} */ (b.dataset.c); q('#cc-robe').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b)); };
   });
-  nameI.oninput = () => { go.disabled = !nameI.value.trim(); };
+  q('#cc-roll').onclick = () => {
+    base = rollAttrs(); alloc = {}; // ทอยใหม่ + คืนแต้มอิสระทั้งหมด
+    attrsBox.classList.remove('cc-rolled'); void attrsBox.offsetWidth; attrsBox.classList.add('cc-rolled');
+    renderAttrs();
+  };
+  nameI.oninput = updateGo;
   nameI.focus();
+  renderAttrs();
 
   // ── พรีวิวสด: เรนเดอร์ตัวละครจริง เดินอยู่กับที่ + หมุนดูรอบตัว (อัปเดตตามเพศ/สีทันที) ──
   const cv = /** @type {HTMLCanvasElement} */ (q('.create-preview'));
@@ -77,7 +176,12 @@ export function showCreate(game) {
   return new Promise((resolve) => {
     go.onclick = () => {
       cancelAnimationFrame(raf);
-      game.createCharacter({ name: nameI.value, gender, robeColor: robe });
+      /** @type {Record<string, number>} */
+      const birthAttrs = {};
+      for (const a of BIRTH_ATTRS) birthAttrs[a.key] = valOf(a.key);
+      const month = Number(/** @type {HTMLSelectElement} */ (q('#cc-bmonth')).value);
+      const day = Number(/** @type {HTMLSelectElement} */ (q('#cc-bday')).value);
+      game.createCharacter({ name: nameI.value, gender, robeColor: robe, birthAttrs, birthday: { month, day } });
       el.classList.add('hidden'); el.innerHTML = '';
       resolve();
     };

@@ -218,10 +218,19 @@ body::after {
 .cc-section-head em { font-style: normal; color: var(--ink-soft); font-size: 13px; }
 .cc-total { font-size: 13px; color: var(--ink-soft); font-weight: 400; }
 .cc-total b { color: var(--seal); font-size: 16px; }
+.cc-total b.cc-left-zero { color: #2f7a3a; } /* แต้มอิสระหมด = พร้อมเริ่ม */
 .cc-attrs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 12px; }
-.cc-attr { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 6px; border-bottom: 1px dotted var(--line); cursor: help; }
+.cc-attr { display: flex; justify-content: space-between; align-items: center; padding: 3px 6px; border-bottom: 1px dotted var(--line); cursor: help; }
 .cc-attr-name { font-size: 14px; }
-.cc-attr-val { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--ink); }
+.cc-attr-ctl { display: flex; align-items: center; gap: 6px; }
+.cc-step {
+  width: 20px; height: 20px; flex: none; padding: 0; cursor: pointer; line-height: 1;
+  font-size: 14px; color: var(--ink); background: rgba(255,255,255,0.55);
+  border: 1.5px solid var(--line); border-radius: 4px;
+}
+.cc-step:hover:not(:disabled) { background: var(--seal); color: #fff; border-color: var(--seal-deep); }
+.cc-step:disabled { opacity: 0.3; cursor: default; }
+.cc-attr-val { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--ink); min-width: 22px; text-align: center; }
 .cc-rolled .cc-attr-val { animation: cc-pop 0.32s ease; }
 @keyframes cc-pop { 0% { transform: scale(1.4); color: var(--seal); } 100% { transform: scale(1); } }
 .cc-roll {
