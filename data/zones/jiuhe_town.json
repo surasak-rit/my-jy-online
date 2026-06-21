@@ -1,0 +1,18 @@
+{
+  "id": "jiuhe_town",
+  "name": "นครจิ่วเหอ (เมืองเก้าธารา)",
+  "type": "hub",
+  "tilemapRef": "data/tilemaps/jiuhe_town.json",
+  "exits": [
+    { "toZoneId": "vajra_cliff", "at": { "x": 14, "y": 1 } },
+    { "toZoneId": "willow_fields", "at": { "x": 1, "y": 14 } }
+  ],
+  "npcs": [
+    { "id": "npc_guide_lan", "at": { "x": 14, "y": 14 }, "role": "ผู้นำทางมือใหม่", "archetype": "scholar", "name": "เสี่ยวหลาน" },
+    { "id": "npc_dojo_master", "at": { "x": 19, "y": 8 }, "role": "อาจารย์สำนักศิลาวัชระ", "archetype": "monk", "name": "ปรมาจารย์สือ", "sectId": "vajra_cliff" },
+    { "id": "npc_merchant", "at": { "x": 17, "y": 12 }, "role": "พ่อค้า", "archetype": "merchant", "name": "เจ้าของร้านหวัง" },
+    { "id": "npc_guard", "at": { "x": 14, "y": 4 }, "role": "ยามประตู", "archetype": "guard", "name": "ทหารยาม" },
+    { "id": "npc_villager_1", "at": { "x": 10, "y": 16 }, "role": "", "archetype": "villager", "name": "ชาวบ้าน" },
+    { "id": "npc_beggar", "at": { "x": 12, "y": 18 }, "role": "", "archetype": "beggar", "name": "ขอทานเฒ่า" }
+  ]
+}

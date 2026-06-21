@@ -1,0 +1,40 @@
+/* UI Layer (HTML+CSS) — HUD/เมนู แยกจากฉากเกม (Canvas) ตาม GDD §7.2 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #11160f;
+  font-family: "Noto Sans Thai", "Segoe UI", system-ui, sans-serif;
+  color: #fff;
+}
+
+#game {
+  display: block;
+  cursor: pointer;
+}
+
+/* HUD ล่างซ้าย — ข้อมูลโซน/พิกัด */
+#hud {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  pointer-events: none;
+}
+
+/* ป้ายชื่อเกมมุมบนซ้าย */
+#title-tag {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  font-size: 12px;
+  color: #d4a64a;
+  opacity: 0.8;
+  pointer-events: none;
+}
