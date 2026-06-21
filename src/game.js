@@ -10,6 +10,7 @@ import { drawProp, FLOOR_PROPS } from './render/props.js';
 import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
+import { spawnNpcs, updateNpcs } from './core/npcs.js';
 import { learn, recomputeStats } from './core/skills.js';
 import { upgradeNeidan } from './core/neidan.js';
 import { buy, useConsumable } from './core/economy.js';
@@ -73,7 +74,7 @@ export class Game {
     /** ฮุคให้ UI (DOM) เปิดหน้าต่างคุยกับ NPC */
     this.onInteract = (/** @type {any} */ _npc) => {};
     this.interactNpc = null;
-    this.zone = null; this.map = null; this.mobs = [];
+    this.zone = null; this.map = null; this.mobs = []; this.npcs = [];
     this.target = null; this.transitioning = false;
     this.dead = false; this.respawnT = 0;
     /** @type {{wx:number,wy:number,text:string,color:string,t:number}[]} */
@@ -108,6 +109,7 @@ export class Game {
     this.cam.focus = { x: w.x, y: w.y };
     this.target = null;
     this.mobs = spawnFromZone(zone, this.mobDefs, (x, y) => this.isWalkable(x, y), (x, y) => this.tw(x, y));
+    this.npcs = spawnNpcs(zone, (x, y) => this.tw(x, y));
     this.showToast(zone.name);
     this.saveState();
     this.transitioning = false;
@@ -123,8 +125,8 @@ export class Game {
     if (hit && hit.npc) {
       const npc = hit.npc;
       this.target = null; this.interactNpc = npc;
-      if (tileDist(this.player.tile, npc.at) <= 1) this.triggerInteract();
-      else this.routeToTile(npc.at, true);
+      if (tileDist(this.player.tile, npc.tile) <= 1) this.triggerInteract();
+      else this.routeToTile(npc.tile, true);
       return;
     }
     this.target = null; this.interactNpc = null;
@@ -152,8 +154,8 @@ export class Game {
       const s = this.cam.worldToScreen(m.pos.x, m.pos.y);
       test(s.x, s.y, 0.8, { mob: m });
     }
-    for (const n of (this.zone?.npcs || [])) {
-      const s = this.cam.tileToScreen(n.at.x, n.at.y);
+    for (const n of (this.npcs || [])) {
+      const s = this.cam.worldToScreen(n.pos.x, n.pos.y);
       test(s.x, s.y, 0.85, { npc: n });
     }
     return best;
@@ -337,7 +339,7 @@ export class Game {
     if (hadWp && p.waypoints.length === 0) this.saveState();
 
     // ถึงตัว NPC ที่จะคุย → เปิดหน้าต่าง
-    if (this.interactNpc && p.waypoints.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();
+    if (this.interactNpc && p.waypoints.length === 0 && tileDist(p.tile, this.interactNpc.tile) <= 1) this.triggerInteract();
 
     // ต่อสู้กับเป้าหมาย
     if (this.target) {
@@ -357,6 +359,14 @@ export class Game {
         } else if (p.waypoints.length === 0) this.routeToTile(this.target.tile, true);
       }
     }
+
+    // NPC เดินเล่น (wander) — ให้เมืองดูมีชีวิต
+    updateNpcs(this.npcs, dt, {
+      isWalkable: (x, y) => this.isWalkable(x, y),
+      tileToWorld: (x, y) => this.tw(x, y),
+      playerTile: p.tile,
+      interactId: this.interactNpc ? this.interactNpc.id : null,
+    });
 
     // มอน AI
     updateMobs(this.mobs, p, dt, {
@@ -422,9 +432,9 @@ export class Game {
       const s = cam.worldToScreen(this.target.pos.x, this.target.pos.y); s.y += map.tileHeight / 2;
       ents.push({ depth: -Infinity, draw: () => { ctx.strokeStyle = '#ffcf33'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(s.x, s.y, 18, 9, 0, 0, Math.PI * 2); ctx.stroke(); } });
     }
-    for (const n of this.zone.npcs) {
-      const s = cam.tileToScreen(n.at.x, n.at.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: n.at.x + n.at.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85, 'S', { moving: false, breath: this.animT * 3 + n.at.x + n.at.y }); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null, boxed: false }, 0.85); } });
+    for (const n of (this.npcs || [])) {
+      const s = cam.worldToScreen(n.pos.x, n.pos.y); s.y += map.tileHeight / 2;
+      ents.push({ depth: n.tile.x + n.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85, n.facing || 'S', { moving: n.moving, step: n.step, breath: n.breath }); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null, boxed: false }, 0.85); } });
     }
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
