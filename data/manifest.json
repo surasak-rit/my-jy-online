@@ -8,7 +8,8 @@
     "tang_clan",
     "five_venoms",
     "huashan_peak",
-    "peach_isle"
+    "peach_isle",
+    "ancient_tomb"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -24,7 +25,9 @@
     "mob_rogue_swordsman",
     "mob_sword_demon",
     "mob_maze_serpent",
-    "mob_blackwind_pirate"
+    "mob_blackwind_pirate",
+    "mob_tomb_bat",
+    "mob_tomb_ghoul"
   ],
   "skills": [
     "vajra_palm",
@@ -39,7 +42,8 @@
     "hidden_needle",
     "venom_claw",
     "lonely_nine",
-    "jade_flute"
+    "jade_flute",
+    "jade_maiden"
   ],
   "items": [
     "potion_small",
@@ -64,7 +68,9 @@
     "sword_purpletip",
     "mat_cold_iron",
     "flute_jadegreen",
-    "mat_peach_resin"
+    "mat_peach_resin",
+    "rope_goldweb",
+    "mat_jade_silk"
   ],
   "quests": [
     "onboarding_1",
@@ -80,6 +86,8 @@
     "huashan_peak_join",
     "huashan_peak_hunt",
     "peach_isle_join",
-    "peach_isle_hunt"
+    "peach_isle_hunt",
+    "ancient_tomb_join",
+    "ancient_tomb_hunt"
   ]
 }

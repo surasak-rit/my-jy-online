@@ -1,0 +1,26 @@
+{
+  "id": "mob_tomb_bat",
+  "name": "ค้างคาวเฝ้าสุสาน",
+  "archetype": "wanderer",
+  "maxHp": 58,
+  "atk": 13,
+  "def": 4,
+  "speed": 5,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 19,
+  "skillPoints": 7,
+  "loot": {
+    "soft": [
+      7,
+      15
+    ],
+    "items": [
+      {
+        "id": "mat_jade_silk",
+        "chance": 0.4
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "id": "ancient_tomb",
+  "name": "สำนักสุสานโบราณ",
+  "type": "sect",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/sect_courtyard.json",
+  "palette": {
+    "primary": "#4a4f5a",
+    "accent": "#d7dbe2"
+  },
+  "portals": [
+    {
+      "at": {
+        "x": 1,
+        "y": 9
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 2,
+        "y": 10
+      },
+      "label": "→ แผนที่ยุทธภพ"
+    }
+  ],
+  "props": [
+    {
+      "type": "hall",
+      "at": {
+        "x": 11,
+        "y": 5
+      },
+      "scale": 1.5,
+      "text": "古墓"
+    },
+    {
+      "type": "statue",
+      "at": {
+        "x": 7,
+        "y": 6
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "statue",
+      "at": {
+        "x": 15,
+        "y": 6
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 9,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 13,
+        "y": 7
+      }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 4,
+        "y": 4
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 18,
+        "y": 13
+      },
+      "scale": 1.2
+    },
+    {
+      "type": "censer",
+      "at": {
+        "x": 11,
+        "y": 9
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc_tomb_maiden",
+      "at": {
+        "x": 11,
+        "y": 7
+      },
+      "role": "เจ้าสำนักสุสานโบราณ",
+      "archetype": "monk",
+      "name": "อาจารย์หญิงเสี่ยวหลงหนฺหวี่",
+      "sectId": "ancient_tomb"
+    }
+  ],
+  "spawns": [
+    {
+      "mobId": "mob_tomb_bat",
+      "tier": 2,
+      "max": 4,
+      "area": {
+        "x": 3,
+        "y": 12,
+        "w": 6,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_tomb_ghoul",
+      "tier": 3,
+      "max": 1,
+      "area": {
+        "x": 14,
+        "y": 12,
+        "w": 4,
+        "h": 4
+      }
+    }
+  ]
+}

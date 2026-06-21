@@ -1,0 +1,15 @@
+{
+  "id": "ancient_tomb",
+  "name": "สำนักสุสานโบราณ",
+  "crest": "🕯️",
+  "art": {
+    "palette": {
+      "primary": "#4a4f5a",
+      "accent": "#d7dbe2"
+    },
+    "outfit": "ชุดขาวสุสาน"
+  },
+  "join": {
+    "gender": "female"
+  }
+}

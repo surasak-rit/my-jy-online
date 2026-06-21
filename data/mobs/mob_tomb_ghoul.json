@@ -1,0 +1,32 @@
+{
+  "id": "mob_tomb_ghoul",
+  "name": "ผีดิบเฝ้าโลงหยก",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 440,
+  "atk": 32,
+  "def": 11,
+  "speed": 2,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 160,
+  "skillPoints": 44,
+  "loot": {
+    "soft": [
+      85,
+      175
+    ],
+    "items": [
+      {
+        "id": "rope_goldweb",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_jade_silk",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

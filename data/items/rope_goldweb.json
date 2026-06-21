@@ -1,0 +1,12 @@
+{
+  "id": "rope_goldweb",
+  "name": "เชือกทองใยฟ้า 金絲索",
+  "slot": "weapon",
+  "price": 275,
+  "bonus": {
+    "atk": 14,
+    "def": 5
+  },
+  "desc": "เชือกอ่อนใยทอง รัดฟาดได้ทั้งรุกรับ",
+  "type": "equip"
+}
