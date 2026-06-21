@@ -179,6 +179,12 @@ body::after {
   font-family: var(--brush); font-size: 30px; color: var(--seal);
   text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
 }
+.create-preview {
+  display: block; margin: 0 auto 16px; border-radius: 6px;
+  background: radial-gradient(80% 70% at 50% 35%, #efe6cf, #d8cbac);
+  border: 1.5px solid var(--line);
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.25), inset 0 -14px 24px rgba(90,70,40,0.18);
+}
 .create-field { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .create-field > span { width: 56px; flex: none; font-weight: 600; }
 #cc-name {
