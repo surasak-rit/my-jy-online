@@ -1,20 +1,26 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
-// input/mouse.js — point-to-click: ส่งทั้ง tile (สำหรับเล็งศัตรู/NPC)
-// และ world point (สำหรับเดินลื่นต่อเนื่อง ไม่ snap กริด) — §7.4
+// input/mouse.js — point-to-click: ส่ง tile (เล็งกริด), world (เดินลื่น)
+// และ screen px (สำหรับ hit-test ตัวละคร/วัตถุที่เลือกได้) — §7.4
 // ──────────────────────────────────────────────────────────────────────────
 
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {import('../render/camera.js').Camera} cam
- * @param {(pick:{tile:{x:number,y:number}, world:{x:number,y:number}})=>void} onPick
+ * @param {(pick:{tile:{x:number,y:number}, world:{x:number,y:number}, screen:{x:number,y:number}})=>void} onPick
+ * @param {(screen:{x:number,y:number})=>boolean} [onHover] คืน true ถ้าชี้โดนเป้าที่เลือกได้ → เปลี่ยน cursor
  */
-export function attachMouse(canvas, cam, onPick) {
-  canvas.addEventListener('click', (e) => {
+export function attachMouse(canvas, cam, onPick, onHover) {
+  const toScreen = (/** @type {MouseEvent} */ e) => {
     const rect = canvas.getBoundingClientRect();
-    const sx = e.clientX - rect.left;
-    const sy = e.clientY - rect.top;
-    const world = cam.screenToWorld(sx, sy);
-    onPick({ tile: cam.worldToTile(world.x, world.y), world });
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+  canvas.addEventListener('click', (e) => {
+    const sc = toScreen(e);
+    const world = cam.screenToWorld(sc.x, sc.y);
+    onPick({ tile: cam.worldToTile(world.x, world.y), world, screen: sc });
+  });
+  if (onHover) canvas.addEventListener('mousemove', (e) => {
+    canvas.classList.toggle('over-target', !!onHover(toScreen(e)));
   });
 }

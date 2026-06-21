@@ -98,11 +98,12 @@ export class Game {
   /** คลิก: มอน→โจมตี, NPC→เข้าคุย, ไม่งั้น→เดินลื่นไปจุดที่คลิก */
   handlePick(pick) {
     if (this.transitioning || !this.map || this.dead) return;
-    const { tile, world } = pick;
-    const mob = this.mobs.find((m) => m.state !== 'dead' && m.tile.x === tile.x && m.tile.y === tile.y);
-    if (mob) { this.target = mob; this.interactNpc = null; this.routeToTile(mob.tile, true); return; }
-    const npc = (this.zone.npcs || []).find((n) => n.at.x === tile.x && n.at.y === tile.y);
-    if (npc) {
+    const { tile, world, screen } = pick;
+    // เลือกเป้าจาก hit-box บนจอ (คลิกโดนตัว ไม่ต้องเล็งช่องเท้าเป๊ะ)
+    const hit = screen ? this.pickEntity(screen) : null;
+    if (hit && hit.mob) { this.target = hit.mob; this.interactNpc = null; this.routeToTile(hit.mob.tile, true); return; }
+    if (hit && hit.npc) {
+      const npc = hit.npc;
       this.target = null; this.interactNpc = npc;
       if (tileDist(this.player.tile, npc.at) <= 1) this.triggerInteract();
       else this.routeToTile(npc.at, true);
@@ -110,6 +111,34 @@ export class Game {
     }
     this.target = null; this.interactNpc = null;
     if (this.isWalkable(tile.x, tile.y)) this.routeToWorld(world, tile);
+  }
+
+  /**
+   * หาตัวละคร/NPC ที่อยู่ใต้จุดคลิก (screen px) ด้วย hit-box แนวตั้งครอบสไปรต์
+   * ขนาดพอดีตัว (ไม่ล้นไปกินช่องรอบ ๆ) — เลือกตัวที่ "กลางลำตัว" ใกล้คลิกสุด
+   * @param {{x:number,y:number}} sc
+   * @returns {{mob?:any, npc?:any}|null}
+   */
+  pickEntity(sc) {
+    /** @type {{mob?:any, npc?:any}|null} */
+    let best = null; let bestD = Infinity;
+    // hit-box: กว้าง ±hw, สูงจากเท้าขึ้นไป top, ต่ำกว่าเท้าเล็กน้อย bot (ปรับตาม scale สไปรต์)
+    const test = (/** @type {number} */ fxs, /** @type {number} */ fys, /** @type {number} */ scale, /** @type {{mob?:any,npc?:any}} */ payload) => {
+      const hw = 16 * scale, top = 94 * scale, bot = 10 * scale;
+      if (sc.x < fxs - hw || sc.x > fxs + hw || sc.y < fys - top || sc.y > fys + bot) return;
+      const d = Math.hypot(sc.x - fxs, sc.y - (fys - 38 * scale)); // ระยะถึงกลางลำตัว
+      if (d < bestD) { bestD = d; best = payload; }
+    };
+    for (const m of this.mobs) {
+      if (m.state === 'dead') continue;
+      const s = this.cam.worldToScreen(m.pos.x, m.pos.y);
+      test(s.x, s.y, 0.8, { mob: m });
+    }
+    for (const n of (this.zone?.npcs || [])) {
+      const s = this.cam.tileToScreen(n.at.x, n.at.y);
+      test(s.x, s.y, 0.85, { npc: n });
+    }
+    return best;
   }
 
   /** เส้นทางไป world point (ต่อเนื่อง): A* บนกริด → ปรับให้ตรงด้วย line-of-sight */

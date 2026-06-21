@@ -29,7 +29,15 @@ html, body {
   color: var(--ink);
 }
 
-#game { display: block; cursor: crosshair; }
+/* cursor เป้าเล็ง ขอบขาว-ไส้เข้ม ตัดกับทุกพื้นหลัง (hotspot กลาง 18,18) */
+#game {
+  display: block;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Ccircle%20cx='18'%20cy='18'%20r='11'%20fill='none'%20stroke='%23f4eede'%20stroke-width='5'/%3E%3Ccircle%20cx='18'%20cy='18'%20r='11'%20fill='none'%20stroke='%232a241d'%20stroke-width='2.5'/%3E%3Cpath%20d='M18%202V11M18%2025V34M2%2018H11M25%2018H34'%20stroke='%232a241d'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cpath%20d='M18%202V11M18%2025V34M2%2018H11M25%2018H34'%20stroke='%23f4eede'%20stroke-width='1.2'%20stroke-linecap='round'/%3E%3Ccircle%20cx='18'%20cy='18'%20r='2'%20fill='%239e2b25'/%3E%3C/svg%3E") 18 18, crosshair;
+}
+/* ชี้โดนเป้าที่เลือกได้ → เป้าล็อกสีชาด (lock-on) */
+#game.over-target {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='40'%20height='40'%3E%3Ccircle%20cx='20'%20cy='20'%20r='13'%20fill='none'%20stroke='%23f4eede'%20stroke-width='5'/%3E%3Ccircle%20cx='20'%20cy='20'%20r='13'%20fill='none'%20stroke='%239e2b25'%20stroke-width='2.8'/%3E%3Cpath%20d='M20%204V12M20%2028V36M4%2020H12M28%2020H36'%20stroke='%239e2b25'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Ccircle%20cx='20'%20cy='20'%20r='3'%20fill='%239e2b25'/%3E%3C/svg%3E") 20 20, pointer;
+}
 
 /* ── HUD ล่างซ้าย — ป้ายไม้/ป้ายหมึก ── */
 #hud {

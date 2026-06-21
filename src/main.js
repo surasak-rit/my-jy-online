@@ -48,7 +48,7 @@ async function boot() {
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
 
-  attachMouse(canvas, game.cam, (tile) => game.handlePick(tile));
+  attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
   // ปุ่ม I = เปิดกระเป๋า
   addEventListener('keydown', (e) => { if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory(); });
 
