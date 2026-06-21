@@ -1,0 +1,19 @@
+{
+  "id": "hidden_needle",
+  "name": "เข็มพิรุณเต็มฟ้า",
+  "type": "external",
+  "weaponType": "needle",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 6
+  },
+  "desc": "สาดเข็มลับอาบยาพิษ โจมตีระยะไกล",
+  "fx": {
+    "color": "#9bd96a",
+    "arcs": 0,
+    "sparks": 16,
+    "core": true
+  },
+  "sectId": "tang_clan"
+}

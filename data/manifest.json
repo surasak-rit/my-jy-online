@@ -4,7 +4,8 @@
     "moonshade",
     "azure_lotus",
     "cloud_summit",
-    "beggar_union"
+    "beggar_union",
+    "tang_clan"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -12,7 +13,9 @@
     "mob_cloud_ape",
     "mob_cloud_apostate",
     "mob_pickpocket",
-    "mob_beggar_traitor"
+    "mob_beggar_traitor",
+    "mob_tang_guard",
+    "mob_tang_assassin"
   ],
   "skills": [
     "vajra_palm",
@@ -23,7 +26,8 @@
     "jade_palm",
     "lotus_heart",
     "cloud_taichi",
-    "dragon_palm"
+    "dragon_palm",
+    "hidden_needle"
   ],
   "items": [
     "potion_small",
@@ -40,7 +44,9 @@
     "sword_cloud",
     "mat_cloud_dew",
     "staff_dogbeat",
-    "mat_scrap_jug"
+    "mat_scrap_jug",
+    "darts_tang",
+    "mat_venom_sac"
   ],
   "quests": [
     "onboarding_1",
@@ -48,6 +54,8 @@
     "cloud_summit_join",
     "cloud_summit_hunt",
     "beggar_union_join",
-    "beggar_union_hunt"
+    "beggar_union_hunt",
+    "tang_clan_join",
+    "tang_clan_hunt"
   ]
 }
