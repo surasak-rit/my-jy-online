@@ -1,0 +1,32 @@
+{
+  "id": "mob_cloud_apostate",
+  "name": "เฒ่าวิปลาสยอดเมฆา",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 420,
+  "atk": 30,
+  "def": 10,
+  "speed": 2,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 150,
+  "skillPoints": 40,
+  "loot": {
+    "soft": [
+      80,
+      160
+    ],
+    "items": [
+      {
+        "id": "sword_cloud",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_cloud_dew",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

@@ -2,11 +2,14 @@
   "sects": [
     "vajra_cliff",
     "moonshade",
-    "azure_lotus"
+    "azure_lotus",
+    "cloud_summit"
   ],
   "mobs": [
     "mob_petty_bandit",
-    "mob_gray_wolf"
+    "mob_gray_wolf",
+    "mob_cloud_ape",
+    "mob_cloud_apostate"
   ],
   "skills": [
     "vajra_palm",
@@ -15,7 +18,8 @@
     "moon_sword",
     "mist_step",
     "jade_palm",
-    "lotus_heart"
+    "lotus_heart",
+    "cloud_taichi"
   ],
   "items": [
     "potion_small",
@@ -28,10 +32,14 @@
     "ring_jinggang",
     "cloak_pojun",
     "boots_huanhua",
-    "saber_xuantie"
+    "saber_xuantie",
+    "sword_cloud",
+    "mat_cloud_dew"
   ],
   "quests": [
     "onboarding_1",
-    "onboarding_2"
+    "onboarding_2",
+    "cloud_summit_join",
+    "cloud_summit_hunt"
   ]
 }
