@@ -6,10 +6,10 @@ import { Game } from './game.js';
 import { startLoop } from './render/loop.js';
 import { attachMouse } from './input/mouse.js';
 import { initPanels } from './ui/panels.js';
+import { initHud } from './ui/hud.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game'));
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-const hud = /** @type {HTMLElement} */ (document.getElementById('hud'));
 
 /** @type {import('./game.js').Game|null} */
 let game = null;
@@ -45,6 +45,7 @@ async function boot() {
   game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs);
   game.setViewport(innerWidth, innerHeight); // logical viewport หลังสร้าง game
   const panels = initPanels(game);
+  const hudUI = initHud(game);
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
 
@@ -54,7 +55,7 @@ async function boot() {
 
   startLoop(
     (dt) => game.update(dt),
-    () => { game.render(); hud.textContent = game.hudText(); },
+    () => { game.render(); hudUI.update(); },
   );
 }
 

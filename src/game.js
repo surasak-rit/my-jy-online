@@ -427,10 +427,17 @@ export class Game {
     ctx.restore();
   }
 
-  hudText() {
-    if (!this.zone) return 'กำลังโหลด…';
+  /** ข้อมูลสำหรับ HUD สถานะตัวละคร (UI=DOM อ่านไปแสดง §7.2) */
+  hudData() {
     const p = this.player;
-    return `${this.zone.name} · ❤️ ${Math.max(0, Math.ceil(p.hp))}/${p.maxHp} · ⚔️XP ${p.combatXP} · ✦SP ${p.skillPoints} · 💰 ${p.currency}`
-      + (this.dead ? ' · กำลังฟื้น…' : ' · คลิกศัตรูเพื่อโจมตี / คลิกพื้นเพื่อเดิน');
+    const sect = this.sectInfo(p.sectId);
+    return {
+      name: p.displayName, title: p.activeTitle,
+      crest: sect ? sect.crest : '·', accent: sect ? sect.color : '#9e2b25',
+      hp: Math.max(0, Math.ceil(p.hp)), maxHp: p.maxHp,
+      atk: Math.round(p.atk), def: Math.round(p.def),
+      xp: p.combatXP, sp: p.skillPoints, coins: p.currency,
+      zone: this.zone ? this.zone.name : '', dead: this.dead,
+    };
   }
 }
