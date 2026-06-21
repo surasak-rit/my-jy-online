@@ -1,0 +1,12 @@
+{
+  "id": "cloud_summit",
+  "name": "สำนักมังกรเมฆา",
+  "crest": "🐉",
+  "art": {
+    "palette": {
+      "primary": "#3b5b78",
+      "accent": "#bfe0ef"
+    },
+    "outfit": "ชุดนักพรตสีคราม"
+  }
+}

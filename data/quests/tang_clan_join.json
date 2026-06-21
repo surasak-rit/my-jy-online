@@ -1,0 +1,18 @@
+{
+  "id": "tang_clan_join",
+  "order": 10,
+  "giver": "npc_tang_elder",
+  "name": "ฝากตัวตระกูลถัง",
+  "desc": "คุยผู้เฒ่าถังเหมินเพื่อฝากตัวเป็นศิษย์ตระกูลถัง แล้วเรียนวิชาเข็มพิรุณเต็มฟ้า",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_tang_elder",
+      "label": "ผู้เฒ่าถังเหมิน"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

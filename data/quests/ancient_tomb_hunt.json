@@ -1,0 +1,25 @@
+{
+  "id": "ancient_tomb_hunt",
+  "order": 11,
+  "giver": "npc_tomb_maiden",
+  "name": "ปราบผีดิบเฝ้าโลงหยก",
+  "desc": "ผีดิบเฝ้าโลงหยกอาละวาดแถบสุสานโบราณ · เขาจงหนาน สั่นซี จงสำนักสุสานโบราณออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_tomb_ghoul",
+      "count": 1,
+      "label": "ผีดิบเฝ้าโลงหยก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "rope_goldweb",
+        "qty": 1
+      }
+    ]
+  }
+}

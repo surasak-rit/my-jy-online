@@ -1,0 +1,32 @@
+{
+  "id": "mob_beggar_traitor",
+  "name": "ยาจกทรยศถุงเก้าชั้น",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 380,
+  "atk": 28,
+  "def": 8,
+  "speed": 3,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 140,
+  "skillPoints": 38,
+  "loot": {
+    "soft": [
+      70,
+      150
+    ],
+    "items": [
+      {
+        "id": "staff_dogbeat",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_scrap_jug",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

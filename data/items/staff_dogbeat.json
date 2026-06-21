@@ -1,0 +1,12 @@
+{
+  "id": "staff_dogbeat",
+  "name": "กระบองตีสุนัข 打狗棒",
+  "slot": "weapon",
+  "price": 240,
+  "bonus": {
+    "atk": 15,
+    "maxHp": 20
+  },
+  "desc": "กระบองไผ่เขียวประจำตำแหน่งประมุข",
+  "type": "equip"
+}

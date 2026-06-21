@@ -1,0 +1,32 @@
+{
+  "id": "mob_tang_assassin",
+  "name": "นักฆ่าเข็มพิษถัง",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 400,
+  "atk": 34,
+  "def": 7,
+  "speed": 4,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 150,
+  "skillPoints": 42,
+  "loot": {
+    "soft": [
+      80,
+      170
+    ],
+    "items": [
+      {
+        "id": "darts_tang",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_venom_sac",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

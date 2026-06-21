@@ -1,0 +1,12 @@
+{
+  "id": "sword_cloud",
+  "name": "กระบี่เมฆาวารี 雲水劍",
+  "slot": "weapon",
+  "price": 260,
+  "bonus": {
+    "atk": 16,
+    "def": 3
+  },
+  "desc": "กระบี่อ่อนสะท้อนปราณ",
+  "type": "equip"
+}

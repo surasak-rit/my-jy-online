@@ -1,0 +1,25 @@
+{
+  "id": "beggar_union_hunt",
+  "order": 11,
+  "giver": "npc_beggar_chief",
+  "name": "ปราบยาจกทรยศถุงเก้าชั้น",
+  "desc": "ยาจกทรยศถุงเก้าชั้นอาละวาดแถบตลาดเมืองหยางโจว · ลานใต้สะพาน จงพรรคยาจกออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_beggar_traitor",
+      "count": 1,
+      "label": "ยาจกทรยศถุงเก้าชั้น"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "staff_dogbeat",
+        "qty": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "mob_snow_wolf",
+  "name": "หมาป่าหิมะคุนหลุน",
+  "archetype": "wanderer",
+  "maxHp": 66,
+  "atk": 15,
+  "def": 4,
+  "speed": 4,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 21,
+  "skillPoints": 8,
+  "loot": {
+    "soft": [
+      8,
+      17
+    ],
+    "items": [
+      {
+        "id": "mat_snow_lotus",
+        "chance": 0.4
+      }
+    ]
+  }
+}

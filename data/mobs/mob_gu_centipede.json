@@ -1,0 +1,26 @@
+{
+  "id": "mob_gu_centipede",
+  "name": "ตะขาบกู่ยักษ์",
+  "archetype": "wanderer",
+  "maxHp": 62,
+  "atk": 14,
+  "def": 3,
+  "speed": 4,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 19,
+  "skillPoints": 7,
+  "loot": {
+    "soft": [
+      7,
+      15
+    ],
+    "items": [
+      {
+        "id": "mat_gu_powder",
+        "chance": 0.4
+      }
+    ]
+  }
+}

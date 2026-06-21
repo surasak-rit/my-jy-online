@@ -1,0 +1,11 @@
+{
+  "id": "sword_purpletip",
+  "name": "กระบี่ยอดม่วง 紫霞劍",
+  "slot": "weapon",
+  "price": 300,
+  "bonus": {
+    "atk": 20
+  },
+  "desc": "กระบี่คมกริบประจำสำนักฮว่าซาน",
+  "type": "equip"
+}

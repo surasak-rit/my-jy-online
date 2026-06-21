@@ -1,0 +1,12 @@
+{
+  "id": "tang_clan",
+  "name": "ตระกูลถัง",
+  "crest": "🎯",
+  "art": {
+    "palette": {
+      "primary": "#5a2f3a",
+      "accent": "#caa15a"
+    },
+    "outfit": "ชุดดำลายเข็ม"
+  }
+}

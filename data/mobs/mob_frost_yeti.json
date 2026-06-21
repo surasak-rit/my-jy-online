@@ -1,0 +1,32 @@
+{
+  "id": "mob_frost_yeti",
+  "name": "ยักษ์หิมะหลังคาโลก",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 470,
+  "atk": 34,
+  "def": 12,
+  "speed": 2,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 170,
+  "skillPoints": 46,
+  "loot": {
+    "soft": [
+      95,
+      190
+    ],
+    "items": [
+      {
+        "id": "blade_snowmoon",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_snow_lotus",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

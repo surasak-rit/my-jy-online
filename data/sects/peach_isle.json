@@ -1,0 +1,12 @@
+{
+  "id": "peach_isle",
+  "name": "เกาะดอกท้อ",
+  "crest": "🌸",
+  "art": {
+    "palette": {
+      "primary": "#7a3b52",
+      "accent": "#f3b6cf"
+    },
+    "outfit": "ชุดชาววังสีชมพู"
+  }
+}

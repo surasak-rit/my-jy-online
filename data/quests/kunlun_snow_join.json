@@ -1,0 +1,18 @@
+{
+  "id": "kunlun_snow_join",
+  "order": 10,
+  "giver": "npc_kunlun_master",
+  "name": "ฝากตัวสำนักคุนหลุน",
+  "desc": "คุยปรมาจารย์เหอจู๋เต้าเพื่อฝากตัวเป็นศิษย์สำนักคุนหลุน แล้วเรียนวิชาดาบเมฆาหิมะ",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_kunlun_master",
+      "label": "ปรมาจารย์เหอจู๋เต้า"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "lonely_nine",
+  "name": "กระบี่เดียวดายเก้ากระบวน",
+  "type": "external",
+  "weaponType": "sword",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 8
+  },
+  "desc": "กระบี่ไร้กระบวน เล็งจุดอ่อน โจมตีสูงสุด",
+  "fx": {
+    "color": "#dfe6ff",
+    "arcs": 3,
+    "arcSpread": 1.6,
+    "sparks": 6,
+    "core": true
+  },
+  "sectId": "huashan_peak"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "mob_maze_serpent",
+  "name": "งูเขาวงกตดอกท้อ",
+  "archetype": "wanderer",
+  "maxHp": 64,
+  "atk": 14,
+  "def": 5,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 20,
+  "skillPoints": 8,
+  "loot": {
+    "soft": [
+      8,
+      17
+    ],
+    "items": [
+      {
+        "id": "mat_peach_resin",
+        "chance": 0.4
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "snow_blade",
+  "name": "ดาบเมฆาหิมะ",
+  "type": "external",
+  "weaponType": "sword",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 7,
+    "def": 2
+  },
+  "desc": "ดาบปราณเย็น เฉือนพร้อมเกล็ดหิมะแช่แข็ง",
+  "fx": {
+    "color": "#cfeaf5",
+    "arcs": 2,
+    "arcSpread": 1.2,
+    "sparks": 10,
+    "rings": 1
+  },
+  "sectId": "kunlun_snow"
+}

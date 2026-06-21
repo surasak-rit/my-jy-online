@@ -1,0 +1,18 @@
+{
+  "id": "cloud_summit_join",
+  "order": 10,
+  "giver": "npc_cloud_master",
+  "name": "ฝากตัวสำนักมังกรเมฆา",
+  "desc": "คุยปรมาจารย์ชิงเหวียนเพื่อฝากตัวเป็นศิษย์สำนักมังกรเมฆา แล้วเรียนวิชากระบี่ไท่เก๊กเมฆา",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_cloud_master",
+      "label": "ปรมาจารย์ชิงเหวียน"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

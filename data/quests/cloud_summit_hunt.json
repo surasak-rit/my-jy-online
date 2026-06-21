@@ -1,0 +1,25 @@
+{
+  "id": "cloud_summit_hunt",
+  "order": 11,
+  "giver": "npc_cloud_master",
+  "name": "ปราบเฒ่าวิปลาสยอดเมฆา",
+  "desc": "เฒ่าวิปลาสยอดเมฆาอาละวาดแถบยอดเขาเมฆา (เขาบู๊ตึ้ง · หูเป่ย) จงสำนักมังกรเมฆาออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_cloud_apostate",
+      "count": 1,
+      "label": "เฒ่าวิปลาสยอดเมฆา"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "sword_cloud",
+        "qty": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "five_venoms_join",
+  "order": 10,
+  "giver": "npc_venom_matron",
+  "name": "ฝากตัวพรรคห้าพิษ",
+  "desc": "คุยนางพญาพิษหลานเฟิ่งเพื่อฝากตัวเป็นศิษย์พรรคห้าพิษ แล้วเรียนวิชาอุ้งมือห้าพิษ",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_venom_matron",
+      "label": "นางพญาพิษหลานเฟิ่ง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

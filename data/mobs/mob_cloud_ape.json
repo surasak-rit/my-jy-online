@@ -1,0 +1,26 @@
+{
+  "id": "mob_cloud_ape",
+  "name": "วานรหิมะเขาเมฆา",
+  "archetype": "wanderer",
+  "maxHp": 60,
+  "atk": 12,
+  "def": 4,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 18,
+  "skillPoints": 7,
+  "loot": {
+    "soft": [
+      6,
+      14
+    ],
+    "items": [
+      {
+        "id": "mat_cloud_dew",
+        "chance": 0.4
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "beggar_union",
+  "name": "พรรคยาจก",
+  "crest": "🥢",
+  "art": {
+    "palette": {
+      "primary": "#7a5a32",
+      "accent": "#d9b271"
+    },
+    "outfit": "ผ้าขอทานปะ"
+  }
+}

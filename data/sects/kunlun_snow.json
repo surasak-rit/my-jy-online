@@ -1,0 +1,12 @@
+{
+  "id": "kunlun_snow",
+  "name": "สำนักคุนหลุน",
+  "crest": "❄️",
+  "art": {
+    "palette": {
+      "primary": "#35617a",
+      "accent": "#cfeaf5"
+    },
+    "outfit": "ชุดขนสัตว์ขาว"
+  }
+}

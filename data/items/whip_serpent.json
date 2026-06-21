@@ -1,0 +1,12 @@
+{
+  "id": "whip_serpent",
+  "name": "แส้อสรพิษเจ็ดสี 七彩蛇鞭",
+  "slot": "weapon",
+  "price": 270,
+  "bonus": {
+    "atk": 17,
+    "def": 2
+  },
+  "desc": "แส้หนังงูอาบพิษ ฟาดได้ไกล",
+  "type": "equip"
+}

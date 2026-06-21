@@ -1,0 +1,25 @@
+{
+  "id": "dali_duan_hunt",
+  "order": 11,
+  "giver": "npc_duan_prince",
+  "name": "ปราบนักพรตมารวัดร้าง",
+  "desc": "นักพรตมารวัดร้างอาละวาดแถบราชสำนักต้าหลี่ · ยูนนาน (วัดเทียนหลง) จงตระกูลต้วนต้าหลี่ออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_demon_monk",
+      "count": 1,
+      "label": "นักพรตมารวัดร้าง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "glove_yang",
+        "qty": 1
+      }
+    ]
+  }
+}

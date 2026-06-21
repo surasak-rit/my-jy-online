@@ -1,0 +1,25 @@
+{
+  "id": "tang_clan_hunt",
+  "order": 11,
+  "giver": "npc_tang_elder",
+  "name": "ปราบนักฆ่าเข็มพิษถัง",
+  "desc": "นักฆ่าเข็มพิษถังอาละวาดแถบคฤหาสน์ถัง · เสฉวน จงตระกูลถังออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_tang_assassin",
+      "count": 1,
+      "label": "นักฆ่าเข็มพิษถัง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "darts_tang",
+        "qty": 1
+      }
+    ]
+  }
+}

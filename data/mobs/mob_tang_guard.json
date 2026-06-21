@@ -1,0 +1,26 @@
+{
+  "id": "mob_tang_guard",
+  "name": "องครักษ์ถัง",
+  "archetype": "wanderer",
+  "maxHp": 58,
+  "atk": 13,
+  "def": 5,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 18,
+  "skillPoints": 7,
+  "loot": {
+    "soft": [
+      8,
+      16
+    ],
+    "items": [
+      {
+        "id": "mat_venom_sac",
+        "chance": 0.4
+      }
+    ]
+  }
+}

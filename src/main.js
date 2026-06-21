@@ -34,19 +34,19 @@ addEventListener('resize', resize); resize();
 const getJSON = async (url) => (await fetch(url, { cache: 'no-cache' })).json();
 
 async function boot() {
-  // โหลด config (data-driven §7.2)
+  // โหลด config (data-driven §7.2) — manifest รวมรายการ id ที่ต้อง preload
+  // เพิ่มเนื้อหา (สำนัก/วิชา/มอน/ไอเทม/เควส) = แก้ data/manifest.json ไม่ต้องแตะโค้ด
+  const manifest = await getJSON('data/manifest.json');
   const sects = {};
-  for (const id of ['vajra_cliff', 'moonshade', 'azure_lotus']) sects[id] = await getJSON(`data/sects/${id}.json`);
+  for (const id of manifest.sects) sects[id] = await getJSON(`data/sects/${id}.json`);
   const mobDefs = {};
-  for (const id of ['mob_petty_bandit', 'mob_gray_wolf']) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
+  for (const id of manifest.mobs) mobDefs[id] = await getJSON(`data/mobs/${id}.json`);
   const skillDefs = {};
-  for (const id of ['vajra_palm', 'iron_body', 'cloud_step', 'moon_sword', 'mist_step', 'jade_palm', 'lotus_heart']) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
+  for (const id of manifest.skills) skillDefs[id] = await getJSON(`data/skills/${id}.json`);
   const itemDefs = {};
-  const ITEM_IDS = ['potion_small', 'potion_big', 'meat_bun',
-    'helm_tiankui', 'amulet_baihu', 'robe_bodhi', 'bracers_tanlang', 'ring_jinggang', 'cloak_pojun', 'boots_huanhua', 'saber_xuantie'];
-  for (const id of ITEM_IDS) itemDefs[id] = await getJSON(`data/items/${id}.json`);
+  for (const id of manifest.items) itemDefs[id] = await getJSON(`data/items/${id}.json`);
   const questDefs = {};
-  for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
+  for (const id of manifest.quests) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
   // เปิดเกม: ถ้ามีเซฟอยู่ → เข้าเกมจากบันทึกล่าสุดทันที (ข้ามหน้าเลือกช่อง)
   // ยกเว้นกด"กลับสู่หน้าหลัก" จากในเกม → บังคับโชว์หน้าเลือกช่อง

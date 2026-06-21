@@ -1,0 +1,26 @@
+{
+  "id": "mob_flame_zealot",
+  "name": "สาวกคลั่งไฟ",
+  "archetype": "wanderer",
+  "maxHp": 64,
+  "atk": 16,
+  "def": 4,
+  "speed": 3,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 21,
+  "skillPoints": 8,
+  "loot": {
+    "soft": [
+      8,
+      18
+    ],
+    "items": [
+      {
+        "id": "mat_flame_charcoal",
+        "chance": 0.4
+      }
+    ]
+  }
+}

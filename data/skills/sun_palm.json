@@ -1,0 +1,22 @@
+{
+  "id": "sun_palm",
+  "name": "ฝ่ามือเปลวสุริยา",
+  "type": "external",
+  "weaponType": "palm",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 8,
+    "maxHp": 8
+  },
+  "desc": "ฝ่ามือไฟแรงสุริยา เผาผลาญรุนแรง",
+  "fx": {
+    "color": "#ff8c3a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "rings": 2,
+    "sparks": 14,
+    "core": true
+  },
+  "sectId": "sacred_flame"
+}

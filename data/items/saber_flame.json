@@ -1,0 +1,12 @@
+{
+  "id": "saber_flame",
+  "name": "ดาบเปลวสุริยัน 烈陽刀",
+  "slot": "weapon",
+  "price": 310,
+  "bonus": {
+    "atk": 21,
+    "maxHp": 15
+  },
+  "desc": "ดาบลุกเป็นไฟประจำพรรคไฟ",
+  "type": "equip"
+}

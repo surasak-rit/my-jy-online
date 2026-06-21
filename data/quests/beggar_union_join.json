@@ -1,0 +1,18 @@
+{
+  "id": "beggar_union_join",
+  "order": 10,
+  "giver": "npc_beggar_chief",
+  "name": "ฝากตัวพรรคยาจก",
+  "desc": "คุยประมุขหงเฒ่าเพื่อฝากตัวเป็นศิษย์พรรคยาจก แล้วเรียนวิชาฝ่ามือพิชิตมังกร",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_beggar_chief",
+      "label": "ประมุขหงเฒ่า"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}
