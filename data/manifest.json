@@ -3,13 +3,16 @@
     "vajra_cliff",
     "moonshade",
     "azure_lotus",
-    "cloud_summit"
+    "cloud_summit",
+    "beggar_union"
   ],
   "mobs": [
     "mob_petty_bandit",
     "mob_gray_wolf",
     "mob_cloud_ape",
-    "mob_cloud_apostate"
+    "mob_cloud_apostate",
+    "mob_pickpocket",
+    "mob_beggar_traitor"
   ],
   "skills": [
     "vajra_palm",
@@ -19,7 +22,8 @@
     "mist_step",
     "jade_palm",
     "lotus_heart",
-    "cloud_taichi"
+    "cloud_taichi",
+    "dragon_palm"
   ],
   "items": [
     "potion_small",
@@ -34,12 +38,16 @@
     "boots_huanhua",
     "saber_xuantie",
     "sword_cloud",
-    "mat_cloud_dew"
+    "mat_cloud_dew",
+    "staff_dogbeat",
+    "mat_scrap_jug"
   ],
   "quests": [
     "onboarding_1",
     "onboarding_2",
     "cloud_summit_join",
-    "cloud_summit_hunt"
+    "cloud_summit_hunt",
+    "beggar_union_join",
+    "beggar_union_hunt"
   ]
 }

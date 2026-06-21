@@ -1,0 +1,26 @@
+{
+  "id": "mob_pickpocket",
+  "name": "นักล้วงตลาด",
+  "archetype": "wanderer",
+  "maxHp": 55,
+  "atk": 11,
+  "def": 3,
+  "speed": 4,
+  "attackCdMs": 1100,
+  "aggroRange": 6,
+  "respawnMs": 6000,
+  "xp": 16,
+  "skillPoints": 6,
+  "loot": {
+    "soft": [
+      8,
+      16
+    ],
+    "items": [
+      {
+        "id": "mat_scrap_jug",
+        "chance": 0.4
+      }
+    ]
+  }
+}
