@@ -120,133 +120,150 @@ function rug(ctx, x, y, s) {
 
 // ── อาคารจีนโบราณ (anchor = กึ่งกลางฐานด้านหน้า) ──────────────────────────
 
-/** หลังคากระเบื้องจีน ปลายชายคาเชิดขึ้น (飞檐) — eaveY = ระดับชายคา, w = กว้าง, rh = สูง */
-function roof(ctx, cx, eaveY, w, rh, tile, tileDark, ridgeColor) {
-  const half = w / 2, ridgeW = w * 0.46, tip = w * 0.07 + 4;
-  // ผืนหลังคา (สันบน → ปลายเชิด → ชายคาแอ่นกลาง)
-  ctx.fillStyle = tile;
-  ctx.beginPath();
-  ctx.moveTo(cx - ridgeW / 2, eaveY - rh);
-  ctx.lineTo(cx + ridgeW / 2, eaveY - rh);
-  ctx.lineTo(cx + half + tip, eaveY - tip);          // ปลายขวาเชิด
-  ctx.quadraticCurveTo(cx, eaveY + rh * 0.18, cx - half - tip, eaveY - tip); // ชายคาแอ่นกลาง → ปลายซ้ายเชิด
+// ── อาคารจีนโบราณ 2.5D (isometric: ผนังสองด้าน + หลังคาทรงปั้นหยา) ────────────
+// anchor (x,y) = มุมหน้าสุด (front vertex) ที่ติดพื้น · iso ratio 2:1 (กว้าง:สูง)
+
+const poly = (ctx, pts, fill) => {
+  ctx.fillStyle = fill; ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
   ctx.closePath(); ctx.fill();
-  // เงาครึ่งขวา
-  ctx.fillStyle = tileDark;
-  ctx.beginPath();
-  ctx.moveTo(cx, eaveY - rh); ctx.lineTo(cx + ridgeW / 2, eaveY - rh);
-  ctx.lineTo(cx + half + tip, eaveY - tip);
-  ctx.quadraticCurveTo(cx + half * 0.4, eaveY + rh * 0.12, cx, eaveY + rh * 0.04);
-  ctx.closePath(); ctx.fill();
-  // เส้นกระเบื้อง (ซี่แนวลาด)
-  ctx.strokeStyle = 'rgba(20,24,30,0.30)'; ctx.lineWidth = 1;
-  for (let i = -3; i <= 3; i++) {
-    const rx = cx + i * (ridgeW / 6.5);
-    ctx.beginPath(); ctx.moveTo(rx, eaveY - rh + 1); ctx.lineTo(cx + i * (half / 3.2), eaveY - tip * 0.4); ctx.stroke();
+};
+
+/**
+ * อาคาร 2.5D ทรงปั้นหยา + ของตกแต่งหน้าผนัง
+ * @param {Object} o {bw,bd,wallH,roofH,eaveOv,wall,wallDark,base,roof,roofDark,ridge}
+ */
+function building(ctx, x, y, s, o) {
+  const bw = o.bw * s, bd = o.bd * s, wallH = o.wallH * s, roofH = o.roofH * s, ov = o.eaveOv * s;
+  // มุมฐาน (F=หน้า, R=ขวา/+x, L=ซ้าย/+y, B=หลัง) — iso 2:1
+  const F = [x, y], R = [x + bw, y - bw / 2], L = [x - bd, y - bd / 2];
+  const top = (p) => [p[0], p[1] - wallH];
+  const F2 = top(F), R2 = top(R), L2 = top(L), B2 = [x + bw - bd, y - (bw + bd) / 2 - wallH];
+
+  shadow(ctx, x, y + 2 * s, (bw + bd) * 0.6, (bw + bd) * 0.18);
+
+  // ฐานหิน (สองด้านล่างผนัง)
+  const baseH = 5 * s;
+  poly(ctx, [F, R, [R[0], R[1] - baseH], [F[0], F[1] - baseH]], o.base);
+  poly(ctx, [F, L, [L[0], L[1] - baseH], [F[0], F[1] - baseH]], mixHex(o.base, 0.12));
+
+  // ผนังสองด้าน (ขวาเงา / ซ้ายโดนแสง)
+  poly(ctx, [[F[0], F[1] - baseH], [R[0], R[1] - baseH], R2, F2], o.wallDark); // +x หน้าขวา (เงา)
+  poly(ctx, [[F[0], F[1] - baseH], [L[0], L[1] - baseH], L2, F2], o.wall);     // +y หน้าซ้าย (สว่าง)
+  // สันมุมหน้า
+  ctx.strokeStyle = 'rgba(50,40,25,0.45)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(F[0], F[1] - baseH); ctx.lineTo(F2[0], F2[1]); ctx.stroke();
+
+  // ── ของตกแต่งบนผนัง (พิกัด u ตามแนวหน้าผนัง 0→1, v ขึ้นบน 0→1) ──
+  const onL = (u, v) => [F[0] + u * (L[0] - F[0]), F[1] - baseH + u * (L[1] - F[1]) - v * (wallH - baseH)];
+  const onR = (u, v) => [F[0] + u * (R[0] - F[0]), F[1] - baseH + u * (R[1] - F[1]) - v * (wallH - baseH)];
+
+  if (o.pillars) for (const u of [0.06, 0.5, 0.94]) { // เสารักแดง (หอใหญ่)
+    poly(ctx, [onL(u - 0.03, 0), onL(u + 0.03, 0), onL(u + 0.03, 0.97), onL(u - 0.03, 0.97)], '#8a2b22');
+    poly(ctx, [onR(u - 0.03, 0), onR(u + 0.03, 0), onR(u + 0.03, 0.97), onR(u - 0.03, 0.97)], '#6f211a');
+  }
+  if (o.shopfront) { // หน้าร้านเปิด + เคาน์เตอร์ (ด้านซ้าย)
+    poly(ctx, [onL(0.2, 0), onL(0.82, 0), onL(0.82, 0.66), onL(0.2, 0.66)], '#33271a');
+    poly(ctx, [onL(0.2, 0), onL(0.82, 0), onL(0.82, 0.18), onL(0.2, 0.18)], '#7a5226');
+  } else { // ประตูไม้ (ด้านซ้าย)
+    const dw = o.doorW || 0.34, dh = o.doorH || 0.66, c = 0.5;
+    poly(ctx, [onL(c - dw / 2, 0), onL(c + dw / 2, 0), onL(c + dw / 2, dh), onL(c - dw / 2, dh)], '#4a2f18');
+    poly(ctx, [onL(c - dw / 2, 0), onL(c, 0), onL(c, dh), onL(c - dw / 2, dh)], '#5e3c20');
+    const ring = onL(c, dh * 0.5); ctx.fillStyle = '#caa24a'; ctx.beginPath(); ctx.arc(ring[0], ring[1], 1.8 * s, 0, Math.PI * 2); ctx.fill();
+  }
+  if (o.windows) for (const u of [0.2, 0.8]) { // หน้าต่างช่องลม (ด้านขวา)
+    const w0 = onR(u - 0.1, 0.35), w1 = onR(u + 0.1, 0.35), w2 = onR(u + 0.1, 0.72), w3 = onR(u - 0.1, 0.72);
+    poly(ctx, [w0, w1, w2, w3], '#6e5230');
+    ctx.strokeStyle = '#caa86a'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo((w0[0] + w3[0]) / 2, (w0[1] + w3[1]) / 2); ctx.lineTo((w1[0] + w2[0]) / 2, (w1[1] + w2[1]) / 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo((w0[0] + w1[0]) / 2, (w0[1] + w1[1]) / 2); ctx.lineTo((w3[0] + w2[0]) / 2, (w3[1] + w2[1]) / 2); ctx.stroke();
+  }
+  if (o.plaque) { // ป้ายไม้ (匾額) เหนือประตู บนผนังซ้าย
+    const a = onL(0.32, 0.72), b = onL(0.68, 0.72), c2 = onL(0.68, 0.96), d = onL(0.32, 0.96);
+    poly(ctx, [a, b, c2, d], '#3a2414');
+    ctx.strokeStyle = '#caa24a'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c2[0], c2[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.stroke();
+    const tc = [(a[0] + c2[0]) / 2, (a[1] + c2[1]) / 2];
+    ctx.fillStyle = '#e8c45a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = `${11 * s}px "Ma Shan Zheng","Noto Serif Thai",serif`; ctx.fillText(o.plaque, tc[0], tc[1]);
+  }
+
+  // ── หลังคาทรงปั้นหยา (สันยาวหน้า-หลัง, สองลาดหันเข้ากล้อง) ──
+  const tip = 7 * s;
+  const Fe = [x, y - wallH + ov * 0.4];
+  const Re = [x + bw + ov, y - (bw + ov) / 2 - wallH - tip];
+  const Le = [x - bd - ov, y - (bd + ov) / 2 - wallH - tip];
+  const Be = [x + bw - bd, y - (bw + bd) / 2 - wallH - ov * 0.4];
+  const rf = [Fe[0] + 0.22 * (Be[0] - Fe[0]), Fe[1] + 0.22 * (Be[1] - Fe[1]) - roofH];
+  const rb = [Fe[0] + 0.78 * (Be[0] - Fe[0]), Fe[1] + 0.78 * (Be[1] - Fe[1]) - roofH];
+  // ลาดขวา (+x, เงา) + ลาดซ้าย (+y, สว่าง)
+  poly(ctx, [Fe, Re, Be, rb, rf], o.roofDark);
+  poly(ctx, [Fe, Le, Be, rb, rf], o.roof);
+  // ชายคาไม้ (แถบใต้)
+  ctx.strokeStyle = 'rgba(20,16,10,0.4)'; ctx.lineWidth = 2.2 * s;
+  ctx.beginPath(); ctx.moveTo(Le[0], Le[1]); ctx.lineTo(Fe[0], Fe[1]); ctx.lineTo(Re[0], Re[1]); ctx.stroke();
+  // เส้นกระเบื้อง (ลาดหน้า ทั้งสองด้าน)
+  ctx.strokeStyle = 'rgba(20,24,30,0.28)'; ctx.lineWidth = 1;
+  for (let i = 1; i <= 4; i++) {
+    const t = i / 5;
+    ctx.beginPath(); ctx.moveTo(rf[0] + t * (rb[0] - rf[0]), rf[1] + t * (rb[1] - rf[1])); ctx.lineTo(Le[0] + t * (Be[0] - Le[0]), Le[1] + t * (Be[1] - Le[1])); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rf[0] + t * (rb[0] - rf[0]), rf[1] + t * (rb[1] - rf[1])); ctx.lineTo(Re[0] + t * (Be[0] - Re[0]), Re[1] + t * (Be[1] - Re[1])); ctx.stroke();
   }
   // สันหลังคา + หางสัน (鸱吻) ปลายเชิด
-  ctx.fillStyle = ridgeColor;
-  ctx.fillRect(cx - ridgeW / 2 - 2, eaveY - rh - 3, ridgeW + 4, 4);
-  ctx.beginPath(); ctx.moveTo(cx - ridgeW / 2 - 2, eaveY - rh - 1); ctx.quadraticCurveTo(cx - ridgeW / 2 - 8, eaveY - rh - 9, cx - ridgeW / 2 - 3, eaveY - rh - 10); ctx.lineTo(cx - ridgeW / 2 + 1, eaveY - rh - 2); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(cx + ridgeW / 2 + 2, eaveY - rh - 1); ctx.quadraticCurveTo(cx + ridgeW / 2 + 8, eaveY - rh - 9, cx + ridgeW / 2 + 3, eaveY - rh - 10); ctx.lineTo(cx + ridgeW / 2 - 1, eaveY - rh - 2); ctx.closePath(); ctx.fill();
-  // แถบชายคาไม้ใต้หลังคา
-  ctx.fillStyle = tileDark; ctx.beginPath();
-  ctx.moveTo(cx - half - tip, eaveY - tip); ctx.quadraticCurveTo(cx, eaveY + rh * 0.18, cx + half + tip, eaveY - tip);
-  ctx.quadraticCurveTo(cx, eaveY + rh * 0.18 + 4, cx - half - tip, eaveY - tip + 4); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = o.ridge; ctx.lineWidth = 3.4 * s; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(rf[0], rf[1]); ctx.lineTo(rb[0], rb[1]); ctx.stroke(); ctx.lineCap = 'butt';
+  ctx.fillStyle = o.ridge;
+  for (const r of [rf, rb]) { ctx.beginPath(); ctx.moveTo(r[0] - 3 * s, r[1]); ctx.quadraticCurveTo(r[0], r[1] - 8 * s, r[0] + 3 * s, r[1] - 6 * s); ctx.lineTo(r[0] + 2 * s, r[1] + 1 * s); ctx.closePath(); ctx.fill(); }
 }
 
-/** ลายช่องลม/หน้าต่างบานเกล็ดไม้ (lattice) */
-function lattice(ctx, x, y, w, h) {
-  ctx.fillStyle = '#7a5a32'; ctx.fillRect(x, y, w, h);
-  ctx.fillStyle = '#caa86a';
-  for (let i = 1; i < 4; i++) ctx.fillRect(x + (w / 4) * i - 0.5, y, 1, h);
-  for (let j = 1; j < 3; j++) ctx.fillRect(x, y + (h / 3) * j - 0.5, w, 1);
-  ctx.strokeStyle = '#4a3620'; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, h);
+/** ผสม hex เข้าหาขาว(white=false→ดำ) ปริมาณ amt — ใช้ปรับเฉดฐาน */
+function mixHex(hex, amt, white = false) {
+  const n = parseInt(hex.slice(1), 16); const t = white ? 255 : 0;
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  r = Math.round(r + (t - r) * amt); g = Math.round(g + (t - g) * amt); b = Math.round(b + (t - b) * amt);
+  return `rgb(${r},${g},${b})`;
 }
 
-/** บ้านเรือนจีน (ผนังปูน หลังคากระเบื้องเทา ประตูไม้) */
+/** บ้านเรือนจีน */
 function house(ctx, x, y, s) {
-  const W = 116 * s, wallH = 52 * s, baseY = y;
-  shadow(ctx, x, y + 2 * s, W * 0.56, 9 * s);
-  // ฐานหิน
-  ctx.fillStyle = '#6f675a'; ctx.fillRect(x - W / 2, baseY - 6 * s, W, 6 * s);
-  // ผนังปูน
-  ctx.fillStyle = '#e7ddca'; ctx.fillRect(x - W / 2, baseY - wallH, W, wallH - 6 * s);
-  ctx.fillStyle = 'rgba(120,100,70,0.16)'; ctx.fillRect(x + 2 * s, baseY - wallH, W / 2 - 2 * s, wallH - 6 * s); // เงาขวา
-  ctx.strokeStyle = 'rgba(60,48,30,0.5)'; ctx.lineWidth = 1.4; ctx.strokeRect(x - W / 2, baseY - wallH, W, wallH - 6 * s);
-  // ประตูไม้กลาง
-  const dw = 22 * s, dh = 30 * s;
-  ctx.fillStyle = '#5a3a1e'; ctx.fillRect(x - dw / 2, baseY - 6 * s - dh, dw, dh);
-  ctx.fillStyle = '#6e4827'; ctx.fillRect(x - dw / 2, baseY - 6 * s - dh, dw / 2 - 1 * s, dh);
-  ctx.fillStyle = '#caa24a'; ctx.beginPath(); ctx.arc(x - 3 * s, baseY - 6 * s - dh / 2, 1.6 * s, 0, Math.PI * 2); ctx.arc(x + 3 * s, baseY - 6 * s - dh / 2, 1.6 * s, 0, Math.PI * 2); ctx.fill(); // ห่วงประตู
-  // หน้าต่าง 2 ข้าง
-  lattice(ctx, x - W / 2 + 10 * s, baseY - wallH + 12 * s, 18 * s, 16 * s);
-  lattice(ctx, x + W / 2 - 28 * s, baseY - wallH + 12 * s, 18 * s, 16 * s);
-  // หลังคา
-  roof(ctx, x, baseY - wallH, W + 24 * s, 30 * s, '#566270', '#3c4654', '#2f3742');
+  building(ctx, x, y, s, {
+    bw: 52, bd: 52, wallH: 46, roofH: 26, eaveOv: 13,
+    wall: '#ece2ce', wallDark: '#cdc1a6', base: '#6f675a',
+    roof: '#5b6775', roofDark: '#3f4a58', ridge: '#2f3742', windows: true,
+  });
 }
 
-/** ร้านค้า (บ้าน + ป้ายร้าน + โคมแดงสองข้าง + กันสาดผ้า) */
+/** ร้านค้า (หน้าร้านเปิด + ป้ายแขวน招幌 + โคมแดง) */
 function shop(ctx, x, y, s, sign = '酒') {
-  const W = 116 * s, wallH = 52 * s, baseY = y;
-  shadow(ctx, x, y + 2 * s, W * 0.56, 9 * s);
-  ctx.fillStyle = '#6f675a'; ctx.fillRect(x - W / 2, baseY - 6 * s, W, 6 * s);
-  ctx.fillStyle = '#e7ddca'; ctx.fillRect(x - W / 2, baseY - wallH, W, wallH - 6 * s);
-  ctx.fillStyle = 'rgba(120,100,70,0.16)'; ctx.fillRect(x + 2 * s, baseY - wallH, W / 2 - 2 * s, wallH - 6 * s);
-  ctx.strokeStyle = 'rgba(60,48,30,0.5)'; ctx.lineWidth = 1.4; ctx.strokeRect(x - W / 2, baseY - wallH, W, wallH - 6 * s);
-  // หน้าร้านเปิด (เคาน์เตอร์ไม้ + ช่องมืด)
-  ctx.fillStyle = '#3a2c1c'; ctx.fillRect(x - 30 * s, baseY - 6 * s - 32 * s, 60 * s, 32 * s);
-  ctx.fillStyle = '#7a5226'; ctx.fillRect(x - 32 * s, baseY - 6 * s - 12 * s, 64 * s, 6 * s); // เคาน์เตอร์
-  // เสาไม้สองข้างหน้าร้าน
-  ctx.fillStyle = '#7a3128'; ctx.fillRect(x - 34 * s, baseY - 6 * s - 36 * s, 5 * s, 36 * s); ctx.fillRect(x + 29 * s, baseY - 6 * s - 36 * s, 5 * s, 36 * s);
-  // กันสาดผ้าลายทาง
-  ctx.fillStyle = '#9c3a30'; ctx.beginPath(); ctx.moveTo(x - 40 * s, baseY - 6 * s - 36 * s); ctx.lineTo(x + 40 * s, baseY - 6 * s - 36 * s); ctx.lineTo(x + 34 * s, baseY - 6 * s - 28 * s); ctx.lineTo(x - 34 * s, baseY - 6 * s - 28 * s); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#e9dec4'; for (let i = -3; i <= 3; i++) ctx.fillRect(x + i * 11 * s - 2 * s, baseY - 6 * s - 36 * s, 4 * s, 8 * s);
-  // หลังคา
-  roof(ctx, x, baseY - wallH, W + 24 * s, 30 * s, '#566270', '#3c4654', '#2f3742');
-  // ป้ายร้านแขวน (招幌) + อักษร
-  ctx.fillStyle = '#7a1d18'; ctx.fillRect(x + W / 2 - 16 * s, baseY - wallH - 2 * s, 13 * s, 30 * s);
-  ctx.fillStyle = '#caa24a'; ctx.lineWidth = 1.5; ctx.strokeStyle = '#caa24a'; ctx.strokeRect(x + W / 2 - 16 * s, baseY - wallH - 2 * s, 13 * s, 30 * s);
-  ctx.fillStyle = '#f2e6c4'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `${12 * s}px "Ma Shan Zheng","Noto Serif Thai",serif`;
-  ctx.fillText(sign, x + W / 2 - 9.5 * s, baseY - wallH + 13 * s);
-  // โคมแดงสองข้างชายคา
-  for (const dx of [-W / 2 + 8 * s, W / 2 - 8 * s]) {
-    ctx.fillStyle = 'rgba(255,170,80,0.16)'; ctx.beginPath(); ctx.arc(x + dx, baseY - wallH + 4 * s, 12 * s, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#b9302a'; ctx.beginPath(); ctx.ellipse(x + dx, baseY - wallH + 4 * s, 6 * s, 8 * s, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#e8b54a'; ctx.fillRect(x + dx - 6 * s, baseY - wallH + 3 * s, 12 * s, 1.5 * s);
-  }
+  building(ctx, x, y, s, {
+    bw: 52, bd: 52, wallH: 46, roofH: 26, eaveOv: 13,
+    wall: '#ece2ce', wallDark: '#cdc1a6', base: '#6f675a',
+    roof: '#5b6775', roofDark: '#3f4a58', ridge: '#2f3742', shopfront: true, windows: true,
+  });
+  // ป้ายแขวน招幌 + อักษร (ห้อยจากชายคาหน้า)
+  const sx = x - 30 * s, sy = y - 46 * s - 26 * s + 6 * s;
+  ctx.fillStyle = '#7a1d18'; ctx.fillRect(sx - 6.5 * s, sy, 13 * s, 28 * s);
+  ctx.strokeStyle = '#caa24a'; ctx.lineWidth = 1.4; ctx.strokeRect(sx - 6.5 * s, sy, 13 * s, 28 * s);
+  ctx.fillStyle = '#f2e6c4'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `${12 * s}px "Ma Shan Zheng","Noto Serif Thai",serif`; ctx.fillText(sign, sx, sy + 13 * s);
+  // โคมแดงห้อยชายคาหน้า
+  const lx = x, ly = y - 46 * s + 2 * s;
+  ctx.fillStyle = 'rgba(255,170,80,0.16)'; ctx.beginPath(); ctx.arc(lx, ly, 11 * s, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#b9302a'; ctx.beginPath(); ctx.ellipse(lx, ly, 5.5 * s, 7.5 * s, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#e8b54a'; ctx.fillRect(lx - 5.5 * s, ly - 1 * s, 11 * s, 1.5 * s);
 }
 
-/** โรงฝึก/หอประชุม (อาคารใหญ่ เสาแดง ป้ายไม้匾額 บันได — ใช้เป็นทางเข้าห้อง) */
+/** โรงฝึก/หอประชุม (อาคารใหญ่ เสาแดง ป้ายไม้匾額 — ใช้เป็นทางเข้าห้อง) */
 function hall(ctx, x, y, s, plaque = '武館') {
-  const W = 150 * s, wallH = 60 * s, baseY = y;
-  shadow(ctx, x, y + 3 * s, W * 0.58, 11 * s);
-  // บันไดหิน
-  ctx.fillStyle = '#9a9080'; ctx.beginPath(); ctx.moveTo(x - 44 * s, baseY); ctx.lineTo(x + 44 * s, baseY); ctx.lineTo(x + 34 * s, baseY - 8 * s); ctx.lineTo(x - 34 * s, baseY - 8 * s); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#8a8070'; ctx.fillRect(x - 34 * s, baseY - 8 * s, 68 * s, 2 * s);
-  // ฐาน + ผนัง
-  ctx.fillStyle = '#6f675a'; ctx.fillRect(x - W / 2, baseY - 14 * s, W, 8 * s);
-  ctx.fillStyle = '#e7ddca'; ctx.fillRect(x - W / 2, baseY - wallH, W, wallH - 14 * s);
-  ctx.fillStyle = 'rgba(120,100,70,0.16)'; ctx.fillRect(x + 2 * s, baseY - wallH, W / 2 - 2 * s, wallH - 14 * s);
-  ctx.strokeStyle = 'rgba(60,48,30,0.5)'; ctx.lineWidth = 1.4; ctx.strokeRect(x - W / 2, baseY - wallH, W, wallH - 14 * s);
-  // เสารักแดงสี่ต้น
-  for (const dx of [-W / 2 + 8 * s, -22 * s, 22 * s, W / 2 - 14 * s]) {
-    ctx.fillStyle = '#8a2b22'; ctx.fillRect(x + dx, baseY - wallH, 7 * s, wallH - 14 * s);
-    ctx.fillStyle = '#a3352a'; ctx.fillRect(x + dx, baseY - wallH, 3 * s, wallH - 14 * s);
-  }
-  // ประตูบานคู่กลาง
-  const dw = 36 * s, dh = 40 * s;
-  ctx.fillStyle = '#4a2f18'; ctx.fillRect(x - dw / 2, baseY - 14 * s - dh, dw, dh);
-  ctx.fillStyle = '#5e3c20'; ctx.fillRect(x - dw / 2, baseY - 14 * s - dh, dw / 2 - 1 * s, dh);
-  ctx.fillStyle = '#caa24a'; // ห่วงทองแดง
-  ctx.beginPath(); ctx.arc(x - 5 * s, baseY - 14 * s - dh / 2, 2.4 * s, 0, Math.PI * 2); ctx.arc(x + 5 * s, baseY - 14 * s - dh / 2, 2.4 * s, 0, Math.PI * 2); ctx.fill();
-  // หลังคาใหญ่ (สองชั้นเล็ก ๆ)
-  roof(ctx, x, baseY - wallH, W + 34 * s, 38 * s, '#4a5560', '#333d47', '#9e2b25');
-  // ป้ายไม้ (匾額) เหนือประตู
-  ctx.fillStyle = '#3a2414'; ctx.fillRect(x - 26 * s, baseY - wallH - 2 * s, 52 * s, 16 * s);
-  ctx.strokeStyle = '#caa24a'; ctx.lineWidth = 2; ctx.strokeRect(x - 26 * s, baseY - wallH - 2 * s, 52 * s, 16 * s);
-  ctx.fillStyle = '#e8c45a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `${13 * s}px "Ma Shan Zheng","Noto Serif Thai",serif`;
-  ctx.fillText(plaque, x, baseY - wallH + 7 * s);
+  // บันไดหินด้านหน้า
+  shadow(ctx, x, y + 3 * s, 80 * s, 16 * s);
+  const stepW = 30 * s, stepD = 30 * s;
+  poly(ctx, [[x, y + 6 * s], [x + stepW, y + 6 * s - stepW / 2], [x, y + 6 * s - (stepW + stepD) / 2], [x - stepD, y + 6 * s - stepD / 2]], '#9a9080');
+  building(ctx, x, y, s, {
+    bw: 66, bd: 66, wallH: 56, roofH: 36, eaveOv: 18,
+    wall: '#ece2ce', wallDark: '#cdc1a6', base: '#6f675a',
+    roof: '#4a5560', roofDark: '#333d47', ridge: '#9e2b25',
+    pillars: true, doorW: 0.4, doorH: 0.7, plaque,
+  });
 }
 
 const PROPS = {
