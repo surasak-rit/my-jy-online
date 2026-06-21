@@ -159,7 +159,9 @@ export function drawNameplate(ctx, fx, fy, info, scale = 1) {
   const align = info.align || 'center';
   ctx.save();
   ctx.textBaseline = 'middle';
-  ctx.textAlign = align;
+  // คำนวณ x เองต่อบรรทัด — ไม่พึ่ง textAlign='center' (Safari/WebKit บางเวอร์ชันไม่เคารพ
+  // เลยวาดชิดซ้ายเริ่มที่กึ่งกลางหัวแล้วยื่นไปขวา) ตั้งเป็น left ให้ทุก env ตรงกัน
+  ctx.textAlign = 'left';
 
   /** @type {{text:string, font:string, color:string}[]} */
   const lines = [];
@@ -183,21 +185,23 @@ export function drawNameplate(ctx, fx, fy, info, scale = 1) {
     ctx.fillRect(fx + plaqueW / 2 - 6 * scale, topY + 3 * scale, 3 * scale, 3 * scale);
   }
 
-  // x ของข้อความ: ชิดซ้าย = เริ่มที่กึ่งกลางตัว (fx), กึ่งกลาง = fx
-  const tx = align === 'left' ? (boxed ? fx - plaqueW / 2 + padX : fx) : fx;
+  // ขอบซ้ายของข้อความเมื่อชิดซ้าย — กึ่งกลางจะคำนวณต่อบรรทัดจากความกว้างจริง
+  const leftX = boxed ? fx - plaqueW / 2 + padX : fx;
   // ไม่มีกรอบ → halo เข้มขึ้นให้อ่านออกบนพื้น
   const halo = boxed ? 'rgba(244,238,222,0.85)' : 'rgba(244,238,222,0.95)';
   let y = topY + padY + lineH / 2;
   for (const ln of lines) {
-    ctx.font = ln.font; ctx.lineWidth = boxed ? 2.5 * scale : 3 * scale; ctx.strokeStyle = halo;
-    ctx.strokeText(ln.text, tx, y);
-    ctx.fillStyle = ln.color; ctx.fillText(ln.text, tx, y);
+    ctx.font = ln.font;
+    const lx = align === 'left' ? leftX : fx - textWidth(ctx, ln.text) / 2; // กึ่งกลางเอง
+    ctx.lineWidth = boxed ? 2.5 * scale : 3 * scale; ctx.strokeStyle = halo;
+    ctx.strokeText(ln.text, lx, y);
+    ctx.fillStyle = ln.color; ctx.fillText(ln.text, lx, y);
     y += lineH;
   }
 
   if (info.hpBar) {
     const w = 40 * scale, h = 5 * scale;
-    const x = align === 'left' ? tx : fx - w / 2;
+    const x = align === 'left' ? leftX : fx - w / 2;
     const by = topY + plaqueH + 3 * scale;
     ctx.fillStyle = INK; ctx.fillRect(x - 1, by - 1, w + 2, h + 2);
     ctx.fillStyle = '#5b2420'; ctx.fillRect(x, by, w, h);
