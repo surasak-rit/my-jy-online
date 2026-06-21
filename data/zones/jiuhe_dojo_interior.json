@@ -1,0 +1,14 @@
+{
+  "id": "jiuhe_dojo_interior",
+  "name": "โรงฝึก — นครจิ่วเหอ",
+  "type": "interior",
+  "parentZoneId": "jiuhe_town",
+  "tilemapRef": "data/tilemaps/jiuhe_dojo.json",
+  "portals": [
+    { "at": { "x": 6, "y": 8 }, "toZoneId": "jiuhe_town", "spawnAt": { "x": 19, "y": 9 }, "label": "ออกจากโรงฝึก" }
+  ],
+  "npcs": [
+    { "id": "npc_dojo_master", "at": { "x": 6, "y": 3 }, "role": "อาจารย์สำนักศิลาวัชระ", "archetype": "monk", "name": "ปรมาจารย์สือ", "sectId": "vajra_cliff" },
+    { "id": "npc_dojo_healer", "at": { "x": 3, "y": 4 }, "role": "หมอประจำโรงฝึก", "archetype": "scholar", "name": "หมอเฉิน" }
+  ]
+}

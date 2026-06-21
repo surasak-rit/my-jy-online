@@ -1,0 +1,16 @@
+{
+  "id": "willow_fields",
+  "name": "ทุ่งต้นหลิว",
+  "type": "field",
+  "tilemapRef": "data/tilemaps/willow_fields.json",
+  "portals": [
+    { "at": { "x": 22, "y": 12 }, "toZoneId": "jiuhe_town", "spawnAt": { "x": 2, "y": 14 }, "label": "→ นครจิ่วเหอ" }
+  ],
+  "npcs": [
+    { "id": "npc_herbalist", "at": { "x": 8, "y": 8 }, "role": "หมอสมุนไพร", "archetype": "scholar", "name": "อาเฒ่าเก็บยา" }
+  ],
+  "spawns": [
+    { "mobId": "mob_petty_bandit", "tier": 1, "max": 5, "area": { "x": 13, "y": 5, "w": 8, "h": 8 } },
+    { "mobId": "mob_gray_wolf", "tier": 1, "max": 4, "area": { "x": 4, "y": 10, "w": 7, "h": 8 } }
+  ]
+}
