@@ -282,6 +282,7 @@ export class Game {
     p.hurtT = Math.max(0, (p.hurtT || 0) - dt);     // กระพริบแดงโดนตี
     p.breath = (p.breath || 0) + dt * 3; // จังหวะหายใจตอนยืนเฉย
     const ox = p.pos.x, oy = p.pos.y;
+    const hadWp = p.waypoints.length > 0;
 
     // เดินลื่นต่อเนื่องตาม waypoints (world px) — สเต็ปได้หลายช่วงต่อเฟรม กันสะดุด
     if (p.waypoints.length) {
@@ -305,6 +306,8 @@ export class Game {
     const moved = Math.hypot(p.pos.x - ox, p.pos.y - oy);
     p.moving = moved > 0.05;
     p.step = (p.step || 0) + moved * 0.22;
+    // เดินจบ (waypoints หมด) → บันทึกตำแหน่งล่าสุด ให้รีเฟรชแล้วยืนที่เดิม
+    if (hadWp && p.waypoints.length === 0) this.saveState();
 
     // ถึงตัว NPC ที่จะคุย → เปิดหน้าต่าง
     if (this.interactNpc && p.waypoints.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();

@@ -54,6 +54,8 @@ async function boot() {
   if (game.needsCreation) await showCreate(game);
 
   attachMouse(canvas, game.cam, (pick) => game.handlePick(pick), (screen) => !!game.pickEntity(screen));
+  // ปิด/รีเฟรชแท็บ → บันทึกตำแหน่งปัจจุบัน (เผื่อรีเฟรชระหว่างเดิน)
+  addEventListener('beforeunload', () => game.saveState());
   // ปุ่ม I = เปิดกระเป๋า
   addEventListener('keydown', (e) => { if (e.key === 'i' || e.key === 'I' || e.key === 'ฺ') panels.openInventory(); });
 
