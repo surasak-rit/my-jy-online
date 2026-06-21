@@ -7,7 +7,8 @@
     "beggar_union",
     "tang_clan",
     "five_venoms",
-    "huashan_peak"
+    "huashan_peak",
+    "peach_isle"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -21,7 +22,9 @@
     "mob_gu_centipede",
     "mob_venom_king",
     "mob_rogue_swordsman",
-    "mob_sword_demon"
+    "mob_sword_demon",
+    "mob_maze_serpent",
+    "mob_blackwind_pirate"
   ],
   "skills": [
     "vajra_palm",
@@ -35,7 +38,8 @@
     "dragon_palm",
     "hidden_needle",
     "venom_claw",
-    "lonely_nine"
+    "lonely_nine",
+    "jade_flute"
   ],
   "items": [
     "potion_small",
@@ -58,7 +62,9 @@
     "whip_serpent",
     "mat_gu_powder",
     "sword_purpletip",
-    "mat_cold_iron"
+    "mat_cold_iron",
+    "flute_jadegreen",
+    "mat_peach_resin"
   ],
   "quests": [
     "onboarding_1",
@@ -72,6 +78,8 @@
     "five_venoms_join",
     "five_venoms_hunt",
     "huashan_peak_join",
-    "huashan_peak_hunt"
+    "huashan_peak_hunt",
+    "peach_isle_join",
+    "peach_isle_hunt"
   ]
 }

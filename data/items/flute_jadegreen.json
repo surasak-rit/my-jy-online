@@ -1,0 +1,12 @@
+{
+  "id": "flute_jadegreen",
+  "name": "ขลุ่ยหยกเขียว 碧玉簫",
+  "slot": "weapon",
+  "price": 290,
+  "bonus": {
+    "atk": 15,
+    "maxMp": 30
+  },
+  "desc": "ขลุ่ยหยกเป็นทั้งอาวุธและเครื่องดนตรี",
+  "type": "equip"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "peach_isle_join",
+  "order": 10,
+  "giver": "npc_peach_lord",
+  "name": "ฝากตัวเกาะดอกท้อ",
+  "desc": "คุยบูรพาเทพหวงเหยาซือเพื่อฝากตัวเป็นศิษย์เกาะดอกท้อ แล้วเรียนวิชาขลุ่ยหยกสะกดวิญญาณ",
+  "steps": [
+    {
+      "kind": "talk",
+      "npcId": "npc_peach_lord",
+      "label": "บูรพาเทพหวงเหยาซือ"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 12,
+    "soft": 40
+  }
+}

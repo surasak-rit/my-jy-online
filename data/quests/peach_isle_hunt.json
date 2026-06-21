@@ -1,0 +1,25 @@
+{
+  "id": "peach_isle_hunt",
+  "order": 11,
+  "giver": "npc_peach_lord",
+  "name": "ปราบโจรสลัดลมดำ",
+  "desc": "โจรสลัดลมดำอาละวาดแถบเกาะดอกท้อ · ทะเลตะวันออก จงเกาะดอกท้อออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_blackwind_pirate",
+      "count": 1,
+      "label": "โจรสลัดลมดำ"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "flute_jadegreen",
+        "qty": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "mob_blackwind_pirate",
+  "name": "โจรสลัดลมดำ",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 460,
+  "atk": 35,
+  "def": 10,
+  "speed": 3,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 170,
+  "skillPoints": 46,
+  "loot": {
+    "soft": [
+      95,
+      185
+    ],
+    "items": [
+      {
+        "id": "flute_jadegreen",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_peach_resin",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}
