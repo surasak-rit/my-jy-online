@@ -1,0 +1,12 @@
+{
+  "id": "blade_snowmoon",
+  "name": "ดาบจันทร์หิมะ 雪月刀",
+  "slot": "weapon",
+  "price": 295,
+  "bonus": {
+    "atk": 19,
+    "def": 2
+  },
+  "desc": "ดาบปราณเย็นจากยอดคุนหลุน",
+  "type": "equip"
+}

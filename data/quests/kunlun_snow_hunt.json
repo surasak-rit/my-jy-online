@@ -1,0 +1,25 @@
+{
+  "id": "kunlun_snow_hunt",
+  "order": 11,
+  "giver": "npc_kunlun_master",
+  "name": "ปราบยักษ์หิมะหลังคาโลก",
+  "desc": "ยักษ์หิมะหลังคาโลกอาละวาดแถบเทือกเขาคุนหลุน · ชิงไห่ จงสำนักคุนหลุนออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_frost_yeti",
+      "count": 1,
+      "label": "ยักษ์หิมะหลังคาโลก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "blade_snowmoon",
+        "qty": 1
+      }
+    ]
+  }
+}
