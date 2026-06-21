@@ -1,0 +1,25 @@
+{
+  "id": "sacred_flame_hunt",
+  "order": 11,
+  "giver": "npc_flame_lord",
+  "name": "ปราบผู้พิทักษ์เปลวเฉียนคุน",
+  "desc": "ผู้พิทักษ์เปลวเฉียนคุนอาละวาดแถบยอดเขาเฉียนคุน (光明頂) · ตะวันตก จงพรรคไฟศักดิ์สิทธิ์ออกปราบ",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_flame_guardian",
+      "count": 1,
+      "label": "ผู้พิทักษ์เปลวเฉียนคุน"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "saber_flame",
+        "qty": 1
+      }
+    ]
+  }
+}

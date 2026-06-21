@@ -1,0 +1,32 @@
+{
+  "id": "mob_flame_guardian",
+  "name": "ผู้พิทักษ์เปลวเฉียนคุน",
+  "archetype": "villager",
+  "boss": true,
+  "maxHp": 480,
+  "atk": 37,
+  "def": 10,
+  "speed": 3,
+  "attackCdMs": 1400,
+  "aggroRange": 7,
+  "respawnMs": 60000,
+  "xp": 175,
+  "skillPoints": 48,
+  "loot": {
+    "soft": [
+      100,
+      200
+    ],
+    "items": [
+      {
+        "id": "saber_flame",
+        "chance": 0.25
+      },
+      {
+        "id": "mat_flame_charcoal",
+        "chance": 1.0,
+        "qty": 3
+      }
+    ]
+  }
+}

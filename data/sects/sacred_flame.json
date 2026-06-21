@@ -1,0 +1,12 @@
+{
+  "id": "sacred_flame",
+  "name": "พรรคไฟศักดิ์สิทธิ์",
+  "crest": "🔥",
+  "art": {
+    "palette": {
+      "primary": "#7a3320",
+      "accent": "#f0a24a"
+    },
+    "outfit": "ชุดแดงเปลวไฟ"
+  }
+}
