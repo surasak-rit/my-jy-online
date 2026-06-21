@@ -29,34 +29,43 @@ function mix(hex, amt, white = false) {
 /**
  * ตัวละครผู้ใหญ่สไตล์ JY Online — ชุดคลุมยาว (robe), แขนกว้าง, คอไขว้,
  * สายคาดเอว, แสงเงา, หันหน้าตามทิศ. สัดส่วน ~7 หัว
+ * anim: { moving, step (เรเดียนผูกระยะเดิน), breath (เรเดียนเวลา) } → ทำให้ขยับเนียน
  * @param {CanvasRenderingContext2D} ctx
  * @param {string} [facing] 'S'|'N'|'E'|'W'
+ * @param {{moving?:boolean, step?:number, breath?:number}} [anim]
  */
-export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S') {
+export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S', anim = {}) {
   const s = scale;
-  const headR = 8 * s, headCy = fy - 90 * s;
-  const shoulderY = fy - 80 * s, shoulderHalf = 12 * s;
-  const waistY = fy - 50 * s, hemY = fy - 3 * s, hemHalf = 17 * s;
+  const mv = !!anim.moving, step = anim.step || 0, breath = anim.breath || 0;
+  // bob: เดิน=เด้งสองครั้ง/รอบ (|sin|), ยืน=หายใจช้า ๆ ; sw: แกว่งแขน/ก้าวเท้า -1..1
+  const bob = mv ? Math.abs(Math.sin(step)) * 2.6 * s : (Math.sin(breath) * 0.9 + 0.9) * s;
+  const sw = mv ? Math.sin(step) : Math.sin(breath) * 0.18;
+  const lean = mv ? (facing === 'E' ? 1.4 * s : facing === 'W' ? -1.4 * s : 0) : 0;
+  const by = -bob; // ยกลำตัวขึ้น (สะโพกขึ้นบน, ชายเสื้ออยู่กับพื้น → ยืด/ยุบ)
+
+  const headR = 8 * s, headCy = fy - 90 * s + by;
+  const shoulderY = fy - 80 * s + by, shoulderHalf = 12 * s;
+  const waistY = fy - 50 * s + by, hemY = fy - 3 * s, hemHalf = 17 * s;
   const dark = mix(bodyColor, 0.30), light = mix(bodyColor, 0.22, true), collar = mix(bodyColor, 0.45);
   const skin = '#e9c9a0';
   ctx.lineJoin = 'round'; ctx.lineWidth = 1.4 * s; ctx.strokeStyle = INK;
 
-  // เงาใต้เท้า
+  // เงาใต้เท้า (อยู่กับพื้น ไม่เด้ง — ย่อเล็กน้อยตอนตัวลอย)
   ctx.fillStyle = 'rgba(42,36,29,0.25)';
-  ctx.beginPath(); ctx.ellipse(fx, fy, 15 * s, 5 * s, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(fx, fy, 15 * s - bob * 0.5, 5 * s, 0, 0, Math.PI * 2); ctx.fill();
 
-  // รองเท้า
-  ctx.fillStyle = '#2a221c';
-  ctx.beginPath(); ctx.ellipse(fx - 5 * s, hemY, 4 * s, 2.4 * s, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(fx + 5 * s, hemY, 4 * s, 2.4 * s, 0, 0, Math.PI * 2); ctx.fill();
+  // เท้า: ก้าวสลับซ้าย-ขวา + ยกตอนก้าว
+  const lift = mv ? 2 * s : 0;
+  drawFoot(ctx, fx - 5 * s + sw * 3 * s, hemY - Math.max(0, sw) * lift, s);
+  drawFoot(ctx, fx + 5 * s - sw * 3 * s, hemY - Math.max(0, -sw) * lift, s);
 
-  // เสื้อคลุมยาว (robe) — บานปลาย
+  // เสื้อคลุมยาว (robe) — บานปลาย (ไหล่เด้งตาม by, ชายอยู่กับพื้น)
   ctx.beginPath();
-  ctx.moveTo(fx - shoulderHalf, shoulderY);
+  ctx.moveTo(fx - shoulderHalf + lean, shoulderY);
   ctx.quadraticCurveTo(fx - shoulderHalf - 2 * s, waistY, fx - hemHalf, hemY);
   ctx.lineTo(fx + hemHalf, hemY);
-  ctx.quadraticCurveTo(fx + shoulderHalf + 2 * s, waistY, fx + shoulderHalf, shoulderY);
-  ctx.quadraticCurveTo(fx, shoulderY - 4 * s, fx - shoulderHalf, shoulderY);
+  ctx.quadraticCurveTo(fx + shoulderHalf + 2 * s, waistY, fx + shoulderHalf + lean, shoulderY);
+  ctx.quadraticCurveTo(fx + lean, shoulderY - 4 * s, fx - shoulderHalf + lean, shoulderY);
   ctx.closePath();
   ctx.fillStyle = bodyColor; ctx.fill(); ctx.stroke();
 
@@ -68,48 +77,54 @@ export function drawCharacter(ctx, fx, fy, bodyColor, scale = 1, facing = 'S') {
   ctx.beginPath(); ctx.moveTo(fx - shoulderHalf + 1 * s, shoulderY); ctx.lineTo(fx - hemHalf + 3 * s, hemY); ctx.lineTo(fx - hemHalf + 9 * s, hemY); ctx.lineTo(fx - shoulderHalf + 7 * s, shoulderY); ctx.closePath(); ctx.fill();
   // คอเสื้อไขว้ (交领)
   ctx.fillStyle = collar;
-  ctx.beginPath(); ctx.moveTo(fx, shoulderY - 3 * s); ctx.lineTo(fx - 7 * s, shoulderY + 2 * s); ctx.lineTo(fx - 3 * s, waistY); ctx.lineTo(fx, waistY - 6 * s); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(fx, shoulderY - 3 * s); ctx.lineTo(fx + 7 * s, shoulderY + 2 * s); ctx.lineTo(fx + 3 * s, waistY); ctx.lineTo(fx, waistY - 6 * s); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(fx + lean, shoulderY - 3 * s); ctx.lineTo(fx - 7 * s, shoulderY + 2 * s); ctx.lineTo(fx - 3 * s, waistY); ctx.lineTo(fx + lean, waistY - 6 * s); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(fx + lean, shoulderY - 3 * s); ctx.lineTo(fx + 7 * s, shoulderY + 2 * s); ctx.lineTo(fx + 3 * s, waistY); ctx.lineTo(fx + lean, waistY - 6 * s); ctx.closePath(); ctx.fill();
   ctx.restore();
 
-  // สายคาดเอว + ชายผ้า
+  // สายคาดเอว + ชายผ้า (แกว่งเล็กน้อยตามจังหวะ)
   ctx.fillStyle = '#caa24a'; ctx.fillRect(fx - shoulderHalf * 0.95, waistY, shoulderHalf * 1.9, 4 * s);
-  ctx.fillStyle = '#a8842f'; ctx.fillRect(fx - 2 * s, waistY, 4 * s, 13 * s);
+  ctx.fillStyle = '#a8842f'; ctx.fillRect(fx - 2 * s + sw * 2 * s, waistY, 4 * s, 13 * s);
 
-  // แขนเสื้อกว้าง (สองข้าง) + มือ
+  // แขนเสื้อกว้าง (แกว่งสลับข้าง) + มือ
   ctx.fillStyle = mix(bodyColor, 0.10);
-  drapeSleeve(ctx, fx - shoulderHalf, shoulderY, -1, s, skin);
-  drapeSleeve(ctx, fx + shoulderHalf, shoulderY, 1, s, skin);
+  drapeSleeve(ctx, fx - shoulderHalf + lean, shoulderY, -1, s, skin, sw * 3.5 * s);
+  drapeSleeve(ctx, fx + shoulderHalf + lean, shoulderY, 1, s, skin, -sw * 3.5 * s);
 
-  // คอ + หัว
-  ctx.fillStyle = skin; ctx.fillRect(fx - 2.5 * s, headCy + headR - 1 * s, 5 * s, 5 * s);
-  ctx.fillStyle = '#efd6ae'; ctx.beginPath(); ctx.arc(fx, headCy, headR, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  // คอ + หัว (เอียงตามทิศ)
+  ctx.fillStyle = skin; ctx.fillRect(fx - 2.5 * s + lean, headCy + headR - 1 * s, 5 * s, 5 * s);
+  ctx.fillStyle = '#efd6ae'; ctx.beginPath(); ctx.arc(fx + lean, headCy, headR, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
   // ผม + มวยผม (topknot)
+  const hx = fx + lean;
   ctx.fillStyle = INK;
-  ctx.beginPath(); ctx.arc(fx, headCy, headR, Math.PI * 0.95, Math.PI * 2.05); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(fx, headCy - headR * 0.6, headR * 1.05, headR * 0.7, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(fx, headCy - headR * 1.15, 3 * s, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(hx, headCy, headR, Math.PI * 0.95, Math.PI * 2.05); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(hx, headCy - headR * 0.6, headR * 1.05, headR * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(hx, headCy - headR * 1.15, 3 * s, 0, Math.PI * 2); ctx.fill();
   if (facing === 'N') {
-    ctx.beginPath(); ctx.arc(fx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill(); // หันหลัง
+    ctx.beginPath(); ctx.arc(hx, headCy, headR * 0.92, 0, Math.PI * 2); ctx.fill(); // หันหลัง
   } else {
     const ex = facing === 'E' ? 2 * s : facing === 'W' ? -2 * s : 0;
     ctx.fillStyle = INK;
-    ctx.beginPath(); ctx.arc(fx - 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(fx + 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx - 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx + 3 * s + ex, headCy + 1 * s, 1.3 * s, 0, Math.PI * 2); ctx.fill();
   }
 }
 
-/** แขนเสื้อกว้างทรงห้อย (dir = -1 ซ้าย / +1 ขวา) + มือโผล่ */
-function drapeSleeve(ctx, sx, sy, dir, s, skin) {
+function drawFoot(ctx, x, y, s) {
+  ctx.fillStyle = '#2a221c';
+  ctx.beginPath(); ctx.ellipse(x, y, 4 * s, 2.4 * s, 0, 0, Math.PI * 2); ctx.fill();
+}
+
+/** แขนเสื้อกว้างทรงห้อย (dir = -1 ซ้าย / +1 ขวา) + มือโผล่; sx2 = แกว่งปลายแขน */
+function drapeSleeve(ctx, sx, sy, dir, s, skin, sx2 = 0) {
   ctx.beginPath();
   ctx.moveTo(sx, sy + 1 * s);
-  ctx.quadraticCurveTo(sx + dir * 9 * s, sy + 12 * s, sx + dir * 6 * s, sy + 28 * s);
-  ctx.lineTo(sx + dir * 0.5 * s, sy + 26 * s);
+  ctx.quadraticCurveTo(sx + dir * 9 * s + sx2, sy + 12 * s, sx + dir * 6 * s + sx2, sy + 28 * s);
+  ctx.lineTo(sx + dir * 0.5 * s + sx2, sy + 26 * s);
   ctx.quadraticCurveTo(sx - dir * 1 * s, sy + 12 * s, sx, sy + 1 * s);
   ctx.closePath(); ctx.fill(); ctx.stroke();
   ctx.save(); ctx.fillStyle = skin;
-  ctx.beginPath(); ctx.arc(sx + dir * 4 * s, sy + 27 * s, 2 * s, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  ctx.beginPath(); ctx.arc(sx + dir * 4 * s + sx2, sy + 27 * s, 2 * s, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 }
 
 /**

@@ -203,6 +203,7 @@ export class Game {
   update(dt) {
     if (this.transitioning || !this.map) return;
     if (this.toastT > 0) this.toastT -= dt;
+    this.animT = (this.animT || 0) + dt; // นาฬิกาแอนิเมชันรวม (idle ของ NPC)
     for (const d of this.dmgNums) { d.t -= dt; d.wy -= 22 * dt; }
     this.dmgNums = this.dmgNums.filter((d) => d.t > 0);
 
@@ -210,6 +211,8 @@ export class Game {
 
     const p = this.player;
     p.atkCd -= dt;
+    p.breath = (p.breath || 0) + dt * 3; // จังหวะหายใจตอนยืนเฉย
+    const ox = p.pos.x, oy = p.pos.y;
 
     // เดินลื่นต่อเนื่องตาม waypoints (world px) — สเต็ปได้หลายช่วงต่อเฟรม กันสะดุด
     if (p.waypoints.length) {
@@ -229,6 +232,11 @@ export class Game {
         if (portal) { this.loadZone(portal.toZoneId, portal.spawnAt); return; }
       }
     }
+    // จังหวะเดิน: ผูก phase กับระยะที่ขยับจริง (กันเท้าลื่น)
+    const moved = Math.hypot(p.pos.x - ox, p.pos.y - oy);
+    p.moving = moved > 0.05;
+    p.step = (p.step || 0) + moved * 0.22;
+
     // ถึงตัว NPC ที่จะคุย → เปิดหน้าต่าง
     if (this.interactNpc && p.waypoints.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();
 
@@ -309,16 +317,16 @@ export class Game {
     }
     for (const n of this.zone.npcs) {
       const s = cam.tileToScreen(n.at.x, n.at.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: n.at.x + n.at.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null, boxed: false, align: 'left' }, 0.85); } });
+      ents.push({ depth: n.at.x + n.at.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85, 'S', { moving: false, breath: this.animT * 3 + n.at.x + n.at.y }); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null, boxed: false, align: 'left' }, 0.85); } });
     }
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
       const s = cam.worldToScreen(m.pos.x, m.pos.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8, m.facing || 'S'); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
+      ents.push({ depth: m.tile.x + m.tile.y, draw: () => { drawCharacter(ctx, s.x, s.y, m.state === 'chase' ? '#8c322b' : (ARCHETYPE_COLOR[m.archetype] || '#777'), 0.8, m.facing || 'S', { moving: m.moving, step: m.step, breath: m.breath }); drawNameplate(ctx, s.x, s.y, { name: m.name, hpBar: { hp: m.hp, maxHp: m.maxHp }, boxed: false, align: 'left' }, 0.8); } });
     }
     if (!this.dead) {
       const ps = cam.worldToScreen(this.player.pos.x, this.player.pos.y); ps.y += map.tileHeight / 2;
-      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
+      ents.push({ depth: this.player.tile.x + this.player.tile.y, draw: () => { drawCharacter(ctx, ps.x, ps.y, '#3f5a6e', 1, this.player.facing, { moving: this.player.moving, step: this.player.step, breath: this.player.breath }); drawNameplate(ctx, ps.x, ps.y, { name: this.player.displayName, title: this.player.activeTitle, sect: this.sectInfo(this.player.sectId), hpBar: { hp: this.player.hp, maxHp: this.player.maxHp }, boxed: false, align: 'left' }, 1); } });
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 

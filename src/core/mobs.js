@@ -50,7 +50,8 @@ export function spawnFromZone(zone, mobDefs, isWalkable, tileToWorld, rng = Math
         defId: def.id, name: def.name, archetype: def.archetype || 'villager',
         tile: { x: tx, y: ty }, pos: { x: w.x, y: w.y }, home: { x: tx, y: ty },
         hp: def.maxHp, maxHp: def.maxHp, atk: def.atk, def: def.def,
-        state: 'idle', facing: 'S', moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
+        state: 'idle', facing: 'S', moving: false, step: 0, breath: Math.random() * 6.28,
+        moveCd: 0, atkCd: 0, stun: 0, respawn: 0, def_: def,
       });
     }
   }
@@ -105,12 +106,17 @@ export function updateMobs(mobs, player, dt, h) {
     const fdx = tw.x - m.pos.x, fdy = tw.y - m.pos.y;
     if (Math.hypot(fdx, fdy) > 2) m.facing = (Math.abs(fdx) >= Math.abs(fdy)) ? (fdx >= 0 ? 'E' : 'W') : (fdy >= 0 ? 'S' : 'N');
 
-    // ลื่น pos เข้าหา center ของ tile
+    // ลื่น pos เข้าหา center ของ tile + จังหวะเดิน (phase ผูกกับระยะที่ขยับจริง)
+    const ox = m.pos.x, oy = m.pos.y;
     const w = h.tileToWorld(m.tile.x, m.tile.y);
     const dx = w.x - m.pos.x, dy = w.y - m.pos.y, dist = Math.hypot(dx, dy);
     const sp = 120 * dt;
     if (dist <= sp) { m.pos.x = w.x; m.pos.y = w.y; }
     else { m.pos.x += dx / dist * sp; m.pos.y += dy / dist * sp; }
+    const moved = Math.hypot(m.pos.x - ox, m.pos.y - oy);
+    m.moving = moved > 0.05;
+    m.step = (m.step || 0) + moved * 0.22;
+    m.breath = (m.breath || 0) + dt * 3;
   }
 }
 
