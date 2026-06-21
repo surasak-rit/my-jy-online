@@ -42,13 +42,29 @@ export class Camera {
     return this.worldToScreen(w.x, w.y);
   }
 
-  /** screen px → tile coord (ปัดเป็นจำนวนเต็ม) — ผกผันของ iso projection */
+  /** screen px → world px (ต่อเนื่อง ไม่ปัด) */
+  screenToWorld(sx, sy) {
+    return { x: sx - this.viewW / 2 + this.focus.x, y: sy - this.viewH / 2 + this.focus.y };
+  }
+
+  /** world px → tile coord (เศษส่วน) — ผกผันของ iso projection */
+  worldToTileF(wx, wy) {
+    return {
+      x: (wx / (this.tileW / 2) + wy / (this.tileH / 2)) / 2,
+      y: (wy / (this.tileH / 2) - wx / (this.tileW / 2)) / 2,
+    };
+  }
+
+  /** world px → tile coord (ปัดเป็นจำนวนเต็ม) */
+  worldToTile(wx, wy) {
+    const f = this.worldToTileF(wx, wy);
+    return { x: Math.round(f.x), y: Math.round(f.y) };
+  }
+
+  /** screen px → tile coord (ปัด) */
   screenToTile(sx, sy) {
-    const wx = sx - this.viewW / 2 + this.focus.x;
-    const wy = sy - this.viewH / 2 + this.focus.y;
-    const tx = (wx / (this.tileW / 2) + wy / (this.tileH / 2)) / 2;
-    const ty = (wy / (this.tileH / 2) - wx / (this.tileW / 2)) / 2;
-    return { x: Math.round(tx), y: Math.round(ty) };
+    const w = this.screenToWorld(sx, sy);
+    return this.worldToTile(w.x, w.y);
   }
 
   /** เลื่อนกล้องเข้าหา world point อย่างนุ่มนวล */

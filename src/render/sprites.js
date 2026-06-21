@@ -69,13 +69,17 @@ function inkCircle(ctx, x, y, r) {
 }
 
 /**
- * ป้ายชื่อเหนือหัว = แผ่นกระดาษสา + ฉายา/ชื่อ + ตราสำนัก (§C.7, ธีมหมึกจีน)
+ * ป้ายชื่อเหนือหัว — ฉายา/ชื่อ + ตราสำนัก (§C.7, ธีมหมึกจีน)
+ * info.boxed=false → ไม่มีกรอบ (เช่น NPC) · info.align='left' → ข้อความชิดซ้าย
  */
 export function drawNameplate(ctx, fx, fy, info, scale = 1) {
+  const boxed = info.boxed !== false;
+  const align = info.align || 'center';
   ctx.save();
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = align;
 
-  /** @type {{text:string, font:string, color:string, brush?:boolean}[]} */
+  /** @type {{text:string, font:string, color:string}[]} */
   const lines = [];
   if (info.title) lines.push({ text: `〈${info.title}〉`, font: `16px "Ma Shan Zheng","Noto Serif Thai",serif`, color: SEAL });
   lines.push({ text: info.role ? `〈${info.role}〉` : info.name, font: `bold 13px "Noto Serif Thai",serif`, color: info.role ? '#3b5566' : INK });
@@ -84,30 +88,31 @@ export function drawNameplate(ctx, fx, fy, info, scale = 1) {
   const lineH = 16 * scale;
   let maxW = 0;
   for (const ln of lines) { ctx.font = ln.font; maxW = Math.max(maxW, textWidth(ctx, ln.text)); }
-  const padX = 9 * scale, padY = 5 * scale;
+  const padX = boxed ? 9 * scale : 0, padY = boxed ? 5 * scale : 0;
   const plaqueW = maxW + padX * 2;
   const plaqueH = lines.length * lineH + padY * 2;
   const topY = fy - CHIBI_H * scale - 12 - plaqueH;
 
-  // แผ่นกระดาษสา + ขอบหมึก
-  roundRect(ctx, fx - plaqueW / 2, topY, plaqueW, plaqueH, 4 * scale);
-  ctx.fillStyle = PAPER; ctx.fill();
-  ctx.lineWidth = 1.4 * scale; ctx.strokeStyle = 'rgba(42,36,29,0.7)'; ctx.stroke();
-  // ตราชาดมุมขวาบน (จุดประทับ)
-  ctx.fillStyle = SEAL;
-  ctx.fillRect(fx + plaqueW / 2 - 6 * scale, topY + 3 * scale, 3 * scale, 3 * scale);
+  if (boxed) {
+    roundRect(ctx, fx - plaqueW / 2, topY, plaqueW, plaqueH, 4 * scale);
+    ctx.fillStyle = PAPER; ctx.fill();
+    ctx.lineWidth = 1.4 * scale; ctx.strokeStyle = 'rgba(42,36,29,0.7)'; ctx.stroke();
+    ctx.fillStyle = SEAL; // ตราชาดมุมป้าย
+    ctx.fillRect(fx + plaqueW / 2 - 6 * scale, topY + 3 * scale, 3 * scale, 3 * scale);
+  }
 
-  // วาดข้อความทีละบรรทัด
+  // x ของข้อความ: ชิดซ้าย = เริ่มที่กึ่งกลางตัว (fx), กึ่งกลาง = fx
+  const tx = align === 'left' ? (boxed ? fx - plaqueW / 2 + padX : fx) : fx;
+  // ไม่มีกรอบ → halo เข้มขึ้นให้อ่านออกบนพื้น
+  const halo = boxed ? 'rgba(244,238,222,0.85)' : 'rgba(244,238,222,0.95)';
   let y = topY + padY + lineH / 2;
   for (const ln of lines) {
-    ctx.font = ln.font; ctx.fillStyle = ln.color;
-    ctx.lineWidth = 2.5 * scale; ctx.strokeStyle = 'rgba(244,238,222,0.85)';
-    ctx.strokeText(ln.text, fx, y);
-    ctx.fillText(ln.text, fx, y);
+    ctx.font = ln.font; ctx.lineWidth = boxed ? 2.5 * scale : 3 * scale; ctx.strokeStyle = halo;
+    ctx.strokeText(ln.text, tx, y);
+    ctx.fillStyle = ln.color; ctx.fillText(ln.text, tx, y);
     y += lineH;
   }
 
-  // HP bar (รางหมึก + หยก)
   if (info.hpBar) {
     const w = 40 * scale, h = 5 * scale, x = fx - w / 2, by = topY + plaqueH + 3 * scale;
     ctx.fillStyle = INK; ctx.fillRect(x - 1, by - 1, w + 2, h + 2);

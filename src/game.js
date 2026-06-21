@@ -35,7 +35,7 @@ export class Game {
     /** @type {any} */
     this.player = {
       id: 'player', displayName: 'จอมยุทธ์น้อย', activeTitle: 'ศิษย์ใหม่',
-      sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, path: [],
+      sectId: 'vajra_cliff', tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [],
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
       skills: saved.skills || {},
@@ -77,7 +77,7 @@ export class Game {
     this.zone = zone; this.map = map;
     this.cam.tileW = map.tileWidth; this.cam.tileH = map.tileHeight;
     const t = spawnAt || this.startTile || { x: 14, y: 20 }; this.startTile = null;
-    this.player.tile = { x: t.x, y: t.y }; this.player.path = [];
+    this.player.tile = { x: t.x, y: t.y }; this.player.waypoints = [];
     const w = this.tw(t.x, t.y);
     this.player.pos = { x: w.x, y: w.y };
     this.cam.focus = { x: w.x, y: w.y };
@@ -88,32 +88,66 @@ export class Game {
     this.transitioning = false;
   }
 
-  /** คลิก: มอน→โจมตี, NPC→เข้าคุย, ไม่งั้น→เดิน */
-  handlePick(tile) {
+  /** คลิก: มอน→โจมตี, NPC→เข้าคุย, ไม่งั้น→เดินลื่นไปจุดที่คลิก */
+  handlePick(pick) {
     if (this.transitioning || !this.map || this.dead) return;
+    const { tile, world } = pick;
     const mob = this.mobs.find((m) => m.state !== 'dead' && m.tile.x === tile.x && m.tile.y === tile.y);
-    if (mob) { this.target = mob; this.interactNpc = null; this.pathAdjacentTo(mob.tile); return; }
+    if (mob) { this.target = mob; this.interactNpc = null; this.routeToTile(mob.tile, true); return; }
     const npc = (this.zone.npcs || []).find((n) => n.at.x === tile.x && n.at.y === tile.y);
     if (npc) {
       this.target = null; this.interactNpc = npc;
-      if (tileDist(this.player.tile, npc.at) <= 1) { this.triggerInteract(); }
-      else this.pathAdjacentTo(npc.at);
+      if (tileDist(this.player.tile, npc.at) <= 1) this.triggerInteract();
+      else this.routeToTile(npc.at, true);
       return;
     }
     this.target = null; this.interactNpc = null;
-    if (this.isWalkable(tile.x, tile.y)) {
-      this.player.path = findPath(this.player.tile, tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
-    }
+    if (this.isWalkable(tile.x, tile.y)) this.routeToWorld(world, tile);
   }
 
-  pathAdjacentTo(tile) {
+  /** เส้นทางไป world point (ต่อเนื่อง): A* บนกริด → ปรับให้ตรงด้วย line-of-sight */
+  routeToWorld(world, tile) {
     const path = findPath(this.player.tile, tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
-    if (path.length) path.pop(); // หยุดที่ช่องประชิด ไม่ทับเป้า
-    this.player.path = path;
+    /** @type {{x:number,y:number}[]} */
+    let pts = path.map((t) => this.tw(t.x, t.y));
+    if (pts.length) pts[pts.length - 1] = { x: world.x, y: world.y }; // จุดจบ = ตำแหน่งคลิกจริง (ลื่น ไม่ snap)
+    else if (this.hasLOS(this.player.pos, world)) pts = [{ x: world.x, y: world.y }]; // เห็นกันตรง ๆ → เดินตรง
+    this.player.waypoints = this.smooth(this.player.pos, pts);
+  }
+
+  /** เส้นทางไปประชิด tile เป้าหมาย (สำหรับโจมตี/คุย) */
+  routeToTile(tile, adjacent = false) {
+    const path = findPath(this.player.tile, tile, (x, y) => this.isWalkable(x, y), { w: this.map.width, h: this.map.height });
+    if (adjacent && path.length) path.pop(); // หยุดช่องประชิด ไม่ทับเป้า
+    this.player.waypoints = this.smooth(this.player.pos, path.map((t) => this.tw(t.x, t.y)));
+  }
+
+  /** line-of-sight ระหว่าง world A→B (สุ่มจุดตามทาง เช็กช่องเดินได้) */
+  hasLOS(a, b) {
+    const dist = Math.hypot(b.x - a.x, b.y - a.y);
+    const steps = Math.max(1, Math.ceil(dist / 14));
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps;
+      const wt = this.cam.worldToTile(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+      if (!this.isWalkable(wt.x, wt.y)) return false;
+    }
+    return true;
+  }
+
+  /** ลดจำนวน waypoint ด้วย string-pulling (ตัดจุดกลางที่มองเห็นปลายทางตรง ๆ) */
+  smooth(start, pts) {
+    if (pts.length <= 1) return pts;
+    const out = []; let anchor = start; let i = 0;
+    while (i < pts.length) {
+      let j = pts.length - 1;
+      while (j > i && !this.hasLOS(anchor, pts[j])) j--;
+      out.push(pts[j]); anchor = pts[j]; i = j + 1;
+    }
+    return out;
   }
 
   triggerInteract() {
-    const n = this.interactNpc; this.interactNpc = null; this.player.path = [];
+    const n = this.interactNpc; this.interactNpc = null; this.player.waypoints = [];
     if (!n) return;
     Quests.onTalk(this.player, n.id, this.questDefs); // ปิด step คุย NPC
     this.saveState();
@@ -170,20 +204,25 @@ export class Game {
     const p = this.player;
     p.atkCd -= dt;
 
-    // เดินตาม path
-    if (p.path.length) {
-      const next = p.path[0];
-      const target = this.tw(next.x, next.y);
-      const dx = target.x - p.pos.x, dy = target.y - p.pos.y, dist = Math.hypot(dx, dy);
-      const step = 150 * (p.moveMult || 1) * dt; // วิชาตัวเบาเพิ่มความเร็ว (§3.2)
-      if (dist <= step) {
-        p.pos.x = target.x; p.pos.y = target.y; p.tile = next; p.path.shift();
-        const portal = this.portalAt(p.tile);
+    // เดินลื่นต่อเนื่องตาม waypoints (world px) — สเต็ปได้หลายช่วงต่อเฟรม กันสะดุด
+    if (p.waypoints.length) {
+      let budget = 150 * (p.moveMult || 1) * dt; // วิชาตัวเบาเพิ่มความเร็ว (§3.2)
+      while (budget > 0 && p.waypoints.length) {
+        const w0 = p.waypoints[0];
+        const dx = w0.x - p.pos.x, dy = w0.y - p.pos.y, dist = Math.hypot(dx, dy);
+        if (dist <= budget) { p.pos.x = w0.x; p.pos.y = w0.y; p.waypoints.shift(); budget -= dist; }
+        else { p.pos.x += dx / dist * budget; p.pos.y += dy / dist * budget; budget = 0; }
+      }
+      // อัปเดต tile จากตำแหน่งจริง + เช็ก portal ขณะเดินผ่าน
+      const t = this.cam.worldToTile(p.pos.x, p.pos.y);
+      if (t.x !== p.tile.x || t.y !== p.tile.y) {
+        p.tile = t;
+        const portal = this.portalAt(t);
         if (portal) { this.loadZone(portal.toZoneId, portal.spawnAt); return; }
-      } else { p.pos.x += dx / dist * step; p.pos.y += dy / dist * step; }
+      }
     }
     // ถึงตัว NPC ที่จะคุย → เปิดหน้าต่าง
-    if (this.interactNpc && p.path.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();
+    if (this.interactNpc && p.waypoints.length === 0 && tileDist(p.tile, this.interactNpc.at) <= 1) this.triggerInteract();
 
     // ต่อสู้กับเป้าหมาย
     if (this.target) {
@@ -191,14 +230,14 @@ export class Game {
       else {
         const d = tileDist(p.tile, this.target.tile);
         if (d <= 1) {
-          p.path = [];
+          p.waypoints = [];
           if (p.atkCd <= 0) {
             const r = attack(p, this.target, 300);
             this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#7c1f1b');
             p.atkCd = p.attackCdMs / 1000;
             if (r.killed) this.onKill(this.target);
           }
-        } else if (p.path.length === 0) this.pathAdjacentTo(this.target.tile);
+        } else if (p.waypoints.length === 0) this.routeToTile(this.target.tile, true);
       }
     }
 
@@ -229,7 +268,7 @@ export class Game {
     this.saveState();
   }
 
-  die() { this.dead = true; this.respawnT = 3; this.player.path = []; this.target = null; this.showToast('พ่ายแพ้… กลับสู่เมือง'); }
+  die() { this.dead = true; this.respawnT = 3; this.player.waypoints = []; this.target = null; this.showToast('พ่ายแพ้… กลับสู่เมือง'); }
   respawn() { this.dead = false; this.player.hp = this.player.maxHp; this.loadZone('jiuhe_town', { x: 14, y: 18 }); }
 
   render() {
@@ -248,7 +287,7 @@ export class Game {
     }
     for (const n of this.zone.npcs) {
       const s = cam.tileToScreen(n.at.x, n.at.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: n.at.x + n.at.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null }, 0.85); } });
+      ents.push({ depth: n.at.x + n.at.y, draw: () => { drawCharacter(ctx, s.x, s.y, ARCHETYPE_COLOR[n.archetype] || '#888', 0.85); drawNameplate(ctx, s.x, s.y, { name: n.name, role: n.role || undefined, sect: n.sectId ? this.sectInfo(n.sectId) : null, boxed: false, align: 'left' }, 0.85); } });
     }
     for (const m of this.mobs) {
       if (m.state === 'dead') continue;
