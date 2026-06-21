@@ -9,7 +9,11 @@ const defs = {
 };
 
 function mkPlayer() {
-  return { baseAtk: 18, baseDef: 6, baseMaxHp: 100, hp: 100, atk: 18, def: 6, maxHp: 100, moveMult: 1, skills: {}, skillPoints: 100 };
+  return {
+    baseAtk: 18, baseDef: 6, baseMaxHp: 100, baseMaxMp: 40, baseMaxStamina: 30, baseMaxFocus: 100,
+    hp: 100, atk: 18, def: 6, maxHp: 100, mp: 40, maxMp: 40, stamina: 30, maxStamina: 30, focus: 100, maxFocus: 100,
+    moveMult: 1, skills: {}, skillPoints: 100,
+  };
 }
 
 test('skillCost แพงขึ้นตาม rank', () => {
@@ -40,6 +44,15 @@ test('ค่ากำเนิด (資質) เสริม atk/def/maxHp', () =>
   assert.equal(p.maxHp, 180); // 100 + 20*4
   assert.equal(p.atk, 24);    // 18 + round(10*0.6)
   assert.equal(p.def, 12);    // 6 + round(20*0.3)
+});
+
+test('ค่ากำเนิดเสริมหลอดพื้นฐาน 內力/體力/定力', () => {
+  const p = mkPlayer();
+  p.birthAttrs = { insight: 10, bone: 20, might: 10, focus: 20 };
+  recomputeStats(p, defs);
+  assert.equal(p.maxMp, 80);       // 40 + (10*2 + 20)
+  assert.equal(p.maxStamina, 60);  // 30 + (10 + 20)
+  assert.equal(p.maxFocus, 120);   // 100 + 20
 });
 
 test('เรียนเกิน maxRank ไม่ได้ / SP ไม่พอ', () => {

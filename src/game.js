@@ -51,7 +51,9 @@ export class Game {
       birthday: saved.birthday || null,     // วันเกิดในเกม {month, day} (生日系統)
       tile: { x: 14, y: 20 }, pos: { x: 0, y: 0 }, waypoints: [], facing: 'S',
       baseAtk: 18, baseDef: 6, baseMaxHp: 100,
+      baseMaxMp: 40, baseMaxStamina: 30, baseMaxFocus: 100, // ค่าพื้นฐาน 內力/體力/定力 (§基本屬性)
       hp: 100, maxHp: 100, atk: 18, def: 6, moveMult: 1, attackCdMs: 700, atkCd: 0, stun: 0,
+      mp: 40, maxMp: 40, stamina: 30, maxStamina: 30, focus: 100, maxFocus: 100,
       skills: saved.skills || {},
       inventory: saved.inventory || [],
       quests: saved.quests || {},
@@ -60,6 +62,9 @@ export class Game {
     };
     recomputeStats(this.player, this.skillDefs);
     this.player.hp = saved.hp || this.player.maxHp;
+    this.player.mp = saved.mp != null ? saved.mp : this.player.maxMp;
+    this.player.stamina = saved.stamina != null ? saved.stamina : this.player.maxStamina;
+    this.player.focus = saved.focus != null ? saved.focus : this.player.maxFocus;
     /** ฮุคให้ UI (DOM) เปิดหน้าต่างคุยกับ NPC */
     this.onInteract = (/** @type {any} */ _npc) => {};
     this.interactNpc = null;
@@ -211,7 +216,8 @@ export class Game {
     save({
       displayName: p.displayName, activeTitle: p.activeTitle, gender: p.gender, robeColor: p.robeColor, sectId: p.sectId,
       birthAttrs: p.birthAttrs, birthday: p.birthday,
-      zoneId: this.zone.id, tile: p.tile, hp: p.hp, skills: p.skills, inventory: p.inventory, quests: p.quests,
+      zoneId: this.zone.id, tile: p.tile, hp: p.hp, mp: p.mp, stamina: p.stamina, focus: p.focus,
+      skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
     });
   }
@@ -225,8 +231,8 @@ export class Game {
     if (birthAttrs) p.birthAttrs = birthAttrs;   // ค่ากำเนิดที่ทอยได้ (資質)
     if (birthday) p.birthday = birthday;          // วันเกิดในเกม (生日系統)
     p.sectId = null; p.activeTitle = 'พเนจร';
-    recomputeStats(p, this.skillDefs);            // ค่ากำเนิดส่งผลต่อ atk/def/maxHp
-    p.hp = p.maxHp;
+    recomputeStats(p, this.skillDefs);            // ค่ากำเนิดส่งผลต่อ atk/def/maxHp + 內力/體力/定力
+    p.hp = p.maxHp; p.mp = p.maxMp; p.stamina = p.maxStamina; p.focus = p.maxFocus;
     this.needsCreation = false;
     this.saveState();
   }
@@ -323,6 +329,10 @@ export class Game {
             const r = attack(p, this.target, 300);
             this.popDmg(this.target.pos.x, this.target.pos.y, '-' + r.damage, '#7c1f1b');
             p.atkCd = p.attackCdMs / 1000;
+            // ออกท่ากินกำลังภายใน + สติ, สมาธิสะดุด (clamp ≥0 ไม่บล็อกการตี)
+            p.mp = Math.max(0, p.mp - 6);
+            p.stamina = Math.max(0, p.stamina - 5);
+            p.focus = Math.max(0, p.focus - 8);
             p.attackT = 0.3; this.target.hurtT = 0.25; // ฟันแขน + เป้าสะดุ้ง
             if (r.killed) this.onKill(this.target);
           }
@@ -336,9 +346,19 @@ export class Game {
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
         p.hp -= dmg; p.hurtT = 0.25; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
+        p.focus = Math.max(0, p.focus - 15); // โดนตี → สมาธิแตก
         if (p.hp <= 0) this.die();
       },
     });
+
+    // ฟื้นค่าพื้นฐานตามเวลา (§內力系統): กำลังภายในฟื้นเรื่อย ๆ,
+    // สติฟื้นตอนยืนนิ่ง/หมดตอนเดิน, สมาธิสะสมตอนสงบ (ไม่สู้/ไม่เดิน)
+    const inCombat = !!this.target;
+    p.mp = Math.min(p.maxMp, p.mp + 8 * dt);
+    p.stamina = Math.max(0, Math.min(p.maxStamina, p.stamina + (p.moving ? -5 : 12) * dt));
+    p.focus = (inCombat || p.moving)
+      ? Math.max(0, p.focus - 10 * dt)
+      : Math.min(p.maxFocus, p.focus + 14 * dt);
 
     this.cam.follow(p.pos.x, p.pos.y);
   }
@@ -476,6 +496,9 @@ export class Game {
       name: p.displayName, title: p.activeTitle,
       crest: sect ? sect.crest : '·', accent: sect ? sect.color : '#9e2b25',
       hp: Math.max(0, Math.ceil(p.hp)), maxHp: p.maxHp,
+      mp: Math.max(0, Math.round(p.mp)), maxMp: p.maxMp,
+      stamina: Math.max(0, Math.round(p.stamina)), maxStamina: p.maxStamina,
+      focus: Math.max(0, Math.round(p.focus)), maxFocus: p.maxFocus,
       atk: Math.round(p.atk), def: Math.round(p.def),
       xp: p.combatXP, sp: p.skillPoints, coins: p.currency,
       zone: this.zone ? this.zone.name : '', dead: this.dead,

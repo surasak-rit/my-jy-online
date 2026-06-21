@@ -36,12 +36,16 @@ export function learn(player, def) {
  */
 export function recomputeStats(player, skillDefs) {
   let atk = player.baseAtk, maxHp = player.baseMaxHp, def = player.baseDef, moveMult = 1;
-  // ค่ากำเนิด (資質) ส่งผลต่อค่าต่อสู้ — กระดูก→เลือด, พลังแขน→โจมตี, สมาธิ→ป้องกัน (GDD §สเตตัส C)
+  let maxMp = player.baseMaxMp || 0, maxStamina = player.baseMaxStamina || 0, maxFocus = player.baseMaxFocus || 0;
+  // ค่ากำเนิด (資質) ส่งผลต่อค่าต่อสู้ + ค่าพื้นฐาน (GDD §สเตตัส C / §基本屬性)
   const b = player.birthAttrs;
   if (b) {
-    maxHp += Math.round((b.bone || 0) * 4);   // 1 กระดูก ≈ +4 HP (อิง 根骨=เลือด)
-    atk += Math.round((b.might || 0) * 0.6);  // พลังแขน → ผลโจมตีกายภาพ
-    def += Math.round((b.focus || 0) * 0.3);  // สมาธิ/定力 → ต้านทาน
+    maxHp += Math.round((b.bone || 0) * 4);    // 1 กระดูก ≈ +4 HP (อิง 根骨=เลือด)
+    atk += Math.round((b.might || 0) * 0.6);   // พลังแขน → ผลโจมตีกายภาพ
+    def += Math.round((b.focus || 0) * 0.3);   // สมาธิ/定力 → ต้านทาน
+    maxMp += Math.round((b.insight || 0) * 2 + (b.bone || 0)); // รู้แจ้ง+กระดูก → กำลังภายใน (內力)
+    maxStamina += Math.round((b.might || 0) + (b.bone || 0));  // พลังแขน+กระดูก → สติ (體力)
+    maxFocus += Math.round((b.focus || 0));                    // สมาธิ → 定力
   }
   for (const id in player.skills) {
     const d = skillDefs[id]; if (!d) continue;
@@ -50,7 +54,12 @@ export function recomputeStats(player, skillDefs) {
     maxHp += (pr.maxHp || 0) * r;
     def += (pr.def || 0) * r;
     moveMult += (pr.moveBonus || 0) * r;
+    maxMp += (pr.maxMp_ || 0) * r; // หมายเหตุ: perRank.maxMp_ เผื่อวิชาเสริม內力 (ยังไม่มี def ใช้)
   }
   player.atk = atk; player.maxHp = maxHp; player.def = def; player.moveMult = moveMult;
+  player.maxMp = maxMp; player.maxStamina = maxStamina; player.maxFocus = maxFocus;
   if (player.hp > maxHp) player.hp = maxHp;
+  if (player.mp > maxMp) player.mp = maxMp;
+  if (player.stamina > maxStamina) player.stamina = maxStamina;
+  if (player.focus > maxFocus) player.focus = maxFocus;
 }

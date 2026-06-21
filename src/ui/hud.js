@@ -19,6 +19,11 @@ export function initHud(game) {
         <div class="hud-bar"><i class="hud-hp"></i><span class="hud-hplabel"></span></div>
       </div>
     </div>
+    <div class="hud-pools">
+      <div class="hud-pool" title="內力 — กำลังภายใน (ใช้ออกท่า)"><b>กำลังภายใน</b><div class="hud-pbar"><i class="hud-mp"></i></div><span class="hud-mplabel"></span></div>
+      <div class="hud-pool" title="體力 — สติ (เดิน/ออกท่าแล้วลด)"><b>สติ</b><div class="hud-pbar"><i class="hud-st"></i></div><span class="hud-stlabel"></span></div>
+      <div class="hud-pool" title="定力 — สมาธิ (สงบนิ่งแล้วสะสม)"><b>สมาธิ</b><div class="hud-pbar"><i class="hud-fo"></i></div><span class="hud-folabel"></span></div>
+    </div>
     <div class="hud-chips">
       <span title="พลังโจมตี">⚔️ <b class="hud-atk"></b></span>
       <span title="พลังป้องกัน">🛡️ <b class="hud-def"></b></span>
@@ -31,6 +36,9 @@ export function initHud(game) {
   const r = {
     crest: q('.hud-crest'), nm: q('.hud-nm'), title: q('.hud-title'),
     hp: q('.hud-hp'), hplabel: q('.hud-hplabel'),
+    mp: q('.hud-mp'), mplabel: q('.hud-mplabel'),
+    st: q('.hud-st'), stlabel: q('.hud-stlabel'),
+    fo: q('.hud-fo'), folabel: q('.hud-folabel'),
     atk: q('.hud-atk'), def: q('.hud-def'), sp: q('.hud-sp'), coin: q('.hud-coin'), zone: q('.hud-zone'),
   };
   const last = /** @type {Record<string, any>} */ ({});
@@ -51,6 +59,14 @@ export function initHud(game) {
       const lowCls = pct <= 0.3 ? 'hud-hp low' : 'hud-hp';
       if (last.hpcls !== lowCls) { r.hp.className = lowCls; last.hpcls = lowCls; }
       set(r.hplabel, 'hpl', d.dead ? 'กำลังฟื้น…' : `❤️ ${d.hp}/${d.maxHp}`);
+      // หลอดพื้นฐาน 3 ค่า (內力/體力/定力)
+      const pool = (/** @type {HTMLElement} */ bar, /** @type {HTMLElement} */ lbl, /** @type {string} */ key, /** @type {number} */ cur, /** @type {number} */ max) => {
+        bar.style.width = (max > 0 ? Math.max(0, Math.min(1, cur / max)) * 100 : 0).toFixed(1) + '%';
+        set(lbl, key, `${cur}/${max}`);
+      };
+      pool(r.mp, r.mplabel, 'mp', d.mp, d.maxMp);
+      pool(r.st, r.stlabel, 'st', d.stamina, d.maxStamina);
+      pool(r.fo, r.folabel, 'fo', d.focus, d.maxFocus);
       set(r.atk, 'atk', String(d.atk));
       set(r.def, 'def', String(d.def));
       set(r.sp, 'sp', String(d.sp));
