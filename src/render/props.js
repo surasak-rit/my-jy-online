@@ -137,10 +137,13 @@ function building(ctx, x, y, s, o) {
   const bw = o.bw * s, bd = o.bd * s, wallH = o.wallH * s, roofH = o.roofH * s, ov = o.eaveOv * s;
   // มุมฐาน (F=หน้า, R=ขวา/+x, L=ซ้าย/+y, B=หลัง) — iso 2:1
   const F = [x, y], R = [x + bw, y - bw / 2], L = [x - bd, y - bd / 2];
+  const Bg = [x + bw - bd, y - (bw + bd) / 2]; // มุมหลังบนพื้น
   const top = (p) => [p[0], p[1] - wallH];
-  const F2 = top(F), R2 = top(R), L2 = top(L), B2 = [x + bw - bd, y - (bw + bd) / 2 - wallH];
+  const F2 = top(F), R2 = top(R), L2 = top(L), B2 = [Bg[0], Bg[1] - wallH];
 
-  shadow(ctx, x, y + 2 * s, (bw + bd) * 0.6, (bw + bd) * 0.18);
+  // เงา = รูปข้าวหลามตัดตาม footprint (วางใต้อาคารพอดี ไม่ลอยเหนือแอ่งเงา)
+  const e = 3 * s;
+  poly(ctx, [[F[0], F[1] + e], [R[0] + e, R[1] + e * 0.5], [Bg[0], Bg[1] - e], [L[0] - e, L[1] + e * 0.5]], 'rgba(30,22,12,0.28)');
 
   // ฐานหิน (สองด้านล่างผนัง)
   const baseH = 5 * s;
