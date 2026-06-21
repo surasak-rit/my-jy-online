@@ -407,11 +407,14 @@ export class Game {
       },
     });
 
-    // ฟื้นค่าพื้นฐานตามเวลา — เดินไม่หักสติ/สมาธิ (อิงเว็บจีน: 體力 ผูกกับ生活技能/อาชีพ,
-    // 定力 ผูกกับการเรียนวิชา/讀書識字 ไม่เกี่ยวการเดิน/ต่อสู้). 內力 = ทรัพยากรต่อสู้
-    p.mp = Math.min(p.maxMp, p.mp + 8 * dt);             // 內力 ฟื้นเรื่อย ๆ (ออกท่าแล้วลด)
-    p.stamina = Math.min(p.maxStamina, p.stamina + 4 * dt); // 體力 ฟื้นเรื่อย ๆ — สิ้นเปลืองตอนทำอาชีพ
-    p.focus = Math.min(p.maxFocus, p.focus + 5 * dt);    // 定力 ฟื้นเรื่อย ๆ — สิ้นเปลืองตอนเรียนวิชา
+    // ฟื้นค่าพื้นฐานตามเวลา — ยืนเฉย ๆ (พัก) ฟื้นเร็วขึ้น + เลือดฟื้นเฉพาะตอนพัก
+    // (อิงเว็บจีน: 體力 ผูกกับ生活技能/อาชีพ · 定力 ผูกกับการเรียนวิชา · 內力 = ทรัพยากรต่อสู้)
+    const resting = !p.moving && !this.target && p.hurtT <= 0; // ยืนนิ่ง ไม่สู้ ไม่เพิ่งโดนตี
+    const mul = resting ? 2.4 : 1; // นั่งพัก/ยืนเฉยฟื้นไวกว่า
+    p.mp = Math.min(p.maxMp, p.mp + 8 * mul * dt);             // 內力
+    p.stamina = Math.min(p.maxStamina, p.stamina + 4 * mul * dt); // 體力
+    p.focus = Math.min(p.maxFocus, p.focus + 5 * mul * dt);    // 定力
+    if (resting) p.hp = Math.min(p.maxHp, p.hp + 5 * dt);     // 氣血 ฟื้นเฉพาะตอนยืนพัก (ไม่ฟื้นกลางสนามรบ)
 
     this.cam.follow(p.pos.x, p.pos.y);
   }
@@ -454,7 +457,7 @@ export class Game {
     for (const pr of (this.zone.props || [])) {
       if (FLOOR_PROPS.has(pr.type)) continue;
       const s = cam.tileToScreen(pr.at.x, pr.at.y); s.y += map.tileHeight / 2;
-      ents.push({ depth: pr.at.x + pr.at.y - 0.5, draw: () => drawProp(ctx, pr.type, s.x, s.y, pr.scale || 1) });
+      ents.push({ depth: pr.at.x + pr.at.y - 0.5, draw: () => drawProp(ctx, pr.type, s.x, s.y, pr.scale || 1, pr.text) });
     }
     // เป้าหมาย: วงแหวนใต้เท้า
     if (this.target && this.target.state !== 'dead') {
@@ -495,11 +498,26 @@ export class Game {
 
   drawPortals() {
     const { ctx, cam, map } = this;
+    const hw = map.tileWidth / 2, hh = map.tileHeight / 2;
     for (const p of (this.zone.portals || [])) {
-      const s = cam.tileToScreen(p.at.x, p.at.y), hw = map.tileWidth / 2, hh = map.tileHeight / 2;
-      ctx.save(); ctx.globalAlpha = 0.4 + 0.18 * Math.sin(performance.now() / 320); ctx.fillStyle = '#6f7d5a'; // เรืองหยก
-      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x + hw, s.y + hh); ctx.lineTo(s.x, s.y + map.tileHeight); ctx.lineTo(s.x - hw, s.y + hh); ctx.closePath(); ctx.fill();
-      ctx.globalAlpha = 0.7; ctx.lineWidth = 1.5; ctx.strokeStyle = '#3f4a32'; ctx.stroke(); ctx.restore();
+      const s = cam.tileToScreen(p.at.x, p.at.y);
+      const diamond = () => { ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x + hw, s.y + hh); ctx.lineTo(s.x, s.y + map.tileHeight); ctx.lineTo(s.x - hw, s.y + hh); ctx.closePath(); };
+      const interior = p.art === 'door' || (p.toZoneId || '').includes('interior');
+      ctx.save();
+      if (interior) {
+        // ธรณีประตูเข้าห้อง: แผ่นหิน + แสงอุ่นจากในอาคาร (เรืองนวล)
+        ctx.fillStyle = '#cdbf9a'; diamond(); ctx.fill();
+        ctx.strokeStyle = 'rgba(60,48,30,0.5)'; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.globalAlpha = 0.45 + 0.22 * Math.sin(performance.now() / 420); // โคมในห้องวับแวม
+        ctx.fillStyle = '#e8b860';
+        ctx.beginPath(); ctx.ellipse(s.x, s.y + hh, hw * 0.66, hh * 0.66, 0, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // ประตูออกสู่สนาม/ทุ่ง: เรืองหยกวับแวม
+        ctx.globalAlpha = 0.4 + 0.18 * Math.sin(performance.now() / 320); ctx.fillStyle = '#6f7d5a';
+        diamond(); ctx.fill();
+        ctx.globalAlpha = 0.7; ctx.lineWidth = 1.5; ctx.strokeStyle = '#3f4a32'; ctx.stroke();
+      }
+      ctx.restore();
     }
   }
 

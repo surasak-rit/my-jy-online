@@ -4,21 +4,168 @@
   "type": "hub",
   "tilemapRef": "data/tilemaps/jiuhe_town.json",
   "portals": [
-    { "at": { "x": 1, "y": 14 }, "toZoneId": "willow_fields", "spawnAt": { "x": 21, "y": 12 }, "label": "→ ทุ่งต้นหลิว" },
-    { "at": { "x": 19, "y": 8 }, "toZoneId": "jiuhe_dojo_interior", "spawnAt": { "x": 6, "y": 7 }, "label": "เข้าโรงฝึก" }
+    {
+      "at": {
+        "x": 1,
+        "y": 14
+      },
+      "toZoneId": "willow_fields",
+      "spawnAt": {
+        "x": 21,
+        "y": 12
+      },
+      "label": "→ ทุ่งต้นหลิว"
+    },
+    {
+      "at": {
+        "x": 19,
+        "y": 8
+      },
+      "toZoneId": "jiuhe_dojo_interior",
+      "spawnAt": {
+        "x": 6,
+        "y": 7
+      },
+      "label": "เข้าโรงฝึก",
+      "art": "door"
+    }
   ],
   "props": [
-    { "type": "lantern", "at": { "x": 12, "y": 4 } },
-    { "type": "lantern", "at": { "x": 16, "y": 4 } },
-    { "type": "vase", "at": { "x": 11, "y": 12 } },
-    { "type": "lotus", "at": { "x": 17, "y": 16 } },
-    { "type": "censer", "at": { "x": 14, "y": 12 } }
+    {
+      "type": "house",
+      "at": {
+        "x": 5,
+        "y": 5
+      },
+      "scale": 1.35
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 19,
+        "y": 7
+      },
+      "scale": 1.5,
+      "text": "武館"
+    },
+    {
+      "type": "shop",
+      "at": {
+        "x": 6,
+        "y": 20
+      },
+      "scale": 1.35,
+      "text": "茶"
+    },
+    {
+      "type": "shop",
+      "at": {
+        "x": 20,
+        "y": 21
+      },
+      "scale": 1.35,
+      "text": "客"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 12,
+        "y": 4
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 16,
+        "y": 4
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 17,
+        "y": 9
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 21,
+        "y": 9
+      }
+    },
+    {
+      "type": "vase",
+      "at": {
+        "x": 11,
+        "y": 12
+      }
+    },
+    {
+      "type": "censer",
+      "at": {
+        "x": 14,
+        "y": 12
+      }
+    },
+    {
+      "type": "lotus",
+      "at": {
+        "x": 17,
+        "y": 16
+      }
+    }
   ],
   "npcs": [
-    { "id": "npc_guide_lan", "at": { "x": 14, "y": 14 }, "role": "ผู้นำทางมือใหม่", "archetype": "scholar", "name": "เสี่ยวหลาน" },
-    { "id": "npc_merchant", "at": { "x": 17, "y": 12 }, "role": "พ่อค้า", "archetype": "merchant", "name": "เจ้าของร้านหวัง" },
-    { "id": "npc_guard", "at": { "x": 14, "y": 4 }, "role": "ยามประตู", "archetype": "guard", "name": "ทหารยาม" },
-    { "id": "npc_villager_1", "at": { "x": 10, "y": 16 }, "role": "", "archetype": "villager", "name": "ชาวบ้าน" },
-    { "id": "npc_beggar", "at": { "x": 12, "y": 18 }, "role": "", "archetype": "beggar", "name": "ขอทานเฒ่า" }
+    {
+      "id": "npc_guide_lan",
+      "at": {
+        "x": 14,
+        "y": 14
+      },
+      "role": "ผู้นำทางมือใหม่",
+      "archetype": "scholar",
+      "name": "เสี่ยวหลาน"
+    },
+    {
+      "id": "npc_merchant",
+      "at": {
+        "x": 17,
+        "y": 12
+      },
+      "role": "พ่อค้า",
+      "archetype": "merchant",
+      "name": "เจ้าของร้านหวัง"
+    },
+    {
+      "id": "npc_guard",
+      "at": {
+        "x": 14,
+        "y": 4
+      },
+      "role": "ยามประตู",
+      "archetype": "guard",
+      "name": "ทหารยาม"
+    },
+    {
+      "id": "npc_villager_1",
+      "at": {
+        "x": 10,
+        "y": 16
+      },
+      "role": "",
+      "archetype": "villager",
+      "name": "ชาวบ้าน"
+    },
+    {
+      "id": "npc_beggar",
+      "at": {
+        "x": 12,
+        "y": 18
+      },
+      "role": "",
+      "archetype": "beggar",
+      "name": "ขอทานเฒ่า"
+    }
   ]
 }
