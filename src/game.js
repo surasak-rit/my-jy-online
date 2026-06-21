@@ -22,6 +22,13 @@ const getJSON = async (url) => (await fetch(url)).json();
 
 const LEARN_FOCUS_COST = 25; // เรียนวิชา/อ่านคัมภีร์ 1 ครั้ง สิ้นเปลืองสมาธิ (定力)
 
+/** เอฟเฟกต์สำรองตามประเภทวิชา (ใช้เมื่อสกิลไม่ได้กำหนด fx เอง) */
+const TYPE_FX = {
+  external: { color: '#e6c14f', arcs: 1, arcSpread: 0.8, rings: 1, sparks: 8, core: true },
+  internal: { color: '#a98be6', rings: 2, sparks: 6, core: true },
+  movement: { color: '#cfe6ff', arcs: 2, arcSpread: 1.2, sparks: 4 },
+};
+
 /** ทิศหันจาก world delta → 'E'|'W'|'S'|'N' */
 function facing(dx, dy) {
   if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? 'E' : 'W';
@@ -298,7 +305,7 @@ export class Game {
   showToast(t) { this.toast = t; this.toastT = 2.2; }
   popDmg(wx, wy, text, color) { this.dmgNums.push({ wx, wy: wy - 60, text, color, t: 0.9 }); }
 
-  /** สไตล์เอฟเฟกต์โจมตีของผู้เล่น — ตามสายวิชาที่เด่นสุด + ความแรง (ฝึก+内丹) */
+  /** เอฟเฟกต์โจมตีของผู้เล่น — เฉพาะของวิชาที่ฝึกเด่นสุด (อ่าน fx จากไฟล์สกิล) + ความแรง */
   attackFlavor() {
     const p = this.player;
     let best = null, bestRank = 0, total = 0;
@@ -307,10 +314,9 @@ export class Game {
       if (r > bestRank) { bestRank = r; best = this.skillDefs[id]; }
     }
     const power = 1 + total * 0.12 + (p.neidan?.tier || 0) * 0.18;
-    if (!best) return { style: 'fist', color: '#e9dec2', power };           // มือเปล่า
-    if (best.type === 'internal') return { style: 'qi', color: '#a98be6', power };   // 內功 ปราณม่วง
-    if (best.type === 'movement') return { style: 'slash', color: '#cfe6ff', power }; // 輕功 วงเฉือนเร็ว
-    return { style: 'palm', color: '#e6c14f', power };                       // 外功 ฝ่ามือพลังหยาง
+    if (!best) return { color: '#e9dec2', sparks: 6, power };       // มือเปล่า — แค่ประกาย
+    const fx = best.fx || TYPE_FX[best.type] || {};                 // เอฟเฟกต์เฉพาะวิชา (fallback ตามประเภท)
+    return { ...fx, power };
   }
   portalAt(tile) { return (this.zone?.portals || []).find((p) => p.at.x === tile.x && p.at.y === tile.y); }
 
@@ -395,7 +401,7 @@ export class Game {
       tileToWorld: (x, y) => this.tw(x, y),
       onPlayerDamaged: (dmg) => {
         p.hp -= dmg; p.hurtT = 0.25; this.popDmg(p.pos.x, p.pos.y, '-' + dmg, '#9e2b25');
-        spawnStrike(this.fx, p.pos.x, p.pos.y - 38, { style: 'fist', color: '#c2453a', power: 0.9 }); // มอนตะปบใส่
+        spawnStrike(this.fx, p.pos.x, p.pos.y - 38, { color: '#c2453a', sparks: 5, power: 0.9 }); // มอนตะปบใส่
         if (p.hp <= 0) this.die();
       },
     });

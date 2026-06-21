@@ -1,7 +1,8 @@
 // @ts-check
 // ──────────────────────────────────────────────────────────────────────────
-// render/fx.js — เอฟเฟกต์ท่าโจมตี/วิทยายุทธ (martial-arts strike VFX)
-// แยกตามสายวิชา: 外功→ฝ่ามือพลัง(palm) · 內功→คลื่นปราณ(qi) · 輕功→วงเฉือน(slash) · มือเปล่า(fist)
+// render/fx.js — เอฟเฟกต์ท่าโจมตี/วิทยายุทธ (martial-arts strike VFX) แบบ data-driven
+// แต่ละสกิลกำหนดเอฟเฟกต์เองในไฟล์สกิล (fx: {color, arcs, arcSpread, rings, sparks, core, spin})
+// drawFx ประกอบเลเยอร์ตามค่าที่ส่งมา → ทุกสกิลหน้าตาไม่ซ้ำกัน + เพิ่มสกิลใหม่ไม่ต้องแก้โค้ด
 // spawn/update เป็น pure (ทดสอบได้); draw แตะ canvas เท่านั้น
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -11,15 +12,28 @@ export const FACE_ANGLE = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2 };
 /**
  * เพิ่มเอฟเฟกต์โจมตี 1 ครั้ง (ที่จุดกระทบ)
  * @param {any[]} list
- * @param {number} wx @param {number} wy  ตำแหน่ง world (ยกขึ้นระดับอกแล้ว)
- * @param {{style?:string, color?:string, angle?:number, power?:number, dur?:number}} [opts]
+ * @param {number} wx @param {number} wy
+ * @param {Object} [opts]
+ * @param {string} [opts.color]      สีหลัก
+ * @param {number} [opts.arcs]       จำนวนวงเฉือน (crescent)
+ * @param {number} [opts.arcSpread]  ความกว้างวงเฉือน (เรเดียน)
+ * @param {number} [opts.rings]      จำนวนวงปราณขยาย
+ * @param {number} [opts.sparks]     จำนวนเส้นประกายกระทบ
+ * @param {boolean}[opts.core]       มีแกนเรืองตรงกลางไหม
+ * @param {number} [opts.spin]       หมุนเอฟเฟกต์ (เรเดียน/วินาที)
+ * @param {number} [opts.angle]      ทิศโจมตี · @param {number} [opts.power] สเกล · @param {number} [opts.dur]
  */
 export function spawnStrike(list, wx, wy, opts = {}) {
   list.push({
     wx, wy, t: 0,
     dur: opts.dur || 0.32,
-    style: opts.style || 'fist',
     color: opts.color || '#e9dec2',
+    arcs: opts.arcs || 0,
+    arcSpread: opts.arcSpread || 1,
+    rings: opts.rings || 0,
+    sparks: opts.sparks != null ? opts.sparks : 6,
+    core: !!opts.core,
+    spin: opts.spin || 0,
     angle: opts.angle || 0,
     power: opts.power || 1,
   });
@@ -39,48 +53,47 @@ export function updateFx(list, dt) {
  */
 export function drawFx(ctx, cam, list) {
   for (const f of list) {
-    const p = Math.min(1, f.t / f.dur);   // ความคืบหน้า 0→1
-    const k = 1 - p;                        // จางลงตามเวลา
+    const p = Math.min(1, f.t / f.dur);  // ความคืบหน้า 0→1
+    const k = 1 - p;                      // จางลงตามเวลา
     const s = cam.worldToScreen(f.wx, f.wy);
-    const sz = 16 + f.power * 9;            // ขนาดตาม power (ฝึกยิ่งสูงยิ่งใหญ่)
+    const sz = 16 + f.power * 9;          // ขนาดตาม power (ฝึกยิ่งสูงยิ่งใหญ่)
     ctx.save();
     ctx.translate(s.x, s.y);
-    ctx.rotate(f.angle);                    // +x = ทิศโจมตี
+    ctx.rotate(f.angle + f.spin * f.t);   // +x = ทิศโจมตี (+ หมุนถ้ามี spin)
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
 
-    // วงเฉือน/ฝ่ามือ: arc โค้งกวาดไปด้านหน้า + แกนสว่าง
-    if (f.style === 'slash' || f.style === 'palm') {
-      const reach = sz * (0.7 + p * 0.8);
-      const spread = f.style === 'slash' ? 1.15 : 0.8; // เฉือน=กว้าง, ฝ่ามือ=กระชับ
-      const a0 = -spread, a1 = -spread + (spread * 2) * Math.min(1, p * 1.4);
-      ctx.globalAlpha = k * 0.95;
-      ctx.strokeStyle = f.color; ctx.lineWidth = (4.5 * k + 1.5) * (f.power * 0.5 + 0.7);
+    // วงเฉือน/ฝ่ามือ (crescent) — หลายวงซ้อนเหลื่อมรัศมี/เวลา ให้รู้สึก "ชุดท่า"
+    for (let i = 0; i < f.arcs; i++) {
+      const pp = Math.min(1, p + i * 0.12);
+      const reach = sz * (0.7 + pp * 0.8) * (1 + i * 0.18);
+      const a0 = -f.arcSpread, a1 = -f.arcSpread + f.arcSpread * 2 * Math.min(1, pp * 1.4);
+      ctx.globalAlpha = (1 - pp) * 0.95;
+      ctx.strokeStyle = f.color; ctx.lineWidth = (4.5 * (1 - pp) + 1.5) * (f.power * 0.4 + 0.7);
       ctx.beginPath(); ctx.arc(reach * 0.25, 0, reach, a0, a1); ctx.stroke();
-      ctx.globalAlpha = k * 0.6; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6;
+      ctx.globalAlpha = (1 - pp) * 0.55; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(reach * 0.25, 0, reach, a0, a1); ctx.stroke();
     }
 
-    // คลื่นปราณ: วงแหวนขยายซ้อน (內功) — palm ก็มีวงแรงดันเล็ก ๆ
-    if (f.style === 'qi' || f.style === 'palm') {
-      const rings = f.style === 'qi' ? 2 : 1;
-      for (let i = 0; i < rings; i++) {
-        const pp = Math.min(1, p + i * 0.18);
-        ctx.globalAlpha = (1 - pp) * 0.7;
-        ctx.strokeStyle = f.color; ctx.lineWidth = 3 * (1 - pp) + 1;
-        ctx.beginPath();
-        ctx.ellipse(sz * 0.3, 0, sz * (0.3 + pp * 1.3), sz * (0.2 + pp * 0.9), 0, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      // แกนเรืองตรงกลาง (เฉพาะช่วงต้น)
-      if (p < 0.5) { ctx.globalAlpha = k * 0.5; ctx.fillStyle = f.color; ctx.beginPath(); ctx.arc(sz * 0.3, 0, sz * 0.35 * k, 0, Math.PI * 2); ctx.fill(); }
+    // วงปราณขยาย (rings) — ซ้อนเหลื่อมเวลา
+    for (let i = 0; i < f.rings; i++) {
+      const pp = Math.min(1, p + i * 0.16);
+      ctx.globalAlpha = (1 - pp) * 0.7;
+      ctx.strokeStyle = f.color; ctx.lineWidth = 3 * (1 - pp) + 1;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, sz * (0.3 + pp * 1.35), sz * (0.2 + pp * 0.95), 0, 0, Math.PI * 2);
+      ctx.stroke();
     }
 
-    // ประกายกระทบ: เส้นพุ่งรอบทิศ (ทุกสไตล์ — บอกจุดโดน)
-    ctx.globalAlpha = k * 0.9;
-    ctx.strokeStyle = f.color; ctx.lineWidth = 2 * k + 0.5;
-    const n = f.style === 'fist' ? 5 : 7;
-    for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2 + f.power;
+    // แกนเรืองตรงกลาง (ช่วงต้น)
+    if (f.core && p < 0.5) {
+      ctx.globalAlpha = k * 0.5; ctx.fillStyle = f.color;
+      ctx.beginPath(); ctx.arc(0, 0, sz * 0.38 * k, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // ประกายกระทบ (sparks) — บอกจุดโดน
+    ctx.globalAlpha = k * 0.9; ctx.strokeStyle = f.color; ctx.lineWidth = 2 * k + 0.5;
+    for (let i = 0; i < f.sparks; i++) {
+      const a = (i / f.sparks) * Math.PI * 2 + f.power;
       const r0 = sz * 0.25 * p, r1 = sz * (0.5 + p * 0.7);
       ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * r1, Math.sin(a) * r1); ctx.stroke();
     }
