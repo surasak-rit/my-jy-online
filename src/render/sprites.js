@@ -114,7 +114,9 @@ export function drawNameplate(ctx, fx, fy, info, scale = 1) {
   }
 
   if (info.hpBar) {
-    const w = 40 * scale, h = 5 * scale, x = fx - w / 2, by = topY + plaqueH + 3 * scale;
+    const w = 40 * scale, h = 5 * scale;
+    const x = align === 'left' ? tx : fx - w / 2;
+    const by = topY + plaqueH + 3 * scale;
     ctx.fillStyle = INK; ctx.fillRect(x - 1, by - 1, w + 2, h + 2);
     ctx.fillStyle = '#5b2420'; ctx.fillRect(x, by, w, h);
     const pct = Math.max(0, Math.min(1, info.hpBar.hp / info.hpBar.maxHp));
