@@ -3,9 +3,23 @@
   "name": "โรงฝึก — นครจิ่วเหอ",
   "type": "interior",
   "parentZoneId": "jiuhe_town",
+  "floor": "wood",
   "tilemapRef": "data/tilemaps/jiuhe_dojo.json",
   "portals": [
     { "at": { "x": 6, "y": 8 }, "toZoneId": "jiuhe_town", "spawnAt": { "x": 19, "y": 9 }, "label": "ออกจากโรงฝึก" }
+  ],
+  "props": [
+    { "type": "rug", "at": { "x": 6, "y": 5 } },
+    { "type": "statue", "at": { "x": 6, "y": 1 }, "scale": 1.1 },
+    { "type": "censer", "at": { "x": 4, "y": 2 } },
+    { "type": "vase", "at": { "x": 9, "y": 1 } },
+    { "type": "vase", "at": { "x": 2, "y": 1 }, "scale": 0.85 },
+    { "type": "pillar", "at": { "x": 1, "y": 4 } },
+    { "type": "pillar", "at": { "x": 11, "y": 4 } },
+    { "type": "lotus", "at": { "x": 10, "y": 6 } },
+    { "type": "table", "at": { "x": 8, "y": 6 } },
+    { "type": "lantern", "at": { "x": 2, "y": 7 } },
+    { "type": "lantern", "at": { "x": 10, "y": 7 } }
   ],
   "npcs": [
     { "id": "npc_dojo_master", "at": { "x": 6, "y": 3 }, "role": "อาจารย์สำนักศิลาวัชระ", "archetype": "monk", "name": "ปรมาจารย์สือ", "sectId": "vajra_cliff" },

@@ -7,6 +7,13 @@
     { "at": { "x": 1, "y": 14 }, "toZoneId": "willow_fields", "spawnAt": { "x": 21, "y": 12 }, "label": "→ ทุ่งต้นหลิว" },
     { "at": { "x": 19, "y": 8 }, "toZoneId": "jiuhe_dojo_interior", "spawnAt": { "x": 6, "y": 7 }, "label": "เข้าโรงฝึก" }
   ],
+  "props": [
+    { "type": "lantern", "at": { "x": 12, "y": 4 } },
+    { "type": "lantern", "at": { "x": 16, "y": 4 } },
+    { "type": "vase", "at": { "x": 11, "y": 12 } },
+    { "type": "lotus", "at": { "x": 17, "y": 16 } },
+    { "type": "censer", "at": { "x": 14, "y": 12 } }
+  ],
   "npcs": [
     { "id": "npc_guide_lan", "at": { "x": 14, "y": 14 }, "role": "ผู้นำทางมือใหม่", "archetype": "scholar", "name": "เสี่ยวหลาน" },
     { "id": "npc_merchant", "at": { "x": 17, "y": 12 }, "role": "พ่อค้า", "archetype": "merchant", "name": "เจ้าของร้านหวัง" },

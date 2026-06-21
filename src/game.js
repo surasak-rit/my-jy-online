@@ -6,6 +6,7 @@
 import { Camera } from './render/camera.js';
 import { drawTileMap } from './render/tilemap.js';
 import { drawCharacter, drawNameplate, ARCHETYPE_COLOR } from './render/sprites.js';
+import { drawProp, FLOOR_PROPS } from './render/props.js';
 import { findPath } from './core/pathfind.js';
 import { attack, tileDist } from './core/combat.js';
 import { spawnFromZone, updateMobs } from './core/mobs.js';
@@ -273,13 +274,27 @@ export class Game {
 
   render() {
     const { ctx, cam, map } = this;
-    ctx.fillStyle = '#ddd1b3'; ctx.fillRect(0, 0, this.viewW, this.viewH); // กระดาษสาหม่น
+    ctx.fillStyle = (this.zone.floor === 'wood') ? '#3a2a18' : '#ddd1b3'; // ผนัง/พื้นนอก
+    ctx.fillRect(0, 0, this.viewW, this.viewH);
     if (!map) return;
-    drawTileMap(ctx, map, cam);
+    drawTileMap(ctx, map, cam, this.zone.floor);
     this.drawPortals();
+
+    // props แบบพื้น (พรม) วาดทับพื้นก่อนตัวละคร
+    for (const pr of (this.zone.props || [])) {
+      if (!FLOOR_PROPS.has(pr.type)) continue;
+      const s = cam.tileToScreen(pr.at.x, pr.at.y); s.y += map.tileHeight / 2;
+      drawProp(ctx, pr.type, s.x, s.y, pr.scale || 1);
+    }
 
     /** @type {{depth:number, draw:()=>void}[]} */
     const ents = [];
+    // props ทรงสูง (แจกัน/เสา/พระ ฯลฯ) → depth-sort ร่วมกับตัวละคร
+    for (const pr of (this.zone.props || [])) {
+      if (FLOOR_PROPS.has(pr.type)) continue;
+      const s = cam.tileToScreen(pr.at.x, pr.at.y); s.y += map.tileHeight / 2;
+      ents.push({ depth: pr.at.x + pr.at.y - 0.5, draw: () => drawProp(ctx, pr.type, s.x, s.y, pr.scale || 1) });
+    }
     // เป้าหมาย: วงแหวนใต้เท้า
     if (this.target && this.target.state !== 'dead') {
       const s = cam.worldToScreen(this.target.pos.x, this.target.pos.y); s.y += map.tileHeight / 2;
@@ -300,8 +315,33 @@ export class Game {
     }
     ents.sort((a, b) => a.depth - b.depth).forEach((e) => e.draw());
 
+    this.drawVignette();
     this.drawDmgNums();
     this.drawToast();
+  }
+
+  /** แสงนุ่ม+ขอบมืด ให้บรรยากาศอุ่นแบบเรือนจีน (interior อุ่นกว่า) */
+  drawVignette() {
+    const { ctx } = this;
+    const interior = this.zone.floor === 'wood';
+    ctx.save();
+    // โทนอุ่นทับบาง ๆ
+    ctx.globalAlpha = interior ? 0.12 : 0.06;
+    ctx.fillStyle = interior ? '#5a2f10' : '#caa15a';
+    ctx.fillRect(0, 0, this.viewW, this.viewH);
+    ctx.globalAlpha = 1;
+    // ขอบมืด (vignette) — กรอบเฟรมหลายชั้น
+    const g = Math.min(this.viewW, this.viewH);
+    for (let i = 0; i < 4; i++) {
+      ctx.globalAlpha = 0.06;
+      ctx.fillStyle = '#1a120a';
+      const m = (i + 1) * g * 0.04;
+      ctx.fillRect(0, 0, this.viewW, m);
+      ctx.fillRect(0, this.viewH - m, this.viewW, m);
+      ctx.fillRect(0, 0, m, this.viewH);
+      ctx.fillRect(this.viewW - m, 0, m, this.viewH);
+    }
+    ctx.restore();
   }
 
   drawPortals() {
