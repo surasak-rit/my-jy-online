@@ -16,7 +16,7 @@ import { learn, recomputeStats } from './core/skills.js';
 import { upgradeNeidan } from './core/neidan.js';
 import { buy, useConsumable } from './core/economy.js';
 import * as Quests from './core/quests.js';
-import { save, load } from './state/save.js';
+import { save, load, setLastSlot } from './state/save.js';
 
 const getJSON = async (url) => (await fetch(url)).json();
 
@@ -253,6 +253,7 @@ export class Game {
       skills: p.skills, inventory: p.inventory, quests: p.quests,
       combatXP: p.combatXP, skillPoints: p.skillPoints, currency: p.currency,
     });
+    setLastSlot(this.slot); // จำช่องล่าสุด → เปิดเกมครั้งหน้าเข้าต่อทันที
   }
 
   /** สร้างตัวละครใหม่ (จากหน้าสร้างตอนเริ่มเกม) — ยังไม่สังกัดสำนัก */

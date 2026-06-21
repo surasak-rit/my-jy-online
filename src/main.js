@@ -9,6 +9,8 @@ import { initPanels } from './ui/panels.js';
 import { initHud } from './ui/hud.js';
 import { showCreate } from './ui/create.js';
 import { showSlots } from './ui/slots.js';
+import { initMenu, RETURN_MENU_FLAG } from './ui/menu.js';
+import { latestSlot } from './state/save.js';
 
 const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game'));
 const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
@@ -44,12 +46,17 @@ async function boot() {
   const questDefs = {};
   for (const id of ['onboarding_1', 'onboarding_2']) questDefs[id] = await getJSON(`data/quests/${id}.json`);
 
-  // เลือกช่องบันทึกก่อน (เล่นต่อ/สร้างใหม่) → สร้าง Game ผูกกับช่องนั้น
-  const slot = await showSlots();
+  // เปิดเกม: ถ้ามีเซฟอยู่ → เข้าเกมจากบันทึกล่าสุดทันที (ข้ามหน้าเลือกช่อง)
+  // ยกเว้นกด"กลับสู่หน้าหลัก" จากในเกม → บังคับโชว์หน้าเลือกช่อง
+  const returningToMenu = sessionStorage.getItem(RETURN_MENU_FLAG) === '1';
+  sessionStorage.removeItem(RETURN_MENU_FLAG);
+  const auto = returningToMenu ? null : latestSlot();
+  const slot = auto != null ? auto : await showSlots();
   game = new Game(ctx, canvas, sects, mobDefs, skillDefs, itemDefs, questDefs, slot);
   game.setViewport(innerWidth, innerHeight); // logical viewport หลังสร้าง game
   const panels = initPanels(game);
   const hudUI = initHud(game);
+  initMenu(game); // เมนูมุมขวาบน (กลับสู่หน้าหลัก)
   game.onInteract = (npc) => panels.open(npc);
   await game.loadZone(game.startZoneId);
 

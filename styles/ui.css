@@ -108,6 +108,32 @@ html, body {
   pointer-events: none;
 }
 
+/* ── เมนูมุมขวาบน (กลับสู่หน้าหลัก) ── */
+#menu { position: fixed; right: 16px; top: 14px; z-index: 25; font-family: var(--serif); }
+#menu-toggle {
+  width: 38px; height: 38px; cursor: pointer; font-size: 19px; line-height: 1;
+  color: var(--paper-2); background: linear-gradient(180deg, var(--seal), var(--seal-deep));
+  border: 1.5px solid var(--seal-deep); border-radius: 5px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.18);
+}
+#menu-toggle:hover { filter: brightness(1.08); }
+#menu-pop {
+  position: absolute; right: 0; top: 46px; min-width: 188px;
+  background: radial-gradient(120% 100% at 50% 0%, var(--paper-2), var(--paper));
+  border: 1.5px solid var(--ink); border-radius: 5px;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.45), inset 0 0 0 3px rgba(255,255,255,0.2);
+  padding: 10px; color: var(--ink);
+}
+#menu-pop.hidden { display: none; }
+.menu-title { font-family: var(--brush); font-size: 18px; color: var(--seal); text-align: center; margin-bottom: 8px; }
+#menu-home {
+  width: 100%; padding: 9px 0; cursor: pointer; font-family: var(--serif); font-size: 14px;
+  color: var(--ink); background: rgba(255,255,255,0.5);
+  border: 1.5px solid var(--line); border-radius: 4px;
+}
+#menu-home:hover { background: var(--seal); color: #fff; border-color: var(--seal-deep); }
+.menu-hint { margin-top: 8px; font-size: 11px; color: var(--ink-soft); text-align: center; font-style: italic; }
+
 /* ── กรอบหมึกรอบจอ (ขอบม้วนภาพ) ── */
 body::after {
   content: ""; position: fixed; inset: 10px;

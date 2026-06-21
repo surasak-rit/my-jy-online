@@ -6,6 +6,7 @@
 
 const PREFIX = 'tigersway.save.v0';
 const LEGACY_KEY = PREFIX; // ช่องเดียวแบบเก่า → ย้ายเข้า slot 0 อัตโนมัติ
+const LAST_KEY = `${PREFIX}.last`; // ช่องที่เล่นล่าสุด (เปิดเกมมาแล้วเข้าต่อทันที)
 export const NUM_SLOTS = 3;
 
 const keyFor = (/** @type {number} */ slot) => `${PREFIX}.slot${slot}`;
@@ -34,6 +35,20 @@ export function load(slot) {
 /** ลบเซฟช่องที่ระบุ */
 export function deleteSlot(slot) {
   try { localStorage.removeItem(keyFor(slot)); } catch { /* ignore */ }
+}
+
+/** จำช่องที่เล่นล่าสุด (เรียกตอนบันทึก) */
+export function setLastSlot(slot) {
+  try { localStorage.setItem(LAST_KEY, String(slot)); } catch { /* ignore */ }
+}
+
+/** ช่องบันทึกล่าสุดที่เล่นได้จริง — fallback เป็นช่องแรกที่มีเซฟ, ไม่มีเลย→null */
+export function latestSlot() {
+  let last = null;
+  try { const s = localStorage.getItem(LAST_KEY); last = s == null ? null : Number(s); } catch { /* ignore */ }
+  if (last != null) { const d = /** @type {any} */ (load(last)); if (d && d.displayName) return last; }
+  for (let i = 0; i < NUM_SLOTS; i++) { const d = /** @type {any} */ (load(i)); if (d && d.displayName) return i; }
+  return null;
 }
 
 /**
