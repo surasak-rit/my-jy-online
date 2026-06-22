@@ -48,8 +48,8 @@
       },
       "toZoneId": "wulin_atlas",
       "spawnAt": {
-        "x": 2,
-        "y": 11
+        "x": 28,
+        "y": 37
       },
       "label": "→ แผนที่ยุทธภพ"
     }
