@@ -3,7 +3,7 @@
   "name": "สำนักยอดกระบี่ฮว่าซาน",
   "type": "sect",
   "floor": "grass",
-  "tilemapRef": "data/tilemaps/sect_courtyard.json",
+  "tilemapRef": "data/tilemaps/huashan_peak.json",
   "palette": {
     "primary": "#4a4a6a",
     "accent": "#cfd6ec"
@@ -12,7 +12,7 @@
     {
       "at": {
         "x": 1,
-        "y": 9
+        "y": 15
       },
       "toZoneId": "wulin_atlas",
       "spawnAt": {
@@ -26,8 +26,8 @@
     {
       "type": "hall",
       "at": {
-        "x": 11,
-        "y": 5
+        "x": 9,
+        "y": 6
       },
       "scale": 1.5,
       "text": "華山"
@@ -36,62 +36,62 @@
       "type": "statue",
       "at": {
         "x": 7,
-        "y": 6
+        "y": 7
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
       "type": "statue",
       "at": {
-        "x": 15,
-        "y": 6
+        "x": 11,
+        "y": 7
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
       "type": "lantern",
       "at": {
-        "x": 9,
-        "y": 7
+        "x": 1,
+        "y": 14
       }
     },
     {
       "type": "lantern",
       "at": {
-        "x": 13,
-        "y": 7
+        "x": 1,
+        "y": 16
       }
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 4,
-        "y": 4
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 18,
-        "y": 13
-      },
-      "scale": 1.2
     },
     {
       "type": "censer",
       "at": {
-        "x": 11,
-        "y": 9
+        "x": 9,
+        "y": 15
       }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 2,
+        "y": 2
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 15,
+        "y": 27
+      },
+      "scale": 1.1
     }
   ],
   "npcs": [
     {
       "id": "npc_huashan_master",
       "at": {
-        "x": 11,
-        "y": 7
+        "x": 9,
+        "y": 8
       },
       "role": "เจ้าสำนักฮว่าซาน",
       "archetype": "scholar",
@@ -105,9 +105,9 @@
       "tier": 2,
       "max": 4,
       "area": {
-        "x": 3,
-        "y": 12,
-        "w": 6,
+        "x": 2,
+        "y": 17,
+        "w": 5,
         "h": 4
       }
     },
@@ -116,9 +116,9 @@
       "tier": 3,
       "max": 1,
       "area": {
-        "x": 14,
-        "y": 12,
-        "w": 4,
+        "x": 11,
+        "y": 17,
+        "w": 5,
         "h": 4
       }
     }

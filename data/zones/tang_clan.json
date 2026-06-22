@@ -3,7 +3,7 @@
   "name": "ตระกูลถัง",
   "type": "sect",
   "floor": "grass",
-  "tilemapRef": "data/tilemaps/sect_courtyard.json",
+  "tilemapRef": "data/tilemaps/tang_clan.json",
   "palette": {
     "primary": "#5a2f3a",
     "accent": "#caa15a"
@@ -26,8 +26,8 @@
     {
       "type": "hall",
       "at": {
-        "x": 11,
-        "y": 5
+        "x": 9,
+        "y": 3
       },
       "scale": 1.5,
       "text": "唐門"
@@ -36,62 +36,62 @@
       "type": "statue",
       "at": {
         "x": 7,
-        "y": 6
+        "y": 4
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
       "type": "statue",
       "at": {
-        "x": 15,
-        "y": 6
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 9,
-        "y": 7
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 13,
-        "y": 7
-      }
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 4,
+        "x": 11,
         "y": 4
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
-      "type": "tree",
+      "type": "lantern",
       "at": {
-        "x": 18,
-        "y": 13
-      },
-      "scale": 1.2
+        "x": 1,
+        "y": 8
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 1,
+        "y": 10
+      }
     },
     {
       "type": "censer",
       "at": {
-        "x": 11,
+        "x": 9,
         "y": 9
       }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 2,
+        "y": 2
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 15,
+        "y": 15
+      },
+      "scale": 1.1
     }
   ],
   "npcs": [
     {
       "id": "npc_tang_elder",
       "at": {
-        "x": 11,
-        "y": 7
+        "x": 9,
+        "y": 5
       },
       "role": "ประมุขตระกูลถัง",
       "archetype": "scholar",
@@ -105,9 +105,9 @@
       "tier": 2,
       "max": 4,
       "area": {
-        "x": 3,
-        "y": 12,
-        "w": 6,
+        "x": 2,
+        "y": 11,
+        "w": 5,
         "h": 4
       }
     },
@@ -116,9 +116,9 @@
       "tier": 3,
       "max": 1,
       "area": {
-        "x": 14,
-        "y": 12,
-        "w": 4,
+        "x": 11,
+        "y": 11,
+        "w": 5,
         "h": 4
       }
     }

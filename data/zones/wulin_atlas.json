@@ -60,8 +60,8 @@
       },
       "toZoneId": "cloud_summit",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 14
       },
       "label": "→ สำนักมังกรเมฆา"
     },
@@ -72,8 +72,8 @@
       },
       "toZoneId": "beggar_union",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 8
       },
       "label": "→ พรรคยาจก"
     },
@@ -84,7 +84,7 @@
       },
       "toZoneId": "tang_clan",
       "spawnAt": {
-        "x": 2,
+        "x": 3,
         "y": 9
       },
       "label": "→ ตระกูลถัง"
@@ -96,8 +96,8 @@
       },
       "toZoneId": "five_venoms",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 13
       },
       "label": "→ พรรคห้าพิษ"
     },
@@ -108,8 +108,8 @@
       },
       "toZoneId": "huashan_peak",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 15
       },
       "label": "→ สำนักยอดกระบี่ฮว่าซาน"
     },
@@ -120,8 +120,8 @@
       },
       "toZoneId": "peach_isle",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 11
       },
       "label": "→ เกาะดอกท้อ"
     },
@@ -132,8 +132,8 @@
       },
       "toZoneId": "ancient_tomb",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 7
       },
       "label": "→ สำนักสุสานโบราณ"
     },
@@ -144,8 +144,8 @@
       },
       "toZoneId": "kunlun_snow",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 13
       },
       "label": "→ สำนักคุนหลุน"
     },
@@ -156,8 +156,8 @@
       },
       "toZoneId": "sacred_flame",
       "spawnAt": {
-        "x": 2,
-        "y": 9
+        "x": 3,
+        "y": 12
       },
       "label": "→ พรรคไฟศักดิ์สิทธิ์"
     },
@@ -168,7 +168,7 @@
       },
       "toZoneId": "dali_duan",
       "spawnAt": {
-        "x": 2,
+        "x": 3,
         "y": 9
       },
       "label": "→ ตระกูลต้วนต้าหลี่"

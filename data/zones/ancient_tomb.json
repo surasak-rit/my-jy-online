@@ -3,7 +3,7 @@
   "name": "สำนักสุสานโบราณ",
   "type": "sect",
   "floor": "grass",
-  "tilemapRef": "data/tilemaps/sect_courtyard.json",
+  "tilemapRef": "data/tilemaps/ancient_tomb.json",
   "palette": {
     "primary": "#4a4f5a",
     "accent": "#d7dbe2"
@@ -12,7 +12,7 @@
     {
       "at": {
         "x": 1,
-        "y": 9
+        "y": 7
       },
       "toZoneId": "wulin_atlas",
       "spawnAt": {
@@ -26,8 +26,8 @@
     {
       "type": "hall",
       "at": {
-        "x": 11,
-        "y": 5
+        "x": 7,
+        "y": 2
       },
       "scale": 1.5,
       "text": "古墓"
@@ -35,63 +35,63 @@
     {
       "type": "statue",
       "at": {
-        "x": 7,
-        "y": 6
+        "x": 5,
+        "y": 3
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
       "type": "statue",
       "at": {
-        "x": 15,
-        "y": 6
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "lantern",
-      "at": {
         "x": 9,
-        "y": 7
+        "y": 3
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 1,
+        "y": 6
       }
     },
     {
       "type": "lantern",
       "at": {
-        "x": 13,
-        "y": 7
+        "x": 1,
+        "y": 8
       }
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 4,
-        "y": 4
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 18,
-        "y": 13
-      },
-      "scale": 1.2
     },
     {
       "type": "censer",
       "at": {
-        "x": 11,
-        "y": 9
+        "x": 7,
+        "y": 7
       }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 2,
+        "y": 2
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 12,
+        "y": 11
+      },
+      "scale": 1.1
     }
   ],
   "npcs": [
     {
       "id": "npc_tomb_maiden",
       "at": {
-        "x": 11,
-        "y": 7
+        "x": 7,
+        "y": 4
       },
       "role": "เจ้าสำนักสุสานโบราณ",
       "archetype": "monk",
@@ -105,9 +105,9 @@
       "tier": 2,
       "max": 4,
       "area": {
-        "x": 3,
-        "y": 12,
-        "w": 6,
+        "x": 2,
+        "y": 9,
+        "w": 3,
         "h": 4
       }
     },
@@ -116,8 +116,8 @@
       "tier": 3,
       "max": 1,
       "area": {
-        "x": 14,
-        "y": 12,
+        "x": 9,
+        "y": 9,
         "w": 4,
         "h": 4
       }

@@ -3,7 +3,7 @@
   "name": "เกาะดอกท้อ",
   "type": "sect",
   "floor": "grass",
-  "tilemapRef": "data/tilemaps/sect_courtyard.json",
+  "tilemapRef": "data/tilemaps/peach_isle.json",
   "palette": {
     "primary": "#7a3b52",
     "accent": "#f3b6cf"
@@ -12,7 +12,7 @@
     {
       "at": {
         "x": 1,
-        "y": 9
+        "y": 11
       },
       "toZoneId": "wulin_atlas",
       "spawnAt": {
@@ -26,8 +26,8 @@
     {
       "type": "hall",
       "at": {
-        "x": 11,
-        "y": 5
+        "x": 16,
+        "y": 4
       },
       "scale": 1.5,
       "text": "桃花"
@@ -35,63 +35,63 @@
     {
       "type": "statue",
       "at": {
-        "x": 7,
-        "y": 6
+        "x": 14,
+        "y": 5
       },
-      "scale": 1.2
+      "scale": 1.1
     },
     {
       "type": "statue",
       "at": {
-        "x": 15,
-        "y": 6
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 9,
-        "y": 7
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 13,
-        "y": 7
-      }
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 4,
-        "y": 4
-      },
-      "scale": 1.2
-    },
-    {
-      "type": "tree",
-      "at": {
         "x": 18,
-        "y": 13
+        "y": 5
       },
-      "scale": 1.2
+      "scale": 1.1
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 1,
+        "y": 10
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 1,
+        "y": 12
+      }
     },
     {
       "type": "censer",
       "at": {
-        "x": 11,
-        "y": 9
+        "x": 16,
+        "y": 11
       }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 2,
+        "y": 2
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 29,
+        "y": 19
+      },
+      "scale": 1.1
     }
   ],
   "npcs": [
     {
       "id": "npc_peach_lord",
       "at": {
-        "x": 11,
-        "y": 7
+        "x": 16,
+        "y": 6
       },
       "role": "เจ้าเกาะดอกท้อ",
       "archetype": "scholar",
@@ -105,9 +105,9 @@
       "tier": 2,
       "max": 4,
       "area": {
-        "x": 3,
-        "y": 12,
-        "w": 6,
+        "x": 2,
+        "y": 13,
+        "w": 12,
         "h": 4
       }
     },
@@ -116,9 +116,9 @@
       "tier": 3,
       "max": 1,
       "area": {
-        "x": 14,
-        "y": 12,
-        "w": 4,
+        "x": 18,
+        "y": 13,
+        "w": 12,
         "h": 4
       }
     }
