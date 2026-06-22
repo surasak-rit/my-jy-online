@@ -1,1 +1,20 @@
-{"id": "mist_step", "name": "ย่างหมอกพระจันทร์", "type": "movement", "sectId": "moonshade", "maxRank": 3, "cost": 5, "perRank": {"moveBonus": 0.14}, "desc": "วิชาตัวเบา เคลื่อนไหวไว", "fx": {"color": "#cfe6ff", "arcs": 2, "arcSpread": 1.3, "sparks": 4, "spin": 1.2}}
+{
+  "id": "mist_step",
+  "name": "ย่างหมอกพระจันทร์",
+  "type": "movement",
+  "tier": "ต่ำ",
+  "maxRank": 3,
+  "cost": 5,
+  "perRank": {
+    "moveBonus": 0.1
+  },
+  "desc": "วิชาตัวเบา เคลื่อนไหวไว",
+  "fx": {
+    "color": "#cfe6ff",
+    "arcs": 2,
+    "arcSpread": 1.3,
+    "sparks": 4,
+    "spin": 1.2
+  },
+  "sectId": "moonshade"
+}

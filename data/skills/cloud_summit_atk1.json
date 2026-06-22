@@ -1,0 +1,22 @@
+{
+  "id": "cloud_summit_atk1",
+  "name": "กระบี่ไท่เก๊กเมฆาปฐมบท",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชากระบี่ขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#bfe0ef",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "cloud_summit"
+}

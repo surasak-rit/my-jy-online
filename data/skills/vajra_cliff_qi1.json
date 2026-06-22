@@ -1,0 +1,21 @@
+{
+  "id": "vajra_cliff_qi1",
+  "name": "ปราณกายเพชรปฐมฌาน",
+  "type": "internal",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "maxHp": 14
+  },
+  "desc": "ปราณภายในขั้นต้น เพิ่มพลังชีวิต",
+  "fx": {
+    "color": "#e6c14f",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 2,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "vajra_cliff"
+}

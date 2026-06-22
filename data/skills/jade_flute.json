@@ -2,12 +2,13 @@
   "id": "jade_flute",
   "name": "ขลุ่ยหยกสะกดวิญญาณ",
   "type": "internal",
-  "weaponType": "flute",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 8,
+  "cost": 9,
   "perRank": {
-    "atk": 5,
-    "maxMp_": 8
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
   },
   "desc": "คลื่นเสียงปราณ สั่นสะเทือนจิตศัตรู",
   "fx": {
@@ -17,5 +18,6 @@
     "rings": 3,
     "spin": true
   },
+  "weaponType": "flute",
   "sectId": "peach_isle"
 }

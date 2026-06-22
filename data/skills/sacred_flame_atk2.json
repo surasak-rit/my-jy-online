@@ -1,0 +1,23 @@
+{
+  "id": "sacred_flame_atk2",
+  "name": "ฝ่ามือเปลวสุริยาพิสัยกลาง",
+  "type": "external",
+  "weaponType": "palm",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5,
+    "def": 1
+  },
+  "desc": "วิชาฝ่ามือขั้นกลาง โจมตี+ป้องกัน",
+  "fx": {
+    "color": "#ff8c3a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "sacred_flame"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "kunlun_snow_qi1",
+  "name": "ปราณเหมันต์ปฐมฌาน",
+  "type": "internal",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "maxHp": 14
+  },
+  "desc": "ปราณภายในขั้นต้น เพิ่มพลังชีวิต",
+  "fx": {
+    "color": "#cfeaf5",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 2,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "kunlun_snow"
+}

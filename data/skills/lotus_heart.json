@@ -1,1 +1,21 @@
-{"id": "lotus_heart", "name": "ปราณใจบัว", "type": "internal", "sectId": "azure_lotus", "maxRank": 5, "cost": 6, "perRank": {"maxHp": 28, "def": 2}, "desc": "วิชาภายใน เพิ่มเลือด+ป้องกัน", "fx": {"color": "#7fd6b0", "rings": 3, "sparks": 6, "core": true}}
+{
+  "id": "lotus_heart",
+  "name": "ปราณใจบัว",
+  "type": "internal",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
+  },
+  "desc": "วิชาภายใน เพิ่มเลือด+ป้องกัน",
+  "fx": {
+    "color": "#7fd6b0",
+    "rings": 3,
+    "sparks": 6,
+    "core": true
+  },
+  "sectId": "azure_lotus"
+}

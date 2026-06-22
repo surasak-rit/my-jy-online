@@ -1,0 +1,19 @@
+{
+  "id": "peach_isle_trial",
+  "order": 12,
+  "giver": "npc_peach_lord",
+  "name": "บททดสอบเกาะดอกท้อ",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของเกาะดอกท้อ — เอาชนะโจรสลัดลมดำให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_blackwind_pirate",
+      "count": 1,
+      "label": "โจรสลัดลมดำ"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

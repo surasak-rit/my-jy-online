@@ -1,0 +1,22 @@
+{
+  "id": "ancient_tomb_atk1",
+  "name": "กระบี่ดรุณีหยกปฐมบท",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชากระบี่ขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#e6ecff",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "ancient_tomb"
+}

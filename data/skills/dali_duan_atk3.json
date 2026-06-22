@@ -1,0 +1,22 @@
+{
+  "id": "dali_duan_atk3",
+  "name": "นิ้วหกชีพจรอุกฤษฏ์",
+  "type": "external",
+  "weaponType": "finger",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 7
+  },
+  "desc": "วิชานิ้วขั้นสูง พลังโจมตีรุนแรง",
+  "fx": {
+    "color": "#ffe27a",
+    "arcs": 3,
+    "arcSpread": 1.0,
+    "sparks": 8,
+    "rings": 1,
+    "core": true
+  },
+  "sectId": "dali_duan"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "ancient_tomb_trial",
+  "order": 12,
+  "giver": "npc_tomb_maiden",
+  "name": "บททดสอบสำนักสุสานโบราณ",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักสุสานโบราณ — เอาชนะผีดิบเฝ้าโลงหยกให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_tomb_ghoul",
+      "count": 1,
+      "label": "ผีดิบเฝ้าโลงหยก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

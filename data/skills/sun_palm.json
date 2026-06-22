@@ -3,11 +3,11 @@
   "name": "ฝ่ามือเปลวสุริยา",
   "type": "external",
   "weaponType": "palm",
+  "tier": "สูง",
   "maxRank": 5,
   "cost": 9,
   "perRank": {
-    "atk": 8,
-    "maxHp": 8
+    "atk": 7
   },
   "desc": "ฝ่ามือไฟแรงสุริยา เผาผลาญรุนแรง",
   "fx": {

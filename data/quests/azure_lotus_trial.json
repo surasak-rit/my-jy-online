@@ -1,0 +1,19 @@
+{
+  "id": "azure_lotus_trial",
+  "order": 12,
+  "giver": "npc_lotus_master",
+  "name": "บททดสอบสำนักบัวคราม",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักบัวคราม — เอาชนะโจรกระจอกให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_petty_bandit",
+      "count": 5,
+      "label": "โจรกระจอก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

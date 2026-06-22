@@ -1,0 +1,22 @@
+{
+  "id": "kunlun_snow_atk1",
+  "name": "ดาบเมฆาหิมะปฐมบท",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชาดาบขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#cfeaf5",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "kunlun_snow"
+}

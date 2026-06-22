@@ -1,0 +1,22 @@
+{
+  "id": "kunlun_snow_atk2b",
+  "name": "ดาบเมฆาหิมะวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชาดาบชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#cfeaf5",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "kunlun_snow"
+}

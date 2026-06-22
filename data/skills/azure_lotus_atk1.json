@@ -1,0 +1,22 @@
+{
+  "id": "azure_lotus_atk1",
+  "name": "ฝ่ามือบัวหยกปฐมบท",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชาฝ่ามือขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#7fd6b0",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "azure_lotus"
+}

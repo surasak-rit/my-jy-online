@@ -1,0 +1,22 @@
+{
+  "id": "ancient_tomb_atk3",
+  "name": "กระบี่ดรุณีหยกอุกฤษฏ์",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 7
+  },
+  "desc": "วิชากระบี่ขั้นสูง พลังโจมตีรุนแรง",
+  "fx": {
+    "color": "#e6ecff",
+    "arcs": 3,
+    "arcSpread": 1.0,
+    "sparks": 8,
+    "rings": 1,
+    "core": true
+  },
+  "sectId": "ancient_tomb"
+}

@@ -3,11 +3,11 @@
   "name": "ดาบเมฆาหิมะ",
   "type": "external",
   "weaponType": "sword",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 7,
+  "cost": 9,
   "perRank": {
-    "atk": 7,
-    "def": 2
+    "atk": 7
   },
   "desc": "ดาบปราณเย็น เฉือนพร้อมเกล็ดหิมะแช่แข็ง",
   "fx": {

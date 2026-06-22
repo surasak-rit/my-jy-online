@@ -1,0 +1,19 @@
+{
+  "id": "huashan_peak_trial",
+  "order": 12,
+  "giver": "npc_huashan_master",
+  "name": "บททดสอบสำนักยอดกระบี่ฮว่าซาน",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักยอดกระบี่ฮว่าซาน — เอาชนะปีศาจกระบี่ยอดเขาให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_sword_demon",
+      "count": 1,
+      "label": "ปีศาจกระบี่ยอดเขา"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

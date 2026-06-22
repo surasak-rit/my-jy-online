@@ -1,0 +1,21 @@
+{
+  "id": "five_venoms_qi1",
+  "name": "ปราณกู่พิษปฐมฌาน",
+  "type": "internal",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "maxHp": 14
+  },
+  "desc": "ปราณภายในขั้นต้น เพิ่มพลังชีวิต",
+  "fx": {
+    "color": "#8fe04a",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 2,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "five_venoms"
+}

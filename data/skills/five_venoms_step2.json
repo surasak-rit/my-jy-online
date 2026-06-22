@@ -1,0 +1,21 @@
+{
+  "id": "five_venoms_step2",
+  "name": "ย่างอสรพิษลมกรด",
+  "type": "movement",
+  "tier": "สูง",
+  "maxRank": 3,
+  "cost": 7,
+  "perRank": {
+    "moveBonus": 0.16
+  },
+  "desc": "วิชาตัวเบาขั้นสูง เคลื่อนไหวดั่งสายลม",
+  "fx": {
+    "color": "#8fe04a",
+    "arcs": 0,
+    "arcSpread": 1.0,
+    "sparks": 0,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "five_venoms"
+}

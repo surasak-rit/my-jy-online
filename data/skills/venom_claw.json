@@ -3,11 +3,11 @@
   "name": "อุ้งมือห้าพิษ",
   "type": "external",
   "weaponType": "claw",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 7,
+  "cost": 9,
   "perRank": {
-    "atk": 6,
-    "def": 2
+    "atk": 7
   },
   "desc": "เล็บอาบพิษกู่ ฉีกแล้วพิษซึม",
   "fx": {

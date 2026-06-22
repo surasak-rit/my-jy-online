@@ -1,0 +1,19 @@
+{
+  "id": "kunlun_snow_trial",
+  "order": 12,
+  "giver": "npc_kunlun_master",
+  "name": "บททดสอบสำนักคุนหลุน",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักคุนหลุน — เอาชนะยักษ์หิมะหลังคาโลกให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_frost_yeti",
+      "count": 1,
+      "label": "ยักษ์หิมะหลังคาโลก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

@@ -2,12 +2,13 @@
   "id": "sixmeridian",
   "name": "กระบี่ปราณหกชีพจร",
   "type": "internal",
-  "weaponType": "finger",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 10,
+  "cost": 9,
   "perRank": {
-    "atk": 7,
-    "maxMp_": 10
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
   },
   "desc": "ปล่อยปราณกระบี่จากปลายนิ้ว โจมตีไกลไร้รูป",
   "fx": {
@@ -18,5 +19,6 @@
     "core": true,
     "rings": 1
   },
+  "weaponType": "finger",
   "sectId": "dali_duan"
 }

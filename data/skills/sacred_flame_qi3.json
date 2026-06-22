@@ -1,0 +1,23 @@
+{
+  "id": "sacred_flame_qi3",
+  "name": "ปราณเฉียนคุนมหาปราณ",
+  "type": "internal",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
+  },
+  "desc": "ปราณภายในขั้นสูง เลือด+ป้องกัน+內力",
+  "fx": {
+    "color": "#ff8c3a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 2,
+    "core": false
+  },
+  "sectId": "sacred_flame"
+}

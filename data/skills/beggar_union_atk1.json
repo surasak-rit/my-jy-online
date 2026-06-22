@@ -1,0 +1,22 @@
+{
+  "id": "beggar_union_atk1",
+  "name": "กระบองตีสุนัขปฐมบท",
+  "type": "external",
+  "weaponType": "staff",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชากระบองขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#f0c060",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "beggar_union"
+}

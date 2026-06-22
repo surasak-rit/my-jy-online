@@ -1,0 +1,22 @@
+{
+  "id": "azure_lotus_atk2b",
+  "name": "ฝ่ามือบัวหยกวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชาฝ่ามือชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#7fd6b0",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "azure_lotus"
+}

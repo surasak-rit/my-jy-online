@@ -1,0 +1,22 @@
+{
+  "id": "five_venoms_atk1",
+  "name": "เล็บห้าพิษปฐมบท",
+  "type": "external",
+  "weaponType": "claw",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชาเล็บขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#8fe04a",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "five_venoms"
+}

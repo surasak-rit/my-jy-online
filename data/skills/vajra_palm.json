@@ -1,1 +1,22 @@
-{"id":"vajra_palm","name":"ฝ่ามือศิลาวัชระ","type":"external","weaponType":"fist","sectId":"vajra_cliff","maxRank":5,"cost":6,"perRank":{"atk":4},"desc":"หมัด/ฝ่ามือสายบุก เพิ่มพลังโจมตี","fx":{"color":"#e6c14f","arcs":1,"arcSpread":0.8,"rings":1,"sparks":8,"core":true}}
+{
+  "id": "vajra_palm",
+  "name": "ฝ่ามือศิลาวัชระ",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 7
+  },
+  "desc": "หมัด/ฝ่ามือสายบุก เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#e6c14f",
+    "arcs": 1,
+    "arcSpread": 0.8,
+    "rings": 1,
+    "sparks": 8,
+    "core": true
+  },
+  "sectId": "vajra_cliff"
+}

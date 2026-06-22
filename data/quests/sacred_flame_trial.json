@@ -1,0 +1,19 @@
+{
+  "id": "sacred_flame_trial",
+  "order": 12,
+  "giver": "npc_flame_lord",
+  "name": "บททดสอบพรรคไฟศักดิ์สิทธิ์",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของพรรคไฟศักดิ์สิทธิ์ — เอาชนะผู้พิทักษ์เปลวเฉียนคุนให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_flame_guardian",
+      "count": 1,
+      "label": "ผู้พิทักษ์เปลวเฉียนคุน"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

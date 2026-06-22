@@ -1,0 +1,19 @@
+{
+  "id": "beggar_union_trial",
+  "order": 12,
+  "giver": "npc_beggar_chief",
+  "name": "บททดสอบพรรคยาจก",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของพรรคยาจก — เอาชนะยาจกทรยศถุงเก้าชั้นให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_beggar_traitor",
+      "count": 1,
+      "label": "ยาจกทรยศถุงเก้าชั้น"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

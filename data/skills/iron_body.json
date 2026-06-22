@@ -1,1 +1,21 @@
-{"id":"iron_body","name":"กายเหล็กลมปราณ","type":"internal","sectId":"vajra_cliff","maxRank":5,"cost":6,"perRank":{"maxHp":25,"def":2},"desc":"วิชาภายใน เพิ่มพลังชีวิต+ป้องกัน","fx":{"color":"#7fc7b8","rings":3,"sparks":6,"core":true}}
+{
+  "id": "iron_body",
+  "name": "กายเหล็กลมปราณ",
+  "type": "internal",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
+  },
+  "desc": "วิชาภายใน เพิ่มพลังชีวิต+ป้องกัน",
+  "fx": {
+    "color": "#7fc7b8",
+    "rings": 3,
+    "sparks": 6,
+    "core": true
+  },
+  "sectId": "vajra_cliff"
+}

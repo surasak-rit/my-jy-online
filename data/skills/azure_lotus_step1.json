@@ -1,0 +1,21 @@
+{
+  "id": "azure_lotus_step1",
+  "name": "ย่างกลีบบัว",
+  "type": "movement",
+  "tier": "ต่ำ",
+  "maxRank": 3,
+  "cost": 5,
+  "perRank": {
+    "moveBonus": 0.1
+  },
+  "desc": "วิชาตัวเบาขั้นต้น เพิ่มความเร็วเคลื่อนที่",
+  "fx": {
+    "color": "#7fd6b0",
+    "arcs": 0,
+    "arcSpread": 1.0,
+    "sparks": 0,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "azure_lotus"
+}

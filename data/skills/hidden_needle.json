@@ -3,10 +3,11 @@
   "name": "เข็มพิรุณเต็มฟ้า",
   "type": "external",
   "weaponType": "needle",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 7,
+  "cost": 9,
   "perRank": {
-    "atk": 6
+    "atk": 7
   },
   "desc": "สาดเข็มลับอาบยาพิษ โจมตีระยะไกล",
   "fx": {

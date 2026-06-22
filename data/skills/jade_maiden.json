@@ -2,12 +2,13 @@
   "id": "jade_maiden",
   "name": "กระบี่ดรุณีหยก",
   "type": "internal",
-  "weaponType": "sword",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 8,
+  "cost": 9,
   "perRank": {
-    "atk": 6,
-    "def": 3
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
   },
   "desc": "กระบี่หญิงพิสุทธิ์ จับคู่ปราณ เย็นเฉียบ",
   "fx": {
@@ -17,5 +18,6 @@
     "sparks": 7,
     "core": true
   },
+  "weaponType": "sword",
   "sectId": "ancient_tomb"
 }

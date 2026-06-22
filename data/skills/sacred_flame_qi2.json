@@ -1,0 +1,22 @@
+{
+  "id": "sacred_flame_qi2",
+  "name": "ปราณเฉียนคุนสมาธิญาณ",
+  "type": "internal",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "maxHp": 20,
+    "def": 2
+  },
+  "desc": "ปราณภายในขั้นกลาง เลือด+ป้องกัน",
+  "fx": {
+    "color": "#ff8c3a",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 3,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "sacred_flame"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "peach_isle_atk2b",
+  "name": "ขลุ่ยคลื่นเสียงวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "flute",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชาขลุ่ยชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#f3b6cf",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "peach_isle"
+}

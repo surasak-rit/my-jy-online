@@ -1,0 +1,19 @@
+{
+  "id": "cloud_summit_trial",
+  "order": 12,
+  "giver": "npc_cloud_master",
+  "name": "บททดสอบสำนักมังกรเมฆา",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักมังกรเมฆา — เอาชนะเฒ่าวิปลาสยอดเมฆาให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_cloud_apostate",
+      "count": 1,
+      "label": "เฒ่าวิปลาสยอดเมฆา"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "moonshade_qi2",
+  "name": "ปราณเงาจันทราสมาธิญาณ",
+  "type": "internal",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "maxHp": 20,
+    "def": 2
+  },
+  "desc": "ปราณภายในขั้นกลาง เลือด+ป้องกัน",
+  "fx": {
+    "color": "#9fb8e0",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 3,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "moonshade"
+}

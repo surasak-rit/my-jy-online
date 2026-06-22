@@ -1,0 +1,21 @@
+{
+  "id": "peach_isle_qi1",
+  "name": "ปราณดอกท้อปฐมฌาน",
+  "type": "internal",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "maxHp": 14
+  },
+  "desc": "ปราณภายในขั้นต้น เพิ่มพลังชีวิต",
+  "fx": {
+    "color": "#f3b6cf",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 2,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "peach_isle"
+}

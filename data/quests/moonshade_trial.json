@@ -1,0 +1,19 @@
+{
+  "id": "moonshade_trial",
+  "order": 12,
+  "giver": "npc_moon_master",
+  "name": "บททดสอบสำนักเงาจันทรา",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของสำนักเงาจันทรา — เอาชนะโจรกระจอกให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_petty_bandit",
+      "count": 5,
+      "label": "โจรกระจอก"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

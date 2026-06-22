@@ -1,0 +1,19 @@
+{
+  "id": "dali_duan_trial",
+  "order": 12,
+  "giver": "npc_duan_prince",
+  "name": "บททดสอบตระกูลต้วนต้าหลี่",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของตระกูลต้วนต้าหลี่ — เอาชนะนักพรตมารวัดร้างให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_demon_monk",
+      "count": 1,
+      "label": "นักพรตมารวัดร้าง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

@@ -2,12 +2,13 @@
   "id": "cloud_taichi",
   "name": "กระบี่ไท่เก๊กเมฆา",
   "type": "internal",
-  "weaponType": "sword",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 7,
+  "cost": 9,
   "perRank": {
-    "def": 4,
-    "maxHp": 12
+    "maxHp": 28,
+    "def": 3,
+    "maxMp_": 6
   },
   "desc": "ปราณนุ่มสะท้อนแรง เพิ่มป้องกัน+เลือด",
   "fx": {
@@ -17,5 +18,6 @@
     "rings": 2,
     "spin": true
   },
+  "weaponType": "sword",
   "sectId": "cloud_summit"
 }

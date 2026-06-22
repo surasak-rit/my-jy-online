@@ -1,0 +1,19 @@
+{
+  "id": "five_venoms_trial",
+  "order": 12,
+  "giver": "npc_venom_matron",
+  "name": "บททดสอบพรรคห้าพิษ",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของพรรคห้าพิษ — เอาชนะราชาตะขาบหุบพิษให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_venom_king",
+      "count": 1,
+      "label": "ราชาตะขาบหุบพิษ"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

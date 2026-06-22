@@ -1,0 +1,23 @@
+{
+  "id": "dali_duan_atk2",
+  "name": "นิ้วหกชีพจรพิสัยกลาง",
+  "type": "external",
+  "weaponType": "finger",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5,
+    "def": 1
+  },
+  "desc": "วิชานิ้วขั้นกลาง โจมตี+ป้องกัน",
+  "fx": {
+    "color": "#ffe27a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "dali_duan"
+}

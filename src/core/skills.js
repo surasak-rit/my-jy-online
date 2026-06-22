@@ -9,12 +9,27 @@ import { neidanBonus } from './neidan.js';
 export function skillCost(def, rank) { return (def.cost || 5) * rank; }
 
 /**
+ * เงื่อนไขปลดล็อกวิชา (絕學/วิชาเควส) — unlock.quest=ทำเควสสำเร็จ · unlock.skill+rank=ฝึกวิชาก่อนถึงระดับ
+ * @returns {{ ok:boolean, note?:string }}
+ */
+export function unlockState(player, def) {
+  const u = def.unlock; if (!u) return { ok: true };
+  if (u.quest && player.quests?.[u.quest]?.state !== 'done')
+    return { ok: false, note: 'ต้องผ่านบททดสอบสำนัก (เควส) ก่อน' };
+  if (u.skill && (player.skills?.[u.skill]?.rank || 0) < (u.rank || 1))
+    return { ok: false, note: `ต้องฝึกวิชาเอกขั้นสูงถึงระดับ ${u.rank || 1} ก่อน` };
+  return { ok: true };
+}
+
+/**
  * เช็กว่าผู้เล่นเรียน/อัปเกรดวิชานี้ได้ไหม
- * @returns {{ ok:boolean, cost?:number, reason?:string }}
+ * @returns {{ ok:boolean, cost?:number, reason?:string, note?:string }}
  */
 export function canLearn(player, def) {
   const cur = player.skills[def.id]?.rank || 0;
   if (cur >= def.maxRank) return { ok: false, reason: 'max' };
+  const u = unlockState(player, def);
+  if (!u.ok) return { ok: false, reason: 'locked', note: u.note };
   const cost = skillCost(def, cur + 1);
   if ((player.skillPoints || 0) < cost) return { ok: false, reason: 'sp', cost };
   return { ok: true, cost };

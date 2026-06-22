@@ -28,21 +28,27 @@ export function initPanels(game) {
     /** @type {HTMLElement} */ (el.querySelector('#panel-x')).onclick = close;
   }
 
-  /** หน้าต่างเรียนวิชาจากอาจารย์สำนัก */
+  /** หน้าต่างเรียนวิชาจากอาจารย์สำนัก — เรียงตามชั้น (ต่ำ→กลาง→สูง→絕學) */
   function openSkills(npc) {
     const p = game.player;
-    const defs = Object.values(game.skillDefs).filter((d) => d.sectId === npc.sectId);
+    const tierOrder = { 'ต่ำ': 0, 'กลาง': 1, 'สูง': 2, '絕學': 3 };
+    const defs = Object.values(game.skillDefs).filter((d) => d.sectId === npc.sectId)
+      .sort((a, b) => (tierOrder[a.tier] ?? 9) - (tierOrder[b.tier] ?? 9));
     const rows = defs.map((d) => {
       const rank = p.skills[d.id]?.rank || 0;
       const c = canLearn(p, d);
       const maxed = rank >= d.maxRank;
       const cost = skillCost(d, rank + 1);
       const typeLabel = { external: '外功', internal: '內功', movement: '輕功' }[d.type] || '';
+      const tierTag = d.tier ? ` <span class="tag">${d.tier}</span>` : '';
+      const locked = c.reason === 'locked';
       const btn = maxed
         ? `<span class="maxed">สูงสุดแล้ว</span>`
-        : `<button class="learn" data-id="${d.id}" ${c.ok ? '' : 'disabled'}>เรียน (✦${cost})</button>`;
-      return `<div class="skill-row">
-        <div><b>${d.name}</b> <span class="tag">${typeLabel}</span><br/>
+        : locked
+          ? `<span class="maxed">🔒 ${c.note || 'ยังปลดล็อกไม่ได้'}</span>`
+          : `<button class="learn" data-id="${d.id}" ${c.ok ? '' : 'disabled'}>เรียน (✦${cost})</button>`;
+      return `<div class="skill-row"${locked ? ' style="opacity:.6"' : ''}>
+        <div><b>${d.name}</b> <span class="tag">${typeLabel}</span>${tierTag}<br/>
           <small>${d.desc} · ระดับ ${rank}/${d.maxRank}</small></div>
         <div>${btn}</div></div>`;
     }).join('');

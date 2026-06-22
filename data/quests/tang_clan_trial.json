@@ -1,0 +1,19 @@
+{
+  "id": "tang_clan_trial",
+  "order": 12,
+  "giver": "npc_tang_elder",
+  "name": "บททดสอบตระกูลถัง",
+  "desc": "พิสูจน์ตนต่อหน้าอาจารย์เพื่อรับสืบทอด絕學ของตระกูลถัง — เอาชนะนักฆ่าเข็มพิษถังให้ได้",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_tang_assassin",
+      "count": 1,
+      "label": "นักฆ่าเข็มพิษถัง"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 25,
+    "soft": 60
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "five_venoms_atk2",
+  "name": "เล็บห้าพิษพิสัยกลาง",
+  "type": "external",
+  "weaponType": "claw",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5,
+    "def": 1
+  },
+  "desc": "วิชาเล็บขั้นกลาง โจมตี+ป้องกัน",
+  "fx": {
+    "color": "#8fe04a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "five_venoms"
+}

@@ -3,10 +3,11 @@
   "name": "กระบี่เดียวดายเก้ากระบวน",
   "type": "external",
   "weaponType": "sword",
+  "tier": "สูง",
   "maxRank": 5,
   "cost": 9,
   "perRank": {
-    "atk": 8
+    "atk": 7
   },
   "desc": "กระบี่ไร้กระบวน เล็งจุดอ่อน โจมตีสูงสุด",
   "fx": {

@@ -1,0 +1,23 @@
+{
+  "id": "vajra_cliff_atk2",
+  "name": "ฝ่ามือศิลาวัชระพิสัยกลาง",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5,
+    "def": 1
+  },
+  "desc": "วิชาฝ่ามือขั้นกลาง โจมตี+ป้องกัน",
+  "fx": {
+    "color": "#e6c14f",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "vajra_cliff"
+}

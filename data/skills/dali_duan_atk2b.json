@@ -1,0 +1,22 @@
+{
+  "id": "dali_duan_atk2b",
+  "name": "นิ้วหกชีพจรวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "finger",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชานิ้วชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#ffe27a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "dali_duan"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "vajra_cliff_atk2b",
+  "name": "ฝ่ามือศิลาวัชระวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชาฝ่ามือชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#e6c14f",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "vajra_cliff"
+}

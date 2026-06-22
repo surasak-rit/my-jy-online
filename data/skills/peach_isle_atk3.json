@@ -1,0 +1,22 @@
+{
+  "id": "peach_isle_atk3",
+  "name": "ขลุ่ยคลื่นเสียงอุกฤษฏ์",
+  "type": "external",
+  "weaponType": "flute",
+  "tier": "สูง",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 7
+  },
+  "desc": "วิชาขลุ่ยขั้นสูง พลังโจมตีรุนแรง",
+  "fx": {
+    "color": "#f3b6cf",
+    "arcs": 3,
+    "arcSpread": 1.0,
+    "sparks": 8,
+    "rings": 1,
+    "core": true
+  },
+  "sectId": "peach_isle"
+}

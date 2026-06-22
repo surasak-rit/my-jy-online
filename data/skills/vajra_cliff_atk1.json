@@ -1,0 +1,22 @@
+{
+  "id": "vajra_cliff_atk1",
+  "name": "ฝ่ามือศิลาวัชระปฐมบท",
+  "type": "external",
+  "weaponType": "fist",
+  "tier": "ต่ำ",
+  "maxRank": 5,
+  "cost": 5,
+  "perRank": {
+    "atk": 3
+  },
+  "desc": "วิชาฝ่ามือขั้นต้น เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#e6c14f",
+    "arcs": 1,
+    "arcSpread": 1.0,
+    "sparks": 4,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "vajra_cliff"
+}

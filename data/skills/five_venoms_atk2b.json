@@ -1,0 +1,22 @@
+{
+  "id": "five_venoms_atk2b",
+  "name": "เล็บห้าพิษวิถีชำนาญ",
+  "type": "external",
+  "weaponType": "claw",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5
+  },
+  "desc": "วิชาเล็บชั้นชำนาญ เพิ่มพลังโจมตี",
+  "fx": {
+    "color": "#8fe04a",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 1,
+    "core": false
+  },
+  "sectId": "five_venoms"
+}

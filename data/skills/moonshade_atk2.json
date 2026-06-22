@@ -1,0 +1,23 @@
+{
+  "id": "moonshade_atk2",
+  "name": "กระบี่เงาจันทร์พิสัยกลาง",
+  "type": "external",
+  "weaponType": "sword",
+  "tier": "กลาง",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 5,
+    "def": 1
+  },
+  "desc": "วิชากระบี่ขั้นกลาง โจมตี+ป้องกัน",
+  "fx": {
+    "color": "#9fb8e0",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "sparks": 6,
+    "rings": 0,
+    "core": false
+  },
+  "sectId": "moonshade"
+}

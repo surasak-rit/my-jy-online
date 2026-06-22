@@ -3,11 +3,11 @@
   "name": "ฝ่ามือพิชิตมังกร",
   "type": "external",
   "weaponType": "fist",
+  "tier": "สูง",
   "maxRank": 5,
-  "cost": 8,
+  "cost": 9,
   "perRank": {
-    "atk": 7,
-    "maxHp": 6
+    "atk": 7
   },
   "desc": "สุดยอดฝ่ามือหยาง บุกแรงสะเทือน",
   "fx": {
