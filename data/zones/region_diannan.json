@@ -1,0 +1,263 @@
+{
+  "id": "region_diannan",
+  "name": "แดนใต้ยูนนาน 滇南",
+  "type": "field",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/region_diannan.json",
+  "portals": [
+    {
+      "at": {
+        "x": 16,
+        "y": 29
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 17,
+        "y": 13
+      },
+      "label": "→ ชุมทางยุทธภพ"
+    },
+    {
+      "at": {
+        "x": 26,
+        "y": 7
+      },
+      "toZoneId": "dali_duan",
+      "spawnAt": {
+        "x": 3,
+        "y": 9
+      },
+      "label": "→ ตระกูลต้วนต้าหลี่"
+    },
+    {
+      "at": {
+        "x": 6,
+        "y": 27
+      },
+      "toZoneId": "five_venoms",
+      "spawnAt": {
+        "x": 3,
+        "y": 13
+      },
+      "label": "→ พรรคห้าพิษ"
+    }
+  ],
+  "props": [
+    {
+      "type": "stall",
+      "at": {
+        "x": 16,
+        "y": 27
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 26,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "大理"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 25,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 27,
+        "y": 7
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 6,
+        "y": 26
+      },
+      "scale": 1.4,
+      "text": "五毒"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 5,
+        "y": 27
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 27
+      }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 17,
+        "y": 2
+      },
+      "scale": 1.2508
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 2
+      },
+      "scale": 1.0093
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 2
+      },
+      "scale": 1.1722
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 2
+      },
+      "scale": 1.1395
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 5
+      },
+      "scale": 1.0552
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 8
+      },
+      "scale": 1.2436
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 29,
+        "y": 8
+      },
+      "scale": 1.1146
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 11
+      },
+      "scale": 1.2091
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 11
+      },
+      "scale": 1.2418
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 20
+      },
+      "scale": 1.2367
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 8,
+        "y": 23
+      },
+      "scale": 1.2172
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 23
+      },
+      "scale": 1.1191
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 26
+      },
+      "scale": 1.2325
+    }
+  ],
+  "npcs": [],
+  "spawns": [
+    {
+      "mobId": "mob_temple_guard",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 24,
+        "y": 10,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_gu_centipede",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 4,
+        "y": 21,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 12,
+        "y": 14,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 18,
+        "y": 18,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 10,
+        "y": 10,
+        "w": 5,
+        "h": 4
+      }
+    }
+  ]
+}

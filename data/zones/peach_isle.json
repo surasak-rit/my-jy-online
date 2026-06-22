@@ -14,12 +14,12 @@
         "x": 1,
         "y": 11
       },
-      "toZoneId": "wulin_atlas",
+      "toZoneId": "region_donghai",
       "spawnAt": {
-        "x": 50,
-        "y": 15
+        "x": 14,
+        "y": 13
       },
-      "label": "→ แผนที่ยุทธภพ"
+      "label": "→ เกาะทะเลตะวันออก 東海"
     }
   ],
   "props": [

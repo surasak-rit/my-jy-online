@@ -1,0 +1,268 @@
+{
+  "id": "region_zhongyuan",
+  "name": "ที่ราบกลาง 中原",
+  "type": "field",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/region_zhongyuan.json",
+  "portals": [
+    {
+      "at": {
+        "x": 20,
+        "y": 25
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 17,
+        "y": 13
+      },
+      "label": "→ ชุมทางยุทธภพ"
+    },
+    {
+      "at": {
+        "x": 6,
+        "y": 7
+      },
+      "toZoneId": "jiuhe_dojo_interior",
+      "spawnAt": {
+        "x": 6,
+        "y": 7
+      },
+      "label": "→ สำนักศิลาวัชระ"
+    },
+    {
+      "at": {
+        "x": 33,
+        "y": 23
+      },
+      "toZoneId": "beggar_union",
+      "spawnAt": {
+        "x": 3,
+        "y": 8
+      },
+      "label": "→ พรรคยาจก"
+    }
+  ],
+  "props": [
+    {
+      "type": "stall",
+      "at": {
+        "x": 20,
+        "y": 23
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 6,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "金剛"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 5,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 7
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 33,
+        "y": 22
+      },
+      "scale": 1.4,
+      "text": "丐幫"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 32,
+        "y": 23
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 34,
+        "y": 23
+      }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 17,
+        "y": 2
+      },
+      "scale": 1.2508
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 2
+      },
+      "scale": 1.0093
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 2
+      },
+      "scale": 1.1722
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 2
+      },
+      "scale": 1.1395
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 5
+      },
+      "scale": 1.0552
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 32,
+        "y": 5
+      },
+      "scale": 1.1434
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 8
+      },
+      "scale": 1.2436
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 29,
+        "y": 8
+      },
+      "scale": 1.1146
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 11
+      },
+      "scale": 1.2091
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 11
+      },
+      "scale": 1.2418
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 17
+      },
+      "scale": 1.0744
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 20
+      },
+      "scale": 1.2367
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 20
+      },
+      "scale": 1.0588
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 8,
+        "y": 23
+      },
+      "scale": 1.2172
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 23
+      },
+      "scale": 1.1191
+    }
+  ],
+  "npcs": [],
+  "spawns": [
+    {
+      "mobId": "mob_pickpocket",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 31,
+        "y": 17,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 16,
+        "y": 12,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 22,
+        "y": 16,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 13,
+        "y": 9,
+        "w": 5,
+        "h": 4
+      }
+    }
+  ]
+}

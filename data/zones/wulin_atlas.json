@@ -1,14 +1,14 @@
 {
   "id": "wulin_atlas",
-  "name": "แผนที่ยุทธภพ (江湖)",
-  "type": "field",
-  "floor": "grass",
+  "name": "ชุมทางยุทธภพ (江湖中樞)",
+  "type": "hub",
+  "floor": "stone",
   "tilemapRef": "data/tilemaps/wulin_atlas.json",
   "portals": [
     {
       "at": {
-        "x": 28,
-        "y": 39
+        "x": 17,
+        "y": 22
       },
       "toZoneId": "jiuhe_town",
       "spawnAt": {
@@ -19,909 +19,270 @@
     },
     {
       "at": {
-        "x": 30,
-        "y": 21
-      },
-      "toZoneId": "jiuhe_dojo_interior",
-      "spawnAt": {
         "x": 6,
-        "y": 7
+        "y": 5
       },
-      "label": "→ สำนักศิลาวัชระ"
-    },
-    {
-      "at": {
-        "x": 41,
-        "y": 30
-      },
-      "toZoneId": "yangzhou_town",
+      "toZoneId": "region_zhongyuan",
       "spawnAt": {
-        "x": 2,
-        "y": 13
-      },
-      "label": "→ สำนักเงาจันทรา"
-    },
-    {
-      "at": {
-        "x": 47,
+        "x": 20,
         "y": 23
       },
-      "toZoneId": "yangzhou_town",
-      "spawnAt": {
-        "x": 2,
-        "y": 13
-      },
-      "label": "→ สำนักบัวคราม"
+      "label": "→ ที่ราบกลาง 中原"
     },
     {
       "at": {
-        "x": 18,
-        "y": 22
+        "x": 17,
+        "y": 4
       },
-      "toZoneId": "cloud_summit",
+      "toZoneId": "region_jiangnan",
       "spawnAt": {
-        "x": 3,
-        "y": 14
+        "x": 19,
+        "y": 21
       },
-      "label": "→ สำนักมังกรเมฆา"
+      "label": "→ เจียงหนานตะวันออก 江南"
     },
     {
       "at": {
-        "x": 23,
-        "y": 28
+        "x": 28,
+        "y": 5
       },
-      "toZoneId": "beggar_union",
+      "toZoneId": "region_xiyue",
       "spawnAt": {
-        "x": 3,
-        "y": 8
-      },
-      "label": "→ พรรคยาจก"
-    },
-    {
-      "at": {
-        "x": 15,
-        "y": 34
-      },
-      "toZoneId": "tang_clan",
-      "spawnAt": {
-        "x": 3,
-        "y": 9
-      },
-      "label": "→ ตระกูลถัง"
-    },
-    {
-      "at": {
-        "x": 25,
-        "y": 39
-      },
-      "toZoneId": "five_venoms",
-      "spawnAt": {
-        "x": 3,
-        "y": 13
-      },
-      "label": "→ พรรคห้าพิษ"
-    },
-    {
-      "at": {
         "x": 14,
-        "y": 13
+        "y": 29
       },
-      "toZoneId": "huashan_peak",
-      "spawnAt": {
-        "x": 3,
-        "y": 15
-      },
-      "label": "→ สำนักยอดกระบี่ฮว่าซาน"
+      "label": "→ เทือกเขาตะวันตก 西嶽"
     },
     {
       "at": {
-        "x": 50,
-        "y": 14
+        "x": 30,
+        "y": 12
       },
-      "toZoneId": "peach_isle",
+      "toZoneId": "region_beixue",
       "spawnAt": {
-        "x": 3,
-        "y": 11
+        "x": 21,
+        "y": 21
       },
-      "label": "→ เกาะดอกท้อ"
+      "label": "→ แดนหิมะเหนือ 北域"
+    },
+    {
+      "at": {
+        "x": 4,
+        "y": 12
+      },
+      "toZoneId": "region_chushu",
+      "spawnAt": {
+        "x": 18,
+        "y": 25
+      },
+      "label": "→ แดนฉู่-สู่ 楚蜀"
     },
     {
       "at": {
         "x": 9,
+        "y": 18
+      },
+      "toZoneId": "region_diannan",
+      "spawnAt": {
+        "x": 16,
+        "y": 27
+      },
+      "label": "→ แดนใต้ยูนนาน 滇南"
+    },
+    {
+      "at": {
+        "x": 25,
+        "y": 18
+      },
+      "toZoneId": "region_donghai",
+      "spawnAt": {
+        "x": 14,
         "y": 19
       },
-      "toZoneId": "ancient_tomb",
-      "spawnAt": {
-        "x": 3,
-        "y": 7
-      },
-      "label": "→ สำนักสุสานโบราณ"
-    },
-    {
-      "at": {
-        "x": 11,
-        "y": 5
-      },
-      "toZoneId": "kunlun_snow",
-      "spawnAt": {
-        "x": 3,
-        "y": 13
-      },
-      "label": "→ สำนักคุนหลุน"
-    },
-    {
-      "at": {
-        "x": 5,
-        "y": 10
-      },
-      "toZoneId": "sacred_flame",
-      "spawnAt": {
-        "x": 3,
-        "y": 12
-      },
-      "label": "→ พรรคไฟศักดิ์สิทธิ์"
-    },
-    {
-      "at": {
-        "x": 8,
-        "y": 38
-      },
-      "toZoneId": "dali_duan",
-      "spawnAt": {
-        "x": 3,
-        "y": 9
-      },
-      "label": "→ ตระกูลต้วนต้าหลี่"
+      "label": "→ เกาะทะเลตะวันออก 東海"
     }
   ],
   "props": [
     {
       "type": "censer",
       "at": {
-        "x": 28,
-        "y": 30
+        "x": 17,
+        "y": 12
       },
       "scale": 1.4
     },
     {
-      "type": "stall",
+      "type": "hall",
       "at": {
-        "x": 26,
-        "y": 30
+        "x": 6,
+        "y": 4
       },
-      "scale": 1.2
+      "scale": 1.3,
+      "text": "中原"
     },
     {
-      "type": "stall",
+      "type": "lantern",
       "at": {
-        "x": 30,
-        "y": 30
-      },
-      "scale": 1.2
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 5
+      }
     },
     {
       "type": "hall",
       "at": {
-        "x": 30,
-        "y": 20
+        "x": 17,
+        "y": 3
       },
       "scale": 1.3,
-      "text": "金剛"
+      "text": "江南"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 16,
+        "y": 4
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 18,
+        "y": 4
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 28,
+        "y": 4
+      },
+      "scale": 1.3,
+      "text": "西嶽"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 27,
+        "y": 5
+      }
     },
     {
       "type": "lantern",
       "at": {
         "x": 29,
-        "y": 21
+        "y": 5
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 30,
+        "y": 11
+      },
+      "scale": 1.3,
+      "text": "北域"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 29,
+        "y": 12
       }
     },
     {
       "type": "lantern",
       "at": {
         "x": 31,
-        "y": 21
+        "y": 12
       }
     },
     {
       "type": "hall",
       "at": {
-        "x": 41,
-        "y": 29
+        "x": 4,
+        "y": 11
       },
       "scale": 1.3,
-      "text": "月影"
+      "text": "楚蜀"
     },
     {
       "type": "lantern",
       "at": {
-        "x": 40,
-        "y": 30
+        "x": 3,
+        "y": 12
       }
     },
     {
       "type": "lantern",
       "at": {
-        "x": 42,
-        "y": 30
+        "x": 5,
+        "y": 12
       }
     },
     {
       "type": "hall",
       "at": {
-        "x": 47,
-        "y": 22
+        "x": 9,
+        "y": 17
       },
       "scale": 1.3,
-      "text": "碧蓮"
+      "text": "滇南"
     },
     {
       "type": "lantern",
       "at": {
-        "x": 46,
-        "y": 23
+        "x": 8,
+        "y": 18
       }
     },
     {
       "type": "lantern",
       "at": {
-        "x": 48,
-        "y": 23
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 18,
-        "y": 21
-      },
-      "scale": 1.3,
-      "text": "雲龍"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 17,
-        "y": 22
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 19,
-        "y": 22
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 23,
-        "y": 27
-      },
-      "scale": 1.3,
-      "text": "丐幫"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 22,
-        "y": 28
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 24,
-        "y": 28
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 15,
-        "y": 33
-      },
-      "scale": 1.3,
-      "text": "唐門"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 14,
-        "y": 34
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 16,
-        "y": 34
+        "x": 10,
+        "y": 18
       }
     },
     {
       "type": "hall",
       "at": {
         "x": 25,
-        "y": 38
+        "y": 17
       },
       "scale": 1.3,
-      "text": "五毒"
+      "text": "東海"
     },
     {
       "type": "lantern",
       "at": {
         "x": 24,
-        "y": 39
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 26,
-        "y": 39
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 14,
-        "y": 12
-      },
-      "scale": 1.3,
-      "text": "華山"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 13,
-        "y": 13
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 15,
-        "y": 13
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 50,
-        "y": 13
-      },
-      "scale": 1.3,
-      "text": "桃花"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 49,
-        "y": 14
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 51,
-        "y": 14
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 9,
         "y": 18
-      },
-      "scale": 1.3,
-      "text": "古墓"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 8,
-        "y": 19
       }
     },
     {
       "type": "lantern",
-      "at": {
-        "x": 10,
-        "y": 19
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 11,
-        "y": 4
-      },
-      "scale": 1.3,
-      "text": "崑崙"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 10,
-        "y": 5
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 12,
-        "y": 5
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 5,
-        "y": 9
-      },
-      "scale": 1.3,
-      "text": "明教"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 4,
-        "y": 10
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 6,
-        "y": 10
-      }
-    },
-    {
-      "type": "hall",
-      "at": {
-        "x": 8,
-        "y": 37
-      },
-      "scale": 1.3,
-      "text": "大理"
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 7,
-        "y": 38
-      }
-    },
-    {
-      "type": "lantern",
-      "at": {
-        "x": 9,
-        "y": 38
-      }
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 14,
-        "y": 5
-      },
-      "scale": 1.0735999999999999
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 32,
-        "y": 5
-      },
-      "scale": 1.1912
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 38,
-        "y": 5
-      },
-      "scale": 1.2112
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 20,
-        "y": 8
-      },
-      "scale": 1.3652
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 29,
-        "y": 8
-      },
-      "scale": 1.1528
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 44,
-        "y": 8
-      },
-      "scale": 1.0068
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 23,
-        "y": 11
-      },
-      "scale": 1.018
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 35,
-        "y": 11
-      },
-      "scale": 1.3972
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 44,
-        "y": 11
-      },
-      "scale": 1.0112
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 29,
-        "y": 14
-      },
-      "scale": 1.2224
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 5,
-        "y": 17
-      },
-      "scale": 1.026
-    },
-    {
-      "type": "tree",
       "at": {
         "x": 26,
-        "y": 17
-      },
-      "scale": 1.0992
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 32,
-        "y": 17
-      },
-      "scale": 1.0328
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 38,
-        "y": 17
-      },
-      "scale": 1.2192
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 50,
-        "y": 17
-      },
-      "scale": 1.2304
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 23,
-        "y": 20
-      },
-      "scale": 1.0784
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 50,
-        "y": 20
-      },
-      "scale": 1.0332
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 8,
-        "y": 23
-      },
-      "scale": 1.2896
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 11,
-        "y": 23
-      },
-      "scale": 1.1588
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 38,
-        "y": 23
-      },
-      "scale": 1.0808
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 17,
-        "y": 26
-      },
-      "scale": 1.2384
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 20,
-        "y": 26
-      },
-      "scale": 1.31
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 35,
-        "y": 26
-      },
-      "scale": 1.1703999999999999
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 26,
-        "y": 29
-      },
-      "scale": 1.1648
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 29,
-        "y": 32
-      },
-      "scale": 1.0472
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 50,
-        "y": 35
-      },
-      "scale": 1.1608
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 44,
-        "y": 38
-      },
-      "scale": 1.1356
-    },
-    {
-      "type": "tree",
-      "at": {
-        "x": 47,
-        "y": 38
-      },
-      "scale": 1.0552
+        "y": 18
+      }
     }
   ],
   "npcs": [
     {
-      "id": "npc_atlas_crier",
+      "id": "npc_hub_crier",
       "at": {
-        "x": 28,
-        "y": 28
+        "x": 17,
+        "y": 10
       },
       "role": "นักเล่าเรื่องยุทธภพ",
       "archetype": "scholar",
       "name": "เฒ่าเล่าขาน"
-    }
-  ],
-  "spawns": [
-    {
-      "mobId": "mob_cloud_ape",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 14,
-        "y": 24,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_pickpocket",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 19,
-        "y": 30,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_tang_guard",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 11,
-        "y": 36,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_gu_centipede",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 21,
-        "y": 36,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_rogue_swordsman",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 10,
-        "y": 15,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_maze_serpent",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 46,
-        "y": 16,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_tomb_bat",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 5,
-        "y": 21,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_snow_wolf",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 7,
-        "y": 7,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_flame_zealot",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 2,
-        "y": 12,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_temple_guard",
-      "tier": 2,
-      "max": 2,
-      "area": {
-        "x": 4,
-        "y": 36,
-        "w": 4,
-        "h": 3
-      }
-    },
-    {
-      "mobId": "mob_gray_wolf",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 34,
-        "y": 16,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_petty_bandit",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 20,
-        "y": 16,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_gray_wolf",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 34,
-        "y": 34,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_petty_bandit",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 18,
-        "y": 38,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_gray_wolf",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 44,
-        "y": 20,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_petty_bandit",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 12,
-        "y": 26,
-        "w": 5,
-        "h": 4
-      }
-    },
-    {
-      "mobId": "mob_gray_wolf",
-      "tier": 1,
-      "max": 3,
-      "area": {
-        "x": 40,
-        "y": 8,
-        "w": 5,
-        "h": 4
-      }
     }
   ]
 }

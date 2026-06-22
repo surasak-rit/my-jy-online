@@ -14,12 +14,12 @@
         "x": 1,
         "y": 13
       },
-      "toZoneId": "wulin_atlas",
+      "toZoneId": "region_beixue",
       "spawnAt": {
-        "x": 11,
-        "y": 6
+        "x": 6,
+        "y": 8
       },
-      "label": "→ แผนที่ยุทธภพ"
+      "label": "→ แดนหิมะเหนือ 北域"
     }
   ],
   "props": [

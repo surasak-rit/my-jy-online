@@ -1,0 +1,295 @@
+{
+  "id": "region_chushu",
+  "name": "แดนฉู่-สู่ 楚蜀",
+  "type": "field",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/region_chushu.json",
+  "portals": [
+    {
+      "at": {
+        "x": 18,
+        "y": 27
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 17,
+        "y": 13
+      },
+      "label": "→ ชุมทางยุทธภพ"
+    },
+    {
+      "at": {
+        "x": 6,
+        "y": 7
+      },
+      "toZoneId": "cloud_summit",
+      "spawnAt": {
+        "x": 3,
+        "y": 14
+      },
+      "label": "→ สำนักมังกรเมฆา"
+    },
+    {
+      "at": {
+        "x": 29,
+        "y": 25
+      },
+      "toZoneId": "tang_clan",
+      "spawnAt": {
+        "x": 3,
+        "y": 9
+      },
+      "label": "→ ตระกูลถัง"
+    }
+  ],
+  "props": [
+    {
+      "type": "stall",
+      "at": {
+        "x": 18,
+        "y": 25
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 6,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "雲龍"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 5,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 7
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 29,
+        "y": 24
+      },
+      "scale": 1.4,
+      "text": "唐門"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 28,
+        "y": 25
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 30,
+        "y": 25
+      }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 17,
+        "y": 2
+      },
+      "scale": 1.2508
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 2
+      },
+      "scale": 1.0093
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 2
+      },
+      "scale": 1.1722
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 2
+      },
+      "scale": 1.1395
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 5
+      },
+      "scale": 1.0552
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 32,
+        "y": 5
+      },
+      "scale": 1.1434
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 8
+      },
+      "scale": 1.2436
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 29,
+        "y": 8
+      },
+      "scale": 1.1146
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 11
+      },
+      "scale": 1.2091
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 11
+      },
+      "scale": 1.2418
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 17
+      },
+      "scale": 1.0744
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 20
+      },
+      "scale": 1.2367
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 20
+      },
+      "scale": 1.0588
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 8,
+        "y": 23
+      },
+      "scale": 1.2172
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 23
+      },
+      "scale": 1.1191
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 17,
+        "y": 26
+      },
+      "scale": 1.1788
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 26
+      },
+      "scale": 1.2325
+    }
+  ],
+  "npcs": [],
+  "spawns": [
+    {
+      "mobId": "mob_cloud_ape",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 4,
+        "y": 10,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_tang_guard",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 27,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 14,
+        "y": 13,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 20,
+        "y": 17,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 12,
+        "y": 10,
+        "w": 5,
+        "h": 4
+      }
+    }
+  ]
+}

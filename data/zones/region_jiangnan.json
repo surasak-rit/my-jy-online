@@ -1,0 +1,233 @@
+{
+  "id": "region_jiangnan",
+  "name": "เจียงหนานตะวันออก 江南",
+  "type": "field",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/region_jiangnan.json",
+  "portals": [
+    {
+      "at": {
+        "x": 19,
+        "y": 23
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 17,
+        "y": 13
+      },
+      "label": "→ ชุมทางยุทธภพ"
+    },
+    {
+      "at": {
+        "x": 31,
+        "y": 7
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 2,
+        "y": 13
+      },
+      "label": "→ สำนักบัวคราม"
+    },
+    {
+      "at": {
+        "x": 6,
+        "y": 21
+      },
+      "toZoneId": "yangzhou_town",
+      "spawnAt": {
+        "x": 2,
+        "y": 13
+      },
+      "label": "→ สำนักเงาจันทรา"
+    }
+  ],
+  "props": [
+    {
+      "type": "stall",
+      "at": {
+        "x": 19,
+        "y": 21
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 31,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "碧蓮"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 30,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 32,
+        "y": 7
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 6,
+        "y": 20
+      },
+      "scale": 1.4,
+      "text": "月影"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 5,
+        "y": 21
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 21
+      }
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 17,
+        "y": 2
+      },
+      "scale": 1.2508
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 20,
+        "y": 2
+      },
+      "scale": 1.0093
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 2
+      },
+      "scale": 1.1722
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 2
+      },
+      "scale": 1.1395
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 5
+      },
+      "scale": 1.0552
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 8
+      },
+      "scale": 1.2436
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 11
+      },
+      "scale": 1.2091
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 14,
+        "y": 11
+      },
+      "scale": 1.2418
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 26,
+        "y": 17
+      },
+      "scale": 1.0744
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 23,
+        "y": 20
+      },
+      "scale": 1.0588
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 8,
+        "y": 23
+      },
+      "scale": 1.2172
+    },
+    {
+      "type": "tree",
+      "at": {
+        "x": 11,
+        "y": 23
+      },
+      "scale": 1.1191
+    }
+  ],
+  "npcs": [],
+  "spawns": [
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 15,
+        "y": 11,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 21,
+        "y": 15,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 12,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      }
+    }
+  ]
+}

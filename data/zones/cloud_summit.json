@@ -14,12 +14,12 @@
         "x": 1,
         "y": 14
       },
-      "toZoneId": "wulin_atlas",
+      "toZoneId": "region_chushu",
       "spawnAt": {
-        "x": 18,
-        "y": 23
+        "x": 6,
+        "y": 8
       },
-      "label": "→ แผนที่ยุทธภพ"
+      "label": "→ แดนฉู่-สู่ 楚蜀"
     }
   ],
   "props": [

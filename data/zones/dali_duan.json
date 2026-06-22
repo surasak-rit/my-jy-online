@@ -14,12 +14,12 @@
         "x": 1,
         "y": 9
       },
-      "toZoneId": "wulin_atlas",
+      "toZoneId": "region_diannan",
       "spawnAt": {
-        "x": 8,
-        "y": 39
+        "x": 26,
+        "y": 8
       },
-      "label": "→ แผนที่ยุทธภพ"
+      "label": "→ แดนใต้ยูนนาน 滇南"
     }
   ],
   "props": [

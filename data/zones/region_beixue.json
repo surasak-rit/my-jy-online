@@ -1,0 +1,159 @@
+{
+  "id": "region_beixue",
+  "name": "แดนหิมะเหนือ 北域",
+  "type": "field",
+  "floor": "grass",
+  "tilemapRef": "data/tilemaps/region_beixue.json",
+  "portals": [
+    {
+      "at": {
+        "x": 21,
+        "y": 23
+      },
+      "toZoneId": "wulin_atlas",
+      "spawnAt": {
+        "x": 17,
+        "y": 13
+      },
+      "label": "→ ชุมทางยุทธภพ"
+    },
+    {
+      "at": {
+        "x": 6,
+        "y": 7
+      },
+      "toZoneId": "kunlun_snow",
+      "spawnAt": {
+        "x": 3,
+        "y": 13
+      },
+      "label": "→ สำนักคุนหลุน"
+    },
+    {
+      "at": {
+        "x": 35,
+        "y": 21
+      },
+      "toZoneId": "sacred_flame",
+      "spawnAt": {
+        "x": 3,
+        "y": 12
+      },
+      "label": "→ พรรคไฟศักดิ์สิทธิ์"
+    }
+  ],
+  "props": [
+    {
+      "type": "stall",
+      "at": {
+        "x": 21,
+        "y": 21
+      },
+      "scale": 1.1
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 6,
+        "y": 6
+      },
+      "scale": 1.4,
+      "text": "崑崙"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 5,
+        "y": 7
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 7,
+        "y": 7
+      }
+    },
+    {
+      "type": "hall",
+      "at": {
+        "x": 35,
+        "y": 20
+      },
+      "scale": 1.4,
+      "text": "明教"
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 34,
+        "y": 21
+      }
+    },
+    {
+      "type": "lantern",
+      "at": {
+        "x": 36,
+        "y": 21
+      }
+    }
+  ],
+  "npcs": [],
+  "spawns": [
+    {
+      "mobId": "mob_snow_wolf",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 4,
+        "y": 10,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_flame_zealot",
+      "tier": 2,
+      "max": 3,
+      "area": {
+        "x": 33,
+        "y": 15,
+        "w": 4,
+        "h": 3
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 17,
+        "y": 11,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_petty_bandit",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 23,
+        "y": 15,
+        "w": 5,
+        "h": 4
+      }
+    },
+    {
+      "mobId": "mob_gray_wolf",
+      "tier": 1,
+      "max": 3,
+      "area": {
+        "x": 14,
+        "y": 8,
+        "w": 5,
+        "h": 4
+      }
+    }
+  ]
+}
