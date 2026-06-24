@@ -1,0 +1,22 @@
+{
+  "id": "luohan_fist",
+  "name": "หมัดอรหันต์เส้าหลิน",
+  "type": "external",
+  "weaponType": "fist",
+  "sectId": "shaolin",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 6,
+    "maxHp": 6
+  },
+  "desc": "มวยพุทธสายแกร่ง ฝ่ามือหมัดกวาดเป็นวง ทนทึกทนทาน (少林羅漢拳)",
+  "fx": {
+    "color": "#e8b552",
+    "arcs": 2,
+    "arcSpread": 1.2,
+    "rings": 2,
+    "sparks": 10,
+    "core": true
+  }
+}

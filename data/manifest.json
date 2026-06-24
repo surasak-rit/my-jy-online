@@ -12,7 +12,8 @@
     "ancient_tomb",
     "kunlun_snow",
     "sacred_flame",
-    "dali_duan"
+    "dali_duan",
+    "shaolin"
   ],
   "mobs": [
     "mob_petty_bandit",
@@ -55,7 +56,8 @@
     "jade_maiden",
     "snow_blade",
     "sun_palm",
-    "sixmeridian"
+    "sixmeridian",
+    "luohan_fist"
   ],
   "items": [
     "potion_small",
@@ -112,6 +114,8 @@
     "sacred_flame_join",
     "sacred_flame_hunt",
     "dali_duan_join",
-    "dali_duan_hunt"
+    "dali_duan_hunt",
+    "shaolin_join",
+    "shaolin_hunt"
   ]
 }

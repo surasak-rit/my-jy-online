@@ -1,0 +1,25 @@
+{
+  "id": "shaolin_hunt",
+  "order": 11,
+  "giver": "npc_shaolin_abbot",
+  "name": "ปราบโจรบุกอารามเส้าหลิน",
+  "desc": "โจรกระบี่บุกปล้นพระธรรมในวิหารหลังเขาซงซาน จงปราบให้สิ้นเพื่อปกป้องวัดเส้าหลิน",
+  "steps": [
+    {
+      "kind": "kill",
+      "mobId": "mob_rogue_swordsman",
+      "count": 2,
+      "label": "โจรกระบี่บุกวัด"
+    }
+  ],
+  "rewards": {
+    "skillPoints": 30,
+    "soft": 120,
+    "items": [
+      {
+        "id": "robe_bodhi",
+        "qty": 1
+      }
+    ]
+  }
+}
