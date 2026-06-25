@@ -57,7 +57,13 @@
     "snow_blade",
     "sun_palm",
     "sixmeridian",
-    "luohan_fist"
+    "luohan_fist",
+    "weituo_palm",
+    "damo_staff",
+    "golden_bell",
+    "yijinjing",
+    "nine_yang",
+    "reed_crossing"
   ],
   "items": [
     "potion_small",
@@ -116,6 +122,8 @@
     "dali_duan_join",
     "dali_duan_hunt",
     "shaolin_join",
-    "shaolin_hunt"
+    "shaolin_hunt",
+    "shaolin_trial",
+    "shaolin_nine_yang"
   ]
 }

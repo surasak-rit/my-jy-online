@@ -1,0 +1,20 @@
+{
+  "id": "golden_bell",
+  "name": "ระฆังทองคลุมกาย",
+  "type": "internal",
+  "sectId": "shaolin",
+  "maxRank": 5,
+  "cost": 6,
+  "perRank": {
+    "maxHp": 25,
+    "def": 3
+  },
+  "desc": "ลมปราณหุ้มกายดั่งระฆังทอง (金鐘罩) ทนทานต่อการกระทบ รากฐานสายในของเส้าหลิน",
+  "fx": {
+    "color": "#e8c97a",
+    "arcs": 0,
+    "rings": 2,
+    "sparks": 6,
+    "core": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "nine_yang",
+  "name": "วิชาเทพเก้าสุริยัน",
+  "type": "internal",
+  "sectId": "shaolin",
+  "maxRank": 3,
+  "cost": 15,
+  "perRank": {
+    "atk": 10,
+    "maxHp": 30,
+    "def": 4,
+    "maxMp_": 15
+  },
+  "desc": "ปราณเทพเก้าสุริยัน (九陽神功) วิชาภายในขั้นสุดยอด ต้องสำเร็จคัมภีร์เปลี่ยนเส้นเอ็นและผ่านเควสต์ลับหอพระธรรมก่อน",
+  "fx": {
+    "color": "#ffb347",
+    "arcs": 2,
+    "arcSpread": 1.2,
+    "rings": 3,
+    "sparks": 18,
+    "core": true
+  }
+}

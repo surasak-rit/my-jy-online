@@ -1,0 +1,21 @@
+{
+  "id": "weituo_palm",
+  "name": "ฝ่ามือเวยถัว",
+  "type": "external",
+  "weaponType": "palm",
+  "sectId": "shaolin",
+  "maxRank": 5,
+  "cost": 7,
+  "perRank": {
+    "atk": 7
+  },
+  "desc": "ฝ่ามือพิทักษ์ธรรมเวยถัว (韋陀掌) ต่อยอดจากหมัดอรหันต์ เน้นพลังจู่โจมหนักหน่วง",
+  "fx": {
+    "color": "#f0c869",
+    "arcs": 2,
+    "arcSpread": 1.0,
+    "rings": 1,
+    "sparks": 12,
+    "core": true
+  }
+}

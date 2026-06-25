@@ -1,0 +1,19 @@
+{
+  "id": "reed_crossing",
+  "name": "ข้ามชลด้วยอ้อเดี่ยว",
+  "type": "movement",
+  "sectId": "shaolin",
+  "maxRank": 3,
+  "cost": 5,
+  "perRank": {
+    "moveBonus": 0.12
+  },
+  "desc": "วิชาตัวเบาสืบจากตำนานตักม้อข้ามแม่น้ำด้วยต้นอ้อเดียว (一葦渡江) ย่างก้าวว่องไวดั่งลม",
+  "fx": {
+    "color": "#bcd6c0",
+    "arcs": 1,
+    "arcSpread": 0.5,
+    "rings": 1,
+    "sparks": 4
+  }
+}

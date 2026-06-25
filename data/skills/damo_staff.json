@@ -1,0 +1,22 @@
+{
+  "id": "damo_staff",
+  "name": "พลองปราบมารตักม้อ",
+  "type": "external",
+  "weaponType": "staff",
+  "sectId": "shaolin",
+  "maxRank": 5,
+  "cost": 8,
+  "perRank": {
+    "atk": 8,
+    "def": 1
+  },
+  "desc": "วิชากระบองปราบมาร (達摩降魔棍) กวาดเป็นวงกว้าง สายดุดันของหอตักม้อ",
+  "fx": {
+    "color": "#caa15a",
+    "arcs": 3,
+    "arcSpread": 1.4,
+    "rings": 1,
+    "sparks": 10,
+    "core": true
+  }
+}

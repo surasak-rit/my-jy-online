@@ -217,6 +217,7 @@ export function initPanels(game) {
 }
 
 function npcLine(npc) {
+  if (npc.line) return npc.line;                 // บทพูดเฉพาะตัว (ตั้งใน zone JSON)
   const lines = {
     guard: 'ระวังโจรแถวทุ่งต้นหลิวด้วยนะ',
     beggar: 'มีเศษเบี้ยเหลือบ้างไหมท่าน…',

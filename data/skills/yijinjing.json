@@ -1,0 +1,22 @@
+{
+  "id": "yijinjing",
+  "name": "คัมภีร์เปลี่ยนเส้นเอ็น",
+  "type": "internal",
+  "sectId": "shaolin",
+  "maxRank": 5,
+  "cost": 9,
+  "perRank": {
+    "atk": 4,
+    "maxHp": 10,
+    "maxMp_": 8
+  },
+  "desc": "ตำราเปลี่ยนเส้นเอ็นของตักม้อ (易筋經) เปลี่ยนรากกระดูก เพิ่มกำลังภายในให้วิชาทั้งสำนักแกร่งขึ้น",
+  "fx": {
+    "color": "#f6e3a0",
+    "arcs": 1,
+    "arcSpread": 0.6,
+    "rings": 3,
+    "sparks": 10,
+    "core": true
+  }
+}
